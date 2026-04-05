@@ -4,24 +4,9 @@
 
 ## Gallery
 
-> 各画像をクリックすると拡大表示できます。
+> 各画像をクリックすると拡大表示できます。カテゴリを展開して一覧を確認してください。
 
-<table>
-<tr>
-<td align="center" valign="top" width="25%"><strong>Apple</strong><br><a href="screenshots/apple.png"><img src="screenshots/apple.png" alt="Apple" width="100%"></a></td>
-<td align="center" valign="top" width="25%"><strong>Stripe</strong><br><a href="screenshots/stripe.png"><img src="screenshots/stripe.png" alt="Stripe" width="100%"></a></td>
-<td align="center" valign="top" width="25%"><strong>Vercel</strong><br><a href="screenshots/vercel.png"><img src="screenshots/vercel.png" alt="Vercel" width="100%"></a></td>
-<td align="center" valign="top" width="25%"><strong>Linear</strong><br><a href="screenshots/linear.png"><img src="screenshots/linear.png" alt="Linear" width="100%"></a></td>
-</tr>
-<tr>
-<td align="center" valign="top"><strong>Spotify</strong><br><a href="screenshots/spotify.png"><img src="screenshots/spotify.png" alt="Spotify" width="100%"></a></td>
-<td align="center" valign="top"><strong>Airbnb</strong><br><a href="screenshots/airbnb.png"><img src="screenshots/airbnb.png" alt="Airbnb" width="100%"></a></td>
-<td align="center" valign="top"><strong>Figma</strong><br><a href="screenshots/figma.png"><img src="screenshots/figma.png" alt="Figma" width="100%"></a></td>
-<td align="center" valign="top"><strong>Notion</strong><br><a href="screenshots/notion.png"><img src="screenshots/notion.png" alt="Notion" width="100%"></a></td>
-</tr>
-</table>
-
-<details>
+<details open>
 <summary><strong>AI & Machine Learning (12)</strong></summary>
 <br>
 <table>
