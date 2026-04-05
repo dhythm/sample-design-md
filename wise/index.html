@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wise - 海外送金をもっとスマートに</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --wise-green: #9fe870;
+      --dark-green: #163300;
+      --near-black: #0e0f0c;
+      --off-white: #f2f0e6;
+      --white: #ffffff;
+      --positive-green: #2e7d32;
+      --danger-red: #d03238;
+      --warning-yellow: #ffd11a;
+      --light-green: #d4f4bc;
+      --medium-gray: #6b6b6b;
+      --border-gray: #e0e0d8;
+      --ring-shadow: 0 0 0 1px rgba(14, 15, 12, 0.08);
+      --ring-shadow-elevated: 0 0 0 1px rgba(14, 15, 12, 0.08), 0 2px 8px rgba(14, 15, 12, 0.04);
+      --ring-focus: 0 0 0 3px rgba(159, 232, 112, 0.4);
+      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --font-display: 'Inter', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 600;
+      color: var(--near-black);
+      background: var(--off-white);
+      -webkit-font-smoothing: antialiased;
+      font-feature-settings: "calt";
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(242, 240, 230, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 0 48px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-gray);
+    }
+    .nav-logo {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--near-black);
+      letter-spacing: -1px;
+      line-height: 0.85;
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--near-black);
+      text-decoration: none;
+      transition: transform 0.2s var(--spring);
+      display: inline-block;
+    }
+    .nav-links a:hover {
+      transform: scale(1.05);
+    }
+    .nav-cta { display: flex; gap: 12px; align-items: center; }
+
+    /* Buttons */
+    .btn-primary {
+      background: var(--wise-green);
+      color: var(--dark-green);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 16px;
+      padding: 14px 32px;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: transform 0.2s var(--spring);
+      font-feature-settings: "calt";
+    }
+    .btn-primary:hover { transform: scale(1.05); }
+    .btn-primary:active { transform: scale(0.95); }
+    .btn-primary:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--near-black);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 16px;
+      padding: 12px 32px;
+      border-radius: 9999px;
+      border: 2px solid var(--near-black);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: transform 0.2s var(--spring);
+      font-feature-settings: "calt";
+    }
+    .btn-secondary:hover { transform: scale(1.05); }
+    .btn-secondary:active { transform: scale(0.95); }
+    .btn-secondary:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+
+    .btn-nav {
+      font-size: 14px;
+      padding: 10px 24px;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 128px 48px 96px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 72px;
+      font-weight: 900;
+      line-height: 0.85;
+      letter-spacing: -2px;
+      color: var(--near-black);
+      margin-bottom: 32px;
+      font-feature-settings: "calt";
+    }
+    .hero p {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--medium-gray);
+      max-width: 560px;
+      margin: 0 auto 48px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: var(--light-green);
+      color: var(--dark-green);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 9999px;
+      margin-bottom: 24px;
+    }
+
+    /* Converter Widget */
+    .converter {
+      max-width: 480px;
+      margin: 64px auto 0;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--ring-shadow-elevated);
+    }
+    .converter-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-gray);
+    }
+    .converter-row:last-child { border-bottom: none; }
+    .converter-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--medium-gray);
+    }
+    .converter-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--near-black);
+    }
+    .converter-value.green {
+      color: var(--positive-green);
+    }
+    .converter-arrow {
+      text-align: center;
+      padding: 12px 0;
+      font-size: 24px;
+      color: var(--medium-gray);
+    }
+
+    /* Features */
+    .features {
+      padding: 128px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .features h2 {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 0.85;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .features > p {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--medium-gray);
+      line-height: 1.5;
+      max-width: 560px;
+      margin: 0 auto 64px;
+      text-align: center;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--ring-shadow);
+      transition: transform 0.2s var(--spring), box-shadow 0.2s ease;
+      cursor: default;
+    }
+    .feature-card:hover {
+      transform: scale(1.02);
+      box-shadow: var(--ring-shadow-elevated);
+    }
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--light-green);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 24px;
+    }
+    .feature-card h3 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.25px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .feature-card p {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--medium-gray);
+      line-height: 1.5;
+    }
+
+    /* How It Works */
+    .how-it-works {
+      background: var(--near-black);
+      padding: 128px 48px;
+      color: var(--white);
+    }
+    .how-it-works .inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .how-it-works h2 {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 0.85;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .how-it-works > .inner > p {
+      font-size: 18px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+      max-width: 560px;
+      margin: 0 auto 64px;
+      text-align: center;
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .step-card {
+      padding: 32px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      transition: transform 0.2s var(--spring);
+    }
+    .step-card:hover {
+      transform: scale(1.02);
+    }
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: var(--wise-green);
+      color: var(--dark-green);
+      font-size: 20px;
+      font-weight: 900;
+      border-radius: 9999px;
+      margin-bottom: 24px;
+    }
+    .step-card h3 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.25px;
+      margin-bottom: 12px;
+    }
+    .step-card p {
+      font-size: 16px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+    }
+
+    /* Metrics */
+    .metrics {
+      padding: 128px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .metrics h2 {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 0.85;
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+    .metric-item {
+      padding: 32px;
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: var(--ring-shadow);
+      transition: transform 0.2s var(--spring);
+    }
+    .metric-item:hover {
+      transform: scale(1.03);
+    }
+    .metric-item .number {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 0.9;
+      color: var(--near-black);
+      margin-bottom: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+    .metric-item p {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--medium-gray);
+    }
+
+    /* CTA */
+    .cta-section {
+      padding: 128px 48px;
+      text-align: center;
+      background: var(--wise-green);
+    }
+    .cta-section h2 {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 0.85;
+      color: var(--dark-green);
+      margin-bottom: 24px;
+    }
+    .cta-section p {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--dark-green);
+      opacity: 0.7;
+      margin-bottom: 48px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta-section .btn-cta {
+      background: var(--dark-green);
+      color: var(--wise-green);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 18px;
+      padding: 18px 40px;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: transform 0.2s var(--spring);
+    }
+    .cta-section .btn-cta:hover { transform: scale(1.05); }
+    .cta-section .btn-cta:active { transform: scale(0.95); }
+
+    /* Footer */
+    .footer {
+      padding: 64px 48px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--near-black);
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .footer-brand-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--medium-gray);
+      line-height: 1.5;
+      max-width: 280px;
+    }
+    .footer-col h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--near-black);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--medium-gray);
+      text-decoration: none;
+      margin-bottom: 12px;
+      transition: transform 0.2s var(--spring);
+      display: inline-block;
+    }
+    .footer-col a:hover {
+      color: var(--near-black);
+      transform: scale(1.05);
+    }
+    .footer-bottom {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--medium-gray);
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid var(--border-gray);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero h1 { font-size: 56px; letter-spacing: -1.5px; }
+      .features h2, .how-it-works h2, .metrics h2, .cta-section h2 { font-size: 48px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 0 24px; height: 64px; }
+      .nav-links { display: none; }
+      .hero { padding: 96px 24px 64px; }
+      .hero h1 { font-size: 40px; letter-spacing: -1px; }
+      .hero p { font-size: 16px; }
+      .features, .metrics { padding: 96px 24px; }
+      .how-it-works { padding: 96px 24px; }
+      .cta-section { padding: 96px 24px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer { padding: 48px 24px 24px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .features h2, .how-it-works h2, .metrics h2, .cta-section h2 {
+        font-size: 36px;
+        letter-spacing: -0.5px;
+        line-height: 0.9;
+      }
+      .converter { margin: 48px auto 0; padding: 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 32px; }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">wise</div>
+    <ul class="nav-links">
+      <li><a href="#">個人向け</a></li>
+      <li><a href="#">法人向け</a></li>
+      <li><a href="#">プラットフォーム</a></li>
+      <li><a href="#">料金</a></li>
+      <li><a href="#">ヘルプ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#" class="btn-secondary btn-nav">ログイン</a>
+      <a href="#" class="btn-primary btn-nav">会員登録</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <span class="hero-badge">手数料最大8倍おトク</span>
+    <h1>海外送金を、<br>もっとスマートに。</h1>
+    <p>銀行の最大8倍安い手数料で、70カ国以上へ送金。常にリアルな為替レートで、隠れたコストは一切ありません。</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-primary">無料で始める</a>
+      <a href="#" class="btn-secondary">料金を比較する</a>
+    </div>
+
+    <!-- Mini Converter -->
+    <div class="converter">
+      <div class="converter-row">
+        <span class="converter-label">送金額</span>
+        <span class="converter-value">100,000 JPY</span>
+      </div>
+      <div class="converter-arrow">↓</div>
+      <div class="converter-row">
+        <span class="converter-label">受取額</span>
+        <span class="converter-value green">612.48 EUR</span>
+      </div>
+      <div class="converter-row">
+        <span class="converter-label">手数料</span>
+        <span class="converter-value">580 JPY</span>
+      </div>
+      <div class="converter-row">
+        <span class="converter-label">為替レート</span>
+        <span class="converter-value">1 EUR = 162.27 JPY</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <h2>すべてが、透明。</h2>
+    <p>Wiseなら送金前にすべてのコストが分かります。隠れた手数料や不利なレートに、もう悩む必要はありません。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">💱</div>
+        <h3>リアルな為替レート</h3>
+        <p>銀行やほかのサービスが使う独自レートではなく、Google検索と同じミッドマーケットレートを使用。余計な上乗せはゼロです。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>スピード送金</h3>
+        <p>送金の多くは24時間以内に到着。一部のルートでは数秒で着金が完了します。リアルタイムで進捗を追跡できます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>安全で信頼性が高い</h3>
+        <p>世界中の金融当局に認可を受けた正規の送金サービス。1,600万人以上のユーザーから信頼されています。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌍</div>
+        <h3>マルチカレンシー口座</h3>
+        <p>50以上の通貨を1つのアカウントで保有・管理。現地の口座情報を取得して、まるで現地にいるように受け取り可能。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💳</div>
+        <h3>Wiseデビットカード</h3>
+        <p>海外での支払いや引き出しに最適。為替手数料なしで、旅行先でも自国通貨のように使えます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏢</div>
+        <h3>法人向けソリューション</h3>
+        <p>一括送金、API連携、経理ソフト統合。国際ビジネスの資金管理を根本から効率化します。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="inner">
+      <h2>3ステップで完了。</h2>
+      <p>複雑な手続きは不要。たった数分で海外送金が完了します。</p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>アカウント作成</h3>
+          <p>メールアドレスだけで無料登録。本人確認もオンラインで完結し、最短数分でアカウントが有効になります。</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>送金内容を入力</h3>
+          <p>送金額と送金先を入力するだけ。手数料と受取額がリアルタイムで表示され、すべてが透明です。</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>入金して完了</h3>
+          <p>銀行振込またはカード払いで入金。あとはWiseが最速ルートで送金を処理します。進捗は随時通知でお届け。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metrics -->
+  <section class="metrics">
+    <h2>数字で見るWise</h2>
+    <div class="metrics-grid">
+      <div class="metric-item">
+        <div class="number">16M+</div>
+        <p>世界中の利用者</p>
+      </div>
+      <div class="metric-item">
+        <div class="number">70+</div>
+        <p>対応国</p>
+      </div>
+      <div class="metric-item">
+        <div class="number">50+</div>
+        <p>対応通貨</p>
+      </div>
+      <div class="metric-item">
+        <div class="number">¥12B+</div>
+        <p>毎月の送金処理額</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>もっと賢く、<br>送金しよう。</h2>
+    <p>アカウント作成は無料。数分で海外送金を始められます。</p>
+    <a href="#" class="btn-cta">無料アカウントを作成</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand">wise</div>
+        <p class="footer-brand-desc">Wise（旧TransferWise）は、安くて速い海外送金サービスを提供するグローバルなテクノロジー企業です。</p>
+      </div>
+      <div class="footer-col">
+        <h4>サービス</h4>
+        <a href="#">海外送金</a>
+        <a href="#">マルチカレンシー口座</a>
+        <a href="#">デビットカード</a>
+        <a href="#">法人向け</a>
+        <a href="#">API & プラットフォーム</a>
+      </div>
+      <div class="footer-col">
+        <h4>サポート</h4>
+        <a href="#">ヘルプセンター</a>
+        <a href="#">料金一覧</a>
+        <a href="#">為替レート</a>
+        <a href="#">送金ステータス</a>
+        <a href="#">お問い合わせ</a>
+      </div>
+      <div class="footer-col">
+        <h4>会社情報</h4>
+        <a href="#">Wiseについて</a>
+        <a href="#">採用情報</a>
+        <a href="#">プレスリリース</a>
+        <a href="#">ブログ</a>
+        <a href="#">利用規約</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Wise Payments Limited. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>

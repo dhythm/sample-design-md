@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revolut - あなたのお金を、もっと自由に</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       Design System: CSS Custom Properties
+       Based on Revolut DESIGN.md
+       ======================================== */
+    :root {
+      /* Primary */
+      --rui-color-dark: #191c1f;
+      --rui-color-white: #ffffff;
+      --rui-color-light-surface: #f4f4f4;
+
+      /* Brand / Interactive */
+      --rui-color-blue: #494fdf;
+      --rui-color-action-blue: #4f55f1;
+      --rui-color-blue-text: #376cd5;
+
+      /* Semantic */
+      --rui-color-danger: #e23b4a;
+      --rui-color-deep-pink: #e61e49;
+      --rui-color-warning: #ec7e00;
+      --rui-color-yellow: #b09000;
+      --rui-color-teal: #00a87e;
+      --rui-color-light-green: #428619;
+      --rui-color-light-blue: #007bc2;
+      --rui-color-brown: #936d62;
+
+      /* Neutral */
+      --rui-color-mid-slate: #505a63;
+      --rui-color-cool-gray: #8d969e;
+      --rui-color-grey-tone-20: #c9c9cd;
+
+      /* Typography - Aeonik Pro is proprietary, fallback to system geometric sans */
+      --font-display: 'Inter', Arial, sans-serif;
+      --font-body: 'Inter', Arial, sans-serif;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 80px;
+      --space-4xl: 120px;
+
+      /* Radius */
+      --radius-sm: 12px;
+      --radius-card: 20px;
+      --radius-pill: 9999px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      letter-spacing: 0.24px;
+      color: var(--rui-color-dark);
+      background-color: var(--rui-color-white);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ========================================
+       Typography
+       ======================================== */
+    .display-mega {
+      font-family: var(--font-display);
+      font-size: 8.5rem;
+      font-weight: 500;
+      line-height: 1.00;
+      letter-spacing: -2.72px;
+    }
+
+    .display-hero {
+      font-family: var(--font-display);
+      font-size: 5rem;
+      font-weight: 500;
+      line-height: 1.00;
+      letter-spacing: -0.8px;
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 1.21;
+      letter-spacing: -0.48px;
+    }
+
+    .sub-heading {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 500;
+      line-height: 1.20;
+      letter-spacing: -0.4px;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1.19;
+      letter-spacing: -0.32px;
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.33;
+    }
+
+    .nav-ui {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.40;
+    }
+
+    .body-large {
+      font-family: var(--font-body);
+      font-size: 1.125rem;
+      font-weight: 400;
+      line-height: 1.56;
+      letter-spacing: -0.09px;
+    }
+
+    .body-semibold {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.50;
+      letter-spacing: 0.16px;
+    }
+
+    /* ========================================
+       Buttons (Pill System)
+       ======================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.40;
+      padding: 14px 32px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      opacity: 0.85;
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 0.125rem var(--rui-color-blue);
+    }
+
+    .btn-primary {
+      background-color: var(--rui-color-dark);
+      color: var(--rui-color-white);
+    }
+
+    .btn-secondary {
+      background-color: var(--rui-color-light-surface);
+      color: #000000;
+    }
+
+    .btn-outlined {
+      background-color: transparent;
+      color: var(--rui-color-dark);
+      border: 2px solid var(--rui-color-dark);
+    }
+
+    .btn-ghost {
+      background-color: rgba(244, 244, 244, 0.1);
+      color: var(--rui-color-light-surface);
+      border: 2px solid var(--rui-color-light-surface);
+    }
+
+    .btn-ghost:hover {
+      background-color: rgba(244, 244, 244, 0.2);
+    }
+
+    /* ========================================
+       Layout
+       ======================================== */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+    }
+
+    .section {
+      padding: var(--space-4xl) 0;
+    }
+
+    .section-dark {
+      background-color: var(--rui-color-dark);
+      color: var(--rui-color-white);
+    }
+
+    .section-light {
+      background-color: var(--rui-color-light-surface);
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: var(--rui-color-white);
+      border-bottom: 1px solid var(--rui-color-grey-tone-20);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: -0.32px;
+      color: var(--rui-color-dark);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xl);
+    }
+
+    .nav-links a {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--rui-color-dark);
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.7;
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .nav-cta .btn {
+      font-size: 1rem;
+      padding: 10px 24px;
+    }
+
+    .nav-hamburger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-radius: var(--radius-sm);
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: var(--rui-color-dark);
+      transition: transform 0.2s ease;
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      padding-top: 72px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background-color: var(--rui-color-white);
+    }
+
+    .hero-content {
+      text-align: center;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: var(--space-3xl) var(--space-xl);
+    }
+
+    .hero-headline {
+      margin-bottom: var(--space-lg);
+    }
+
+    .hero-sub {
+      color: var(--rui-color-mid-slate);
+      max-width: 640px;
+      margin: 0 auto var(--space-2xl);
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    /* ========================================
+       Stats Bar
+       ======================================== */
+    .stats {
+      padding: var(--space-3xl) 0;
+      background-color: var(--rui-color-light-surface);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-xl);
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 1.21;
+      letter-spacing: -0.48px;
+      color: var(--rui-color-dark);
+      margin-bottom: var(--space-sm);
+    }
+
+    .stat-label {
+      color: var(--rui-color-mid-slate);
+      font-size: 1rem;
+      letter-spacing: 0.24px;
+    }
+
+    /* ========================================
+       Features Section
+       ======================================== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xl);
+      margin-top: var(--space-2xl);
+    }
+
+    .feature-card {
+      background-color: var(--rui-color-light-surface);
+      border-radius: var(--radius-card);
+      padding: var(--space-2xl);
+      transition: transform 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-lg);
+      font-size: 1.75rem;
+    }
+
+    .feature-icon-blue {
+      background-color: rgba(73, 79, 223, 0.1);
+      color: var(--rui-color-blue);
+    }
+
+    .feature-icon-teal {
+      background-color: rgba(0, 168, 126, 0.1);
+      color: var(--rui-color-teal);
+    }
+
+    .feature-icon-pink {
+      background-color: rgba(230, 30, 73, 0.1);
+      color: var(--rui-color-deep-pink);
+    }
+
+    .feature-icon-warning {
+      background-color: rgba(236, 126, 0, 0.1);
+      color: var(--rui-color-warning);
+    }
+
+    .feature-icon-light-blue {
+      background-color: rgba(0, 123, 194, 0.1);
+      color: var(--rui-color-light-blue);
+    }
+
+    .feature-icon-green {
+      background-color: rgba(66, 134, 25, 0.1);
+      color: var(--rui-color-light-green);
+    }
+
+    .feature-card .card-title {
+      margin-bottom: var(--space-md);
+    }
+
+    .feature-card p {
+      color: var(--rui-color-mid-slate);
+      line-height: 1.56;
+    }
+
+    /* ========================================
+       Showcase (Dark Section)
+       ======================================== */
+    .showcase {
+      padding: var(--space-4xl) 0;
+      background-color: var(--rui-color-dark);
+      color: var(--rui-color-white);
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3xl);
+      align-items: center;
+      margin-top: var(--space-2xl);
+    }
+
+    .showcase-text .section-heading {
+      margin-bottom: var(--space-lg);
+    }
+
+    .showcase-text .body-large {
+      color: var(--rui-color-cool-gray);
+      margin-bottom: var(--space-xl);
+    }
+
+    .showcase-visual {
+      background: linear-gradient(135deg, rgba(73, 79, 223, 0.15), rgba(0, 168, 126, 0.1));
+      border-radius: var(--radius-card);
+      padding: var(--space-2xl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .showcase-card-item {
+      background-color: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      padding: var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .showcase-card-item .label {
+      font-weight: 600;
+      font-size: 0.875rem;
+      letter-spacing: 0.16px;
+      color: var(--rui-color-cool-gray);
+      margin-bottom: 4px;
+    }
+
+    .showcase-card-item .value {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: -0.32px;
+    }
+
+    .showcase-card-item .badge {
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+    }
+
+    .badge-teal {
+      background-color: rgba(0, 168, 126, 0.15);
+      color: var(--rui-color-teal);
+    }
+
+    .badge-blue {
+      background-color: rgba(73, 79, 223, 0.15);
+      color: var(--rui-color-action-blue);
+    }
+
+    .badge-warning {
+      background-color: rgba(236, 126, 0, 0.15);
+      color: var(--rui-color-warning);
+    }
+
+    /* ========================================
+       Plans Section
+       ======================================== */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xl);
+      margin-top: var(--space-2xl);
+    }
+
+    .plan-card {
+      border: 1px solid var(--rui-color-grey-tone-20);
+      border-radius: var(--radius-card);
+      padding: var(--space-2xl);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .plan-card.featured {
+      background-color: var(--rui-color-dark);
+      color: var(--rui-color-white);
+      border-color: transparent;
+    }
+
+    .plan-name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+    }
+
+    .plan-price {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 500;
+      letter-spacing: -0.4px;
+      margin-bottom: var(--space-xs);
+    }
+
+    .plan-price span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--rui-color-cool-gray);
+    }
+
+    .plan-desc {
+      color: var(--rui-color-mid-slate);
+      margin-bottom: var(--space-lg);
+      font-size: 0.9375rem;
+    }
+
+    .plan-card.featured .plan-desc {
+      color: var(--rui-color-cool-gray);
+    }
+
+    .plan-features {
+      margin-bottom: var(--space-xl);
+      flex-grow: 1;
+    }
+
+    .plan-features li {
+      padding: var(--space-sm) 0;
+      font-size: 0.9375rem;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+
+    .plan-features li::before {
+      content: "\2713";
+      color: var(--rui-color-teal);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .plan-card.featured .plan-features li {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .plan-card .btn {
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta {
+      padding: var(--space-4xl) 0;
+      background-color: var(--rui-color-dark);
+      color: var(--rui-color-white);
+      text-align: center;
+    }
+
+    .cta .display-hero {
+      max-width: 800px;
+      margin: 0 auto var(--space-lg);
+    }
+
+    .cta .body-large {
+      color: var(--rui-color-cool-gray);
+      max-width: 560px;
+      margin: 0 auto var(--space-2xl);
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      background-color: var(--rui-color-dark);
+      color: var(--rui-color-cool-gray);
+      padding: var(--space-3xl) 0 var(--space-2xl);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: var(--space-2xl);
+      margin-bottom: var(--space-3xl);
+    }
+
+    .footer-brand .nav-logo {
+      color: var(--rui-color-white);
+      margin-bottom: var(--space-md);
+    }
+
+    .footer-brand p {
+      font-size: 0.9375rem;
+      line-height: 1.60;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      color: var(--rui-color-white);
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: var(--space-lg);
+    }
+
+    .footer-col li {
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer-col a {
+      font-size: 0.9375rem;
+      color: var(--rui-color-cool-gray);
+      transition: color 0.2s ease;
+    }
+
+    .footer-col a:hover {
+      color: var(--rui-color-white);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-xl);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.875rem;
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: var(--space-lg);
+    }
+
+    .footer-bottom-links a {
+      color: var(--rui-color-cool-gray);
+      transition: color 0.2s ease;
+    }
+
+    .footer-bottom-links a:hover {
+      color: var(--rui-color-white);
+    }
+
+    /* ========================================
+       Responsive
+       ======================================== */
+
+    /* Tablet: 720-1024px */
+    @media (max-width: 1024px) {
+      .display-mega {
+        font-size: 5rem;
+        letter-spacing: -1.6px;
+      }
+
+      .display-hero {
+        font-size: 3.5rem;
+        letter-spacing: -0.56px;
+      }
+
+      .section-heading {
+        font-size: 2.5rem;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .plans-grid .plan-card:last-child {
+        grid-column: 1 / -1;
+        max-width: 480px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-2xl);
+      }
+
+      .showcase-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-2xl);
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+    }
+
+    /* Mobile: <720px */
+    @media (max-width: 720px) {
+      .display-mega {
+        font-size: 3rem;
+        letter-spacing: -0.96px;
+      }
+
+      .display-hero {
+        font-size: 2.5rem;
+        letter-spacing: -0.4px;
+      }
+
+      .section-heading {
+        font-size: 2rem;
+        letter-spacing: -0.32px;
+      }
+
+      .sub-heading {
+        font-size: 1.75rem;
+      }
+
+      .card-title {
+        font-size: 1.5rem;
+      }
+
+      .container {
+        padding: 0 var(--space-md);
+      }
+
+      .section {
+        padding: var(--space-3xl) 0;
+      }
+
+      .hero-content {
+        padding: var(--space-2xl) var(--space-md);
+      }
+
+      .features-grid,
+      .plans-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .plans-grid .plan-card:last-child {
+        max-width: 100%;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-lg);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: center;
+      }
+
+      .footer-bottom-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .nav-cta .btn-outlined {
+        display: none;
+      }
+    }
+
+    /* Mobile Small: <400px */
+    @media (max-width: 400px) {
+      .display-mega {
+        font-size: 2.25rem;
+      }
+
+      .display-hero {
+        font-size: 2rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+
+      .cta-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       Navigation
+       ======================================== -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">Revolut</a>
+
+      <div class="nav-links">
+        <a href="#features">機能</a>
+        <a href="#plans">プラン</a>
+        <a href="#business">ビジネス</a>
+        <a href="#security">セキュリティ</a>
+      </div>
+
+      <div class="nav-cta">
+        <a href="#" class="btn btn-outlined" style="font-size: 1rem; padding: 10px 24px;">ログイン</a>
+        <a href="#" class="btn btn-primary" style="font-size: 1rem; padding: 10px 24px;">アプリを入手</a>
+      </div>
+
+      <button class="nav-hamburger" aria-label="メニューを開く">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========================================
+       Hero Section
+       ======================================== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="display-mega hero-headline">お金の未来を、<br>今すぐ手に。</h1>
+        <p class="body-large hero-sub">送金、投資、貯蓄、暗号資産。すべてをひとつのアプリで。世界4,500万人以上が信頼するRevolutで、あなたの資産管理を次のレベルへ。</p>
+        <div class="hero-actions">
+          <a href="#" class="btn btn-primary">無料で始める</a>
+          <a href="#" class="btn btn-outlined">プランを比較</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Stats Bar
+       ======================================== -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-number">4,500万+</div>
+          <div class="stat-label">世界中のユーザー</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">200+</div>
+          <div class="stat-label">対応国・地域</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">36通貨</div>
+          <div class="stat-label">リアルタイム為替</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">0円</div>
+          <div class="stat-label">隠れた手数料</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Features Section
+       ======================================== -->
+  <section class="section" id="features">
+    <div class="container">
+      <div style="text-align: center; max-width: 640px; margin: 0 auto;">
+        <h2 class="section-heading">ひとつのアプリで、<br>すべてを管理。</h2>
+        <p class="body-large" style="color: var(--rui-color-mid-slate); margin-top: var(--space-md);">日常の支払いからグローバルな投資まで。Revolutがあれば、お金の管理がシンプルになります。</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-blue">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3 class="card-title">海外送金</h3>
+          <p>銀行間レートで30以上の通貨に即座に送金。従来の銀行手数料を最大8倍節約できます。</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-teal">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <h3 class="card-title">株式投資</h3>
+          <p>手数料無料で米国株や暗号資産に投資。1株未満からでも始められるフラクショナル取引に対応。</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-pink">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <h3 class="card-title">バーチャルカード</h3>
+          <p>ワンタイムカードでオンラインショッピングを安全に。使い捨てカード番号で不正利用を防止。</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-warning">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3 class="card-title">自動貯蓄</h3>
+          <p>ラウンドアップ機能でお釣りを自動貯蓄。Vaultsで目標を設定し、賢く資産を増やしましょう。</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-light-blue">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="card-title">セキュリティ</h3>
+          <p>生体認証、カード凍結、位置情報ベースのセキュリティ。あなたの資産を24時間365日保護。</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-green">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3 class="card-title">スマート分析</h3>
+          <p>AIが支出パターンを分析し、予算管理をサポート。カテゴリ別の支出レポートで無駄を可視化。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Showcase (Dark Section)
+       ======================================== -->
+  <section class="showcase" id="business">
+    <div class="container">
+      <div class="showcase-grid">
+        <div class="showcase-text">
+          <h2 class="section-heading">リアルタイムで、<br>世界とつながる。</h2>
+          <p class="body-large">為替レートをリアルタイムで確認。150以上の通貨ペアに対応し、銀行間レートで両替が可能です。</p>
+          <a href="#" class="btn btn-ghost">詳しく見る</a>
+        </div>
+
+        <div class="showcase-visual">
+          <div class="showcase-card-item">
+            <div>
+              <div class="label">USD / JPY</div>
+              <div class="value">149.82</div>
+            </div>
+            <span class="badge badge-teal">+0.34%</span>
+          </div>
+          <div class="showcase-card-item">
+            <div>
+              <div class="label">EUR / JPY</div>
+              <div class="value">162.45</div>
+            </div>
+            <span class="badge badge-blue">+0.12%</span>
+          </div>
+          <div class="showcase-card-item">
+            <div>
+              <div class="label">GBP / JPY</div>
+              <div class="value">189.23</div>
+            </div>
+            <span class="badge badge-warning">-0.08%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Plans Section
+       ======================================== -->
+  <section class="section" id="plans">
+    <div class="container">
+      <div style="text-align: center; max-width: 640px; margin: 0 auto;">
+        <h2 class="section-heading">あなたに合ったプランを。</h2>
+        <p class="body-large" style="color: var(--rui-color-mid-slate); margin-top: var(--space-md);">無料プランから始めて、必要に応じてアップグレード。</p>
+      </div>
+
+      <div class="plans-grid">
+        <div class="plan-card">
+          <div class="plan-name">Standard</div>
+          <div class="plan-price">無料</div>
+          <p class="plan-desc">はじめてのRevolutに。日常使いに十分な機能を無料で。</p>
+          <ul class="plan-features">
+            <li>海外送金（月5回まで手数料無料）</li>
+            <li>バーチャルカード1枚</li>
+            <li>支出分析</li>
+            <li>暗号資産取引</li>
+          </ul>
+          <a href="#" class="btn btn-outlined" style="font-size: 1rem;">始める</a>
+        </div>
+
+        <div class="plan-card featured">
+          <div class="plan-name" style="color: var(--rui-color-action-blue);">Premium</div>
+          <div class="plan-price">&yen;980 <span>/ 月</span></div>
+          <p class="plan-desc">海外旅行や投資をもっと自由に。追加特典で差をつけよう。</p>
+          <ul class="plan-features">
+            <li>海外送金 無制限</li>
+            <li>空港ラウンジアクセス</li>
+            <li>海外医療保険</li>
+            <li>暗号資産 優先レート</li>
+            <li>メタルカード</li>
+          </ul>
+          <a href="#" class="btn btn-ghost" style="font-size: 1rem;">Premiumを試す</a>
+        </div>
+
+        <div class="plan-card">
+          <div class="plan-name">Metal</div>
+          <div class="plan-price">&yen;1,980 <span>/ 月</span></div>
+          <p class="plan-desc">最上級の体験を。専用コンシェルジュとプレミアム特典。</p>
+          <ul class="plan-features">
+            <li>Premiumの全機能</li>
+            <li>専用カスタマーサポート</li>
+            <li>キャッシュバック最大1%</li>
+            <li>限定メタルカード</li>
+            <li>デバイス保険</li>
+          </ul>
+          <a href="#" class="btn btn-outlined" style="font-size: 1rem;">Metalを選ぶ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       CTA Section
+       ======================================== -->
+  <section class="cta" id="security">
+    <div class="container">
+      <h2 class="display-hero">お金の管理を、<br>もっとシンプルに。</h2>
+      <p class="body-large">4,500万人以上が選んだ金融アプリ。今すぐ無料でアカウントを開設して、新しいお金の体験を始めましょう。</p>
+      <div class="cta-actions">
+        <a href="#" class="btn btn-ghost">無料アカウントを開設</a>
+        <a href="#" class="btn" style="background: transparent; color: var(--rui-color-cool-gray); border: 2px solid var(--rui-color-cool-gray); border-radius: 9999px;">アプリをダウンロード</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Footer
+       ======================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">Revolut</div>
+          <p>送金、支出管理、投資、暗号資産。すべてをひとつのスーパーアプリで。</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>製品</h4>
+          <ul>
+            <li><a href="#">個人アカウント</a></li>
+            <li><a href="#">ビジネス</a></li>
+            <li><a href="#">Revolut &lt;18</a></li>
+            <li><a href="#">暗号資産</a></li>
+            <li><a href="#">株式投資</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>会社情報</h4>
+          <ul>
+            <li><a href="#">概要</a></li>
+            <li><a href="#">採用情報</a></li>
+            <li><a href="#">ブログ</a></li>
+            <li><a href="#">プレスリリース</a></li>
+            <li><a href="#">アフィリエイト</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="#">ヘルプセンター</a></li>
+            <li><a href="#">コミュニティ</a></li>
+            <li><a href="#">セキュリティ</a></li>
+            <li><a href="#">手数料</a></li>
+            <li><a href="#">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>法的情報</h4>
+          <ul>
+            <li><a href="#">利用規約</a></li>
+            <li><a href="#">プライバシーポリシー</a></li>
+            <li><a href="#">Cookie設定</a></li>
+            <li><a href="#">規制情報</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Revolut Ltd. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">プライバシー</a>
+          <a href="#">利用規約</a>
+          <a href="#">Cookie</a>
+          <a href="#">サイトマップ</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HashiCorp - インフラストラクチャの自動化</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       HashiCorp Design System - CSS Custom Properties
+       ======================================== */
+    :root {
+      /* Neutral Scale */
+      --color-black: #000000;
+      --color-dark-charcoal: #15181e;
+      --color-near-black: #0d0e12;
+      --color-charcoal: #3b3d45;
+      --color-dark-gray: #656a76;
+      --color-cool-gray: #b2b6bd;
+      --color-mid-gray: #d5d7db;
+      --color-light-gray: #f1f2f3;
+      --color-near-white: #efeff1;
+      --color-white: #ffffff;
+
+      /* Product Brand Colors */
+      --color-terraform: #7b42bc;
+      --color-vault: #ffcf25;
+      --color-waypoint: #14c6cb;
+      --color-waypoint-hover: #12b6bb;
+      --color-vagrant: #1868f2;
+
+      /* Semantic Colors */
+      --color-action-blue: #1060ff;
+      --color-link-blue: #2264d6;
+      --color-bright-blue: #2b89ff;
+      --color-purple-accent: #911ced;
+
+      /* Shadows */
+      --shadow-whisper: rgba(97, 104, 117, 0.05) 0px 1px 1px, rgba(97, 104, 117, 0.05) 0px 2px 2px;
+      --shadow-card: rgba(97, 104, 117, 0.05) 0px 1px 1px, rgba(97, 104, 117, 0.05) 0px 2px 2px;
+
+      /* Typography */
+      --font-brand: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --font-system: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+      /* Border Radius */
+      --radius-minimal: 2px;
+      --radius-small: 3px;
+      --radius-secondary: 4px;
+      --radius-primary: 5px;
+      --radius-card: 8px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-system);
+      font-weight: 400;
+      line-height: 1.63;
+      color: var(--color-charcoal);
+      background: var(--color-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: var(--color-link-blue);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    a:focus-visible {
+      outline: 3px solid var(--color-action-blue);
+      outline-offset: 2px;
+      border-radius: var(--radius-minimal);
+    }
+
+    /* ========================================
+       Utility
+       ======================================== */
+    .container {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .uppercase-label {
+      font-family: var(--font-brand);
+      font-size: 0.81rem;
+      font-weight: 600;
+      line-height: 1.69;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-white);
+      border-bottom: 1px solid var(--color-light-gray);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-brand);
+      font-weight: 700;
+      font-size: 1.19rem;
+      color: var(--color-black);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-logo:hover {
+      text-decoration: none;
+    }
+
+    .nav-logo svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.94rem;
+      font-weight: 500;
+      line-height: 1.60;
+      color: var(--color-charcoal);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-black);
+      text-decoration: none;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--color-dark-charcoal);
+      color: var(--color-mid-gray) !important;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 9px 9px 9px 15px;
+      border-radius: var(--radius-primary);
+      border: 1px solid rgba(178, 182, 189, 0.4);
+      box-shadow: var(--shadow-whisper);
+      transition: background 0.15s ease;
+    }
+
+    .nav-cta:hover {
+      background: var(--color-charcoal);
+      text-decoration: none;
+    }
+
+    .nav-cta svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: var(--color-charcoal);
+    }
+
+    /* ========================================
+       Hero Section (Dark Mode)
+       ======================================== */
+    .hero {
+      background: var(--color-dark-charcoal);
+      color: var(--color-near-white);
+      padding: 96px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(123, 66, 188, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(20, 198, 203, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+    }
+
+    .hero-label {
+      color: var(--color-cool-gray);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-family: var(--font-brand);
+      font-size: 5.13rem;
+      font-weight: 600;
+      line-height: 1.17;
+      letter-spacing: normal;
+      font-feature-settings: 'kern' 1;
+      color: var(--color-white);
+      margin-bottom: 24px;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-cool-gray);
+      margin-bottom: 40px;
+      max-width: 600px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-white);
+      color: var(--color-charcoal);
+      font-family: var(--font-system);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: var(--radius-primary);
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-whisper);
+      transition: background 0.15s ease, transform 0.1s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-light-gray);
+      text-decoration: none;
+    }
+
+    .btn-primary:focus-visible {
+      outline: 3px solid var(--color-action-blue);
+      outline-offset: 2px;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--color-mid-gray);
+      font-family: var(--font-system);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 12px 24px;
+      border-radius: var(--radius-secondary);
+      border: 1px solid rgba(178, 182, 189, 0.4);
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(178, 182, 189, 0.6);
+      text-decoration: none;
+    }
+
+    .btn-secondary:focus-visible {
+      outline: 3px solid var(--color-action-blue);
+      outline-offset: 2px;
+    }
+
+    /* ========================================
+       Products Section (Light Mode)
+       ======================================== */
+    .products {
+      padding: 80px 0;
+      background: var(--color-white);
+    }
+
+    .products-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .products-header .uppercase-label {
+      color: var(--color-dark-gray);
+      margin-bottom: 16px;
+    }
+
+    .products-header h2 {
+      font-family: var(--font-brand);
+      font-size: 3.25rem;
+      font-weight: 600;
+      line-height: 1.19;
+      font-feature-settings: 'kern' 1;
+      color: var(--color-black);
+      margin-bottom: 16px;
+    }
+
+    .products-header p {
+      font-size: 1.25rem;
+      line-height: 1.50;
+      color: var(--color-dark-gray);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .product-card {
+      background: var(--color-white);
+      border-radius: var(--radius-card);
+      padding: 32px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--color-light-gray);
+      transition: box-shadow 0.2s ease, transform 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .product-card--terraform::before {
+      background: var(--color-terraform);
+    }
+
+    .product-card--vault::before {
+      background: var(--color-vault);
+    }
+
+    .product-card--waypoint::before {
+      background: var(--color-waypoint);
+    }
+
+    .product-card--vagrant::before {
+      background: var(--color-vagrant);
+    }
+
+    .product-card--consul::before {
+      background: linear-gradient(90deg, #dc477d, #f24c53);
+    }
+
+    .product-card--nomad::before {
+      background: #06d092;
+    }
+
+    .product-card:hover {
+      box-shadow: rgba(97, 104, 117, 0.05) 0px 2px 4px, rgba(97, 104, 117, 0.08) 0px 4px 8px;
+      transform: translateY(-1px);
+    }
+
+    .product-card-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-card);
+    }
+
+    .product-card-icon--terraform { background: rgba(123, 66, 188, 0.1); color: var(--color-terraform); }
+    .product-card-icon--vault { background: rgba(255, 207, 37, 0.15); color: #c49b00; }
+    .product-card-icon--waypoint { background: rgba(20, 198, 203, 0.1); color: var(--color-waypoint); }
+    .product-card-icon--vagrant { background: rgba(24, 104, 242, 0.1); color: var(--color-vagrant); }
+    .product-card-icon--consul { background: rgba(220, 71, 125, 0.1); color: #dc477d; }
+    .product-card-icon--nomad { background: rgba(6, 208, 146, 0.1); color: #06d092; }
+
+    .product-card h3 {
+      font-family: var(--font-brand);
+      font-size: 1.63rem;
+      font-weight: 700;
+      line-height: 1.19;
+      color: var(--color-black);
+      margin-bottom: 12px;
+    }
+
+    .product-card p {
+      font-size: 1rem;
+      line-height: 1.63;
+      color: var(--color-dark-gray);
+      margin-bottom: 20px;
+    }
+
+    .product-card-link {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--color-link-blue);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .product-card-link:hover {
+      text-decoration: underline;
+    }
+
+    .product-card-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.15s ease;
+    }
+
+    .product-card:hover .product-card-link svg {
+      transform: translateX(2px);
+    }
+
+    /* ========================================
+       Features Section (Dark)
+       ======================================== */
+    .features {
+      background: var(--color-dark-charcoal);
+      color: var(--color-near-white);
+      padding: 80px 0;
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .features-header .uppercase-label {
+      color: var(--color-cool-gray);
+      margin-bottom: 16px;
+    }
+
+    .features-header h2 {
+      font-family: var(--font-brand);
+      font-size: 3.25rem;
+      font-weight: 600;
+      line-height: 1.19;
+      font-feature-settings: 'kern' 1;
+      color: var(--color-white);
+      margin-bottom: 16px;
+    }
+
+    .features-header p {
+      font-size: 1.25rem;
+      line-height: 1.50;
+      color: var(--color-cool-gray);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--color-near-black);
+      border-radius: var(--radius-card);
+      padding: 32px;
+      border: 1px solid rgba(178, 182, 189, 0.1);
+      transition: border-color 0.2s ease;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(178, 182, 189, 0.2);
+    }
+
+    .feature-card-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 20px;
+      color: var(--color-cool-gray);
+    }
+
+    .feature-card h3 {
+      font-family: var(--font-brand);
+      font-size: 1.19rem;
+      font-weight: 700;
+      line-height: 1.21;
+      color: var(--color-near-white);
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      font-size: 0.94rem;
+      line-height: 1.63;
+      color: var(--color-cool-gray);
+    }
+
+    /* ========================================
+       Stats Section
+       ======================================== */
+    .stats {
+      padding: 80px 0;
+      background: var(--color-light-gray);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      text-align: center;
+    }
+
+    .stat-item h3 {
+      font-family: var(--font-brand);
+      font-size: 2.63rem;
+      font-weight: 700;
+      line-height: 1.19;
+      letter-spacing: -0.42px;
+      color: var(--color-black);
+      margin-bottom: 8px;
+      font-feature-settings: 'kern' 1;
+    }
+
+    .stat-item p {
+      font-size: 1rem;
+      line-height: 1.50;
+      color: var(--color-dark-gray);
+    }
+
+    /* ========================================
+       CTA Section (Dark)
+       ======================================== */
+    .cta {
+      background: var(--color-dark-charcoal);
+      padding: 96px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(123, 66, 188, 0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-content .uppercase-label {
+      color: var(--color-cool-gray);
+      margin-bottom: 16px;
+    }
+
+    .cta-content h2 {
+      font-family: var(--font-brand);
+      font-size: 3.25rem;
+      font-weight: 600;
+      line-height: 1.19;
+      font-feature-settings: 'kern' 1;
+      color: var(--color-white);
+      margin-bottom: 20px;
+    }
+
+    .cta-content p {
+      font-size: 1.25rem;
+      line-height: 1.50;
+      color: var(--color-cool-gray);
+      margin-bottom: 40px;
+    }
+
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      background: var(--color-near-black);
+      color: var(--color-cool-gray);
+      padding: 64px 0 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand p {
+      font-size: 0.88rem;
+      line-height: 1.63;
+      color: var(--color-dark-gray);
+      margin-top: 16px;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-family: var(--font-brand);
+      font-size: 0.81rem;
+      font-weight: 600;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      color: var(--color-near-white);
+      margin-bottom: 20px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col a {
+      font-size: 0.88rem;
+      color: var(--color-dark-gray);
+      transition: color 0.15s ease;
+    }
+
+    .footer-col a:hover {
+      color: var(--color-near-white);
+      text-decoration: none;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(178, 182, 189, 0.15);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bottom p {
+      font-size: 0.81rem;
+      color: var(--color-dark-gray);
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-bottom-links a {
+      font-size: 0.81rem;
+      color: var(--color-dark-gray);
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-brand);
+      font-weight: 700;
+      font-size: 1.06rem;
+      color: var(--color-near-white);
+      text-decoration: none;
+    }
+
+    .footer-logo:hover {
+      text-decoration: none;
+    }
+
+    .footer-logo svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* ========================================
+       Responsive Design
+       ======================================== */
+
+    /* Tablet: 768px */
+    @media (max-width: 992px) {
+      .hero h1 {
+        font-size: 3.25rem;
+      }
+
+      .products-header h2,
+      .features-header h2,
+      .cta-content h2 {
+        font-size: 2.63rem;
+      }
+
+      .products-grid,
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px 24px;
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+    }
+
+    /* Mobile: 480px */
+    @media (max-width: 600px) {
+      .hero {
+        padding: 64px 0 56px;
+      }
+
+      .hero h1 {
+        font-size: 2.63rem;
+      }
+
+      .hero p {
+        font-size: 1.06rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .products,
+      .features,
+      .stats {
+        padding: 56px 0;
+      }
+
+      .products-header h2,
+      .features-header h2,
+      .cta-content h2 {
+        font-size: 2.13rem;
+      }
+
+      .products-grid,
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .cta {
+        padding: 64px 0;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .footer-bottom-links {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ Navigation ============ -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12.5 2.1v11.3L2.8 8V19.2l9.7 5.5V13.4l9.7 5.6V7.7L12.5 2.1z" fill="#000"/>
+          <path d="M19.5 13.4v11.3l9.7-5.6V7.8l-9.7 5.6z" fill="#000"/>
+        </svg>
+        HashiCorp
+      </a>
+      <ul class="nav-links">
+        <li><a href="#products">プロダクト</a></li>
+        <li><a href="#features">プラットフォーム</a></li>
+        <li><a href="#resources">リソース</a></li>
+        <li><a href="#partners">パートナー</a></li>
+        <li>
+          <a href="#get-started" class="nav-cta">
+            無料で始める
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </li>
+      </ul>
+      <button class="mobile-menu-btn" aria-label="メニューを開く">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============ Hero Section ============ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <p class="uppercase-label hero-label">クラウドインフラストラクチャの自動化</p>
+        <h1>インフラを<br>コードで管理する</h1>
+        <p>HashiCorpのプロダクト群が、マルチクラウド環境におけるインフラのプロビジョニング、セキュリティ、ネットワーキング、アプリケーションデプロイを自動化します。</p>
+        <div class="hero-actions">
+          <a href="#get-started" class="btn-primary">
+            HCP を無料で試す
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="#products" class="btn-secondary">
+            プロダクトを見る
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Products Section ============ -->
+  <section class="products" id="products">
+    <div class="container">
+      <div class="products-header">
+        <p class="uppercase-label">プロダクト</p>
+        <h2>すべてのインフラを統合管理</h2>
+        <p>プロビジョニングからセキュリティ、ネットワーキングまで。クラウドの運用をシンプルにするツールスイート。</p>
+      </div>
+      <div class="products-grid">
+        <!-- Terraform -->
+        <div class="product-card product-card--terraform">
+          <div class="product-card-icon product-card-icon--terraform">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M10.5 2v9.5l8.2 4.7V6.7L10.5 2z" fill="currentColor"/>
+              <path d="M19.7 6.7v9.5l8.3-4.8V1.9l-8.3 4.8z" fill="currentColor"/>
+              <path d="M1 5.3v9.5l8.2 4.7V10L1 5.3z" fill="currentColor"/>
+              <path d="M10.5 20.5L18.7 16v9.5l-8.2-4.7v-.3z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Terraform</h3>
+          <p>インフラストラクチャをコードとして定義・プロビジョニング。マルチクラウドのリソースを宣言的に管理します。</p>
+          <a href="#" class="product-card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Vault -->
+        <div class="product-card product-card--vault">
+          <div class="product-card-icon product-card-icon--vault">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M14 2L3 8.5v11L14 26l11-6.5v-11L14 2zm0 3l7.5 4.3v8.4L14 22l-7.5-4.3V9.3L14 5z" fill="currentColor"/>
+              <circle cx="14" cy="13.5" r="3" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Vault</h3>
+          <p>シークレット管理と暗号化を統合。動的シークレットやデータ暗号化で機密情報を安全に保護します。</p>
+          <a href="#" class="product-card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Consul -->
+        <div class="product-card product-card--consul">
+          <div class="product-card-icon product-card-icon--consul">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <circle cx="14" cy="14" r="11" stroke="currentColor" stroke-width="2" fill="none"/>
+              <circle cx="14" cy="14" r="4" fill="currentColor"/>
+              <circle cx="21" cy="10" r="1.5" fill="currentColor"/>
+              <circle cx="21" cy="14" r="1.5" fill="currentColor"/>
+              <circle cx="21" cy="18" r="1.5" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Consul</h3>
+          <p>サービスメッシュとサービスディスカバリを提供。分散システム全体のネットワーク構成を自動化します。</p>
+          <a href="#" class="product-card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Nomad -->
+        <div class="product-card product-card--nomad">
+          <div class="product-card-icon product-card-icon--nomad">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M14 2L3 8.5v11L14 26l11-6.5v-11L14 2z" stroke="currentColor" stroke-width="2" fill="none"/>
+              <path d="M11 10l8 4.5-3 1.7-8-4.5 3-1.7z" fill="currentColor"/>
+              <path d="M16 13.7v5.5l-8-4.5v-5.5" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <h3>Nomad</h3>
+          <p>シンプルで柔軟なワークロードオーケストレーター。コンテナ、VM、非コンテナ化アプリをデプロイ・管理します。</p>
+          <a href="#" class="product-card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Waypoint -->
+        <div class="product-card product-card--waypoint">
+          <div class="product-card-icon product-card-icon--waypoint">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M14 3L5 8v12l9 5 9-5V8l-9-5zm0 4l5 2.8v5.5L14 18l-5-2.8V9.8L14 7z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Waypoint</h3>
+          <p>アプリケーションのビルド、デプロイ、リリースを一貫したワークフローで管理。どのプラットフォームでも同じ体験を。</p>
+          <a href="#" class="product-card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Vagrant -->
+        <div class="product-card product-card--vagrant">
+          <div class="product-card-icon product-card-icon--vagrant">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M5 4h6l3 10 3-10h6l-9 20h-1L5 4z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Vagrant</h3>
+          <p>開発環境の構築と管理を自動化。再現可能な仮想マシン環境をコードで定義・共有できます。</p>
+          <a href="#" class="product-card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Features Section ============ -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features-header">
+        <p class="uppercase-label">HashiCorp Cloud Platform</p>
+        <h2>統合クラウドプラットフォーム</h2>
+        <p>すべてのHashiCorpプロダクトをマネージドサービスとして利用。運用の複雑さを排除し、本来の業務に集中できます。</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <rect x="4" y="8" width="32" height="24" rx="3" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 18l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>フルマネージド運用</h3>
+          <p>インフラの管理・監視・アップグレードをHashiCorpが代行。SLAに基づく高可用性を提供します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <circle cx="20" cy="20" r="14" stroke="currentColor" stroke-width="2" fill="none"/>
+              <path d="M14 20h12M20 14v12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>マルチクラウド対応</h3>
+          <p>AWS、Azure、GCPをはじめとする主要クラウドプロバイダーに対応。ベンダーロックインを回避します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <path d="M20 6v28M6 20h28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <rect x="12" y="12" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+          <h3>ゼロトラストセキュリティ</h3>
+          <p>IDベースのアクセス制御、動的シークレット管理、暗号化を組み合わせたセキュリティモデルを実現します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <path d="M8 28l8-10 6 6 10-14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="32" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3>可観測性の統合</h3>
+          <p>メトリクス、ログ、トレースを統合ダッシュボードで可視化。問題の早期発見と解決をサポートします。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <rect x="6" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+              <rect x="22" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+              <rect x="6" y="22" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+              <rect x="22" y="22" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3>Infrastructure as Code</h3>
+          <p>宣言的な構成ファイルでインフラを定義。バージョン管理、レビュー、再利用が可能になります。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <path d="M20 6c-7.7 0-14 6.3-14 14s6.3 14 14 14 14-6.3 14-14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M30 6v8h-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>自動化されたワークフロー</h3>
+          <p>CI/CDパイプラインとの統合により、コードのプッシュからデプロイまでを完全に自動化します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Stats Section ============ -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3>100M+</h3>
+          <p>Terraformのダウンロード数</p>
+        </div>
+        <div class="stat-item">
+          <h3>4,000+</h3>
+          <p>インテグレーション対応</p>
+        </div>
+        <div class="stat-item">
+          <h3>85%</h3>
+          <p>Fortune 500企業が採用</p>
+        </div>
+        <div class="stat-item">
+          <h3>50,000+</h3>
+          <p>グローバルのお客様</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA Section ============ -->
+  <section class="cta" id="get-started">
+    <div class="container">
+      <div class="cta-content">
+        <p class="uppercase-label">今すぐ始める</p>
+        <h2>クラウドインフラの未来を構築しよう</h2>
+        <p>HashiCorp Cloud Platformは無料枠を提供しています。今すぐアカウントを作成して、インフラの自動化を始めましょう。</p>
+        <div class="cta-actions">
+          <a href="#" class="btn-primary">
+            無料アカウント作成
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="#" class="btn-secondary">
+            営業に問い合わせ
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Footer ============ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="footer-logo">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.5 2.1v11.3L2.8 8V19.2l9.7 5.5V13.4l9.7 5.6V7.7L12.5 2.1z" fill="#efeff1"/>
+              <path d="M19.5 13.4v11.3l9.7-5.6V7.8l-9.7 5.6z" fill="#efeff1"/>
+            </svg>
+            HashiCorp
+          </a>
+          <p>マルチクラウド環境のインフラストラクチャ自動化を提供するグローバルソフトウェア企業です。</p>
+        </div>
+        <div class="footer-col">
+          <h4>プロダクト</h4>
+          <ul>
+            <li><a href="#">Terraform</a></li>
+            <li><a href="#">Vault</a></li>
+            <li><a href="#">Consul</a></li>
+            <li><a href="#">Nomad</a></li>
+            <li><a href="#">Waypoint</a></li>
+            <li><a href="#">Vagrant</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>リソース</h4>
+          <ul>
+            <li><a href="#">ドキュメント</a></li>
+            <li><a href="#">チュートリアル</a></li>
+            <li><a href="#">コミュニティ</a></li>
+            <li><a href="#">イベント</a></li>
+            <li><a href="#">ブログ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>企業情報</h4>
+          <ul>
+            <li><a href="#">会社概要</a></li>
+            <li><a href="#">採用情報</a></li>
+            <li><a href="#">お問い合わせ</a></li>
+            <li><a href="#">プレスリリース</a></li>
+            <li><a href="#">パートナー</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 HashiCorp, Inc. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">プライバシーポリシー</a>
+          <a href="#">利用規約</a>
+          <a href="#">セキュリティ</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

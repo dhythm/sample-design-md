@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cohere — エンタープライズAIプラットフォーム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Design Tokens (CSS Custom Properties) ===== */
+    :root {
+      /* Colors — Primary Text */
+      --color-black: #000000;
+      --color-near-black: #212121;
+      --color-deep-dark: #17171c;
+
+      /* Colors — Interactive & Accent */
+      --color-interaction-blue: #1863dc;
+      --color-ring-blue: rgba(76, 110, 230, 0.5);
+      --color-focus-purple: #9b60aa;
+
+      /* Colors — Surfaces */
+      --color-white: #ffffff;
+      --color-snow: #fafafa;
+      --color-lightest-gray: #f2f2f2;
+
+      /* Colors — Neutral & Border */
+      --color-muted-slate: #93939f;
+      --color-border-cool: #d9d9dd;
+      --color-border-light: #e5e7eb;
+
+      /* Colors — Purple Brand */
+      --color-purple-deep: #39165c;
+      --color-purple-mid: #4a1d7a;
+      --color-purple-accent: #6b3fa0;
+      --color-purple-light: #8b5ec8;
+
+      /* Typography */
+      --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+      --font-body: 'Inter', Arial, ui-sans-serif, system-ui, sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+
+      /* Border Radius */
+      --radius-sharp: 4px;
+      --radius-comfortable: 8px;
+      --radius-generous: 16px;
+      --radius-large: 20px;
+      --radius-signature: 22px;
+      --radius-pill: 9999px;
+
+      /* Spacing (8px base) */
+      --space-2: 2px;
+      --space-4: 4px;
+      --space-6: 6px;
+      --space-8: 8px;
+      --space-10: 10px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-20: 20px;
+      --space-24: 24px;
+      --space-28: 28px;
+      --space-32: 32px;
+      --space-36: 36px;
+      --space-40: 40px;
+      --space-48: 48px;
+      --space-56: 56px;
+      --space-60: 60px;
+
+      /* Max Width */
+      --max-width: 1200px;
+    }
+
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--color-near-black);
+      background-color: var(--color-white);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ===== Typography Utilities ===== */
+    .display-hero {
+      font-family: var(--font-display);
+      font-size: 4.5rem;
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -1.44px;
+    }
+
+    .display-secondary {
+      font-family: var(--font-display);
+      font-size: 3.75rem;
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -1.2px;
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.48px;
+    }
+
+    .sub-heading {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.32px;
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .body-large {
+      font-size: 1.125rem;
+      line-height: 1.4;
+    }
+
+    .label-uppercase {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: 0.28px;
+      text-transform: uppercase;
+      color: var(--color-muted-slate);
+    }
+
+    /* ===== Layout ===== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    /* ===== Navigation ===== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-white);
+      border-bottom: 1px solid var(--color-lightest-gray);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-black);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-32);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 1rem;
+      color: var(--color-near-black);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-interaction-blue);
+    }
+
+    .nav-links a:focus-visible {
+      outline: 2px solid var(--color-interaction-blue);
+      outline-offset: 4px;
+      border-radius: var(--radius-sharp);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--space-10) var(--space-24);
+      background: var(--color-black);
+      color: var(--color-white) !important;
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.71;
+      border-radius: var(--radius-pill);
+      transition: background 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      background: var(--color-deep-dark);
+      color: var(--color-white) !important;
+    }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-8);
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--color-black);
+      border-radius: 1px;
+      transition: transform 0.3s ease;
+    }
+
+    /* ===== Hero Section ===== */
+    .hero {
+      padding: 120px 0 100px;
+      background: var(--color-white);
+    }
+
+    .hero-content {
+      max-width: 860px;
+    }
+
+    .hero-label {
+      margin-bottom: var(--space-20);
+    }
+
+    .hero h1 {
+      color: var(--color-black);
+      margin-bottom: var(--space-24);
+    }
+
+    .hero-description {
+      color: var(--color-muted-slate);
+      max-width: 640px;
+      margin-bottom: var(--space-40);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--space-16);
+      flex-wrap: wrap;
+    }
+
+    /* ===== Buttons ===== */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      padding: var(--space-12) var(--space-32);
+      background: var(--color-black);
+      color: var(--color-white);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.5;
+      border: none;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-deep-dark);
+    }
+
+    .btn-primary:focus-visible {
+      outline: 2px solid var(--color-interaction-blue);
+      outline-offset: 2px;
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      padding: var(--space-12) var(--space-32);
+      background: transparent;
+      color: var(--color-black);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.5;
+      border: 1px solid var(--color-border-cool);
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-ghost:hover {
+      color: var(--color-interaction-blue);
+      border-color: var(--color-interaction-blue);
+    }
+
+    .btn-ghost:focus-visible {
+      outline: 2px solid var(--color-interaction-blue);
+      outline-offset: 2px;
+    }
+
+    .btn-arrow::after {
+      content: '\2192';
+      font-size: 1.1em;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-arrow:hover::after {
+      transform: translateX(3px);
+    }
+
+    /* ===== Trust Bar ===== */
+    .trust-bar {
+      padding: var(--space-56) 0;
+      background: var(--color-snow);
+      border-top: 1px solid var(--color-lightest-gray);
+      border-bottom: 1px solid var(--color-lightest-gray);
+    }
+
+    .trust-label {
+      text-align: center;
+      margin-bottom: var(--space-32);
+    }
+
+    .trust-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-48);
+      flex-wrap: wrap;
+    }
+
+    .trust-logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--color-muted-slate);
+      opacity: 0.6;
+      letter-spacing: -0.3px;
+    }
+
+    /* ===== Features Section ===== */
+    .features {
+      padding: 100px 0;
+      background: var(--color-white);
+    }
+
+    .features-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto var(--space-60);
+    }
+
+    .features-header .label-uppercase {
+      margin-bottom: var(--space-16);
+    }
+
+    .features-header h2 {
+      color: var(--color-black);
+      margin-bottom: var(--space-20);
+    }
+
+    .features-header p {
+      color: var(--color-muted-slate);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+    }
+
+    .feature-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-lightest-gray);
+      border-radius: var(--radius-signature);
+      padding: var(--space-32);
+      transition: border-color 0.2s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--color-border-cool);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--color-snow);
+      border-radius: var(--radius-comfortable);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-24);
+      font-size: 1.5rem;
+    }
+
+    .feature-card h3 {
+      color: var(--color-black);
+      margin-bottom: var(--space-12);
+    }
+
+    .feature-card p {
+      color: var(--color-muted-slate);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ===== Purple Hero Band (Showcase Section) ===== */
+    .showcase {
+      background: linear-gradient(135deg, var(--color-purple-deep) 0%, var(--color-purple-mid) 40%, var(--color-purple-accent) 100%);
+      padding: 100px 0;
+      color: var(--color-white);
+    }
+
+    .showcase-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-60);
+      align-items: center;
+    }
+
+    .showcase-content .label-uppercase {
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: var(--space-20);
+    }
+
+    .showcase-content h2 {
+      color: var(--color-white);
+      margin-bottom: var(--space-24);
+    }
+
+    .showcase-content p {
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: var(--space-36);
+    }
+
+    .showcase .btn-primary {
+      background: var(--color-white);
+      color: var(--color-black);
+    }
+
+    .showcase .btn-primary:hover {
+      background: var(--color-snow);
+    }
+
+    .showcase-visual {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-signature);
+      padding: var(--space-32);
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .showcase-visual-header {
+      display: flex;
+      gap: var(--space-8);
+      margin-bottom: var(--space-24);
+    }
+
+    .showcase-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .showcase-code {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .showcase-code .keyword {
+      color: var(--color-purple-light);
+    }
+
+    .showcase-code .string {
+      color: #7dd3a0;
+    }
+
+    .showcase-code .comment {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    /* ===== Solutions Section ===== */
+    .solutions {
+      padding: 100px 0;
+      background: var(--color-snow);
+      border-top: 1px solid var(--color-lightest-gray);
+    }
+
+    .solutions-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto var(--space-60);
+    }
+
+    .solutions-header .label-uppercase {
+      margin-bottom: var(--space-16);
+    }
+
+    .solutions-header h2 {
+      color: var(--color-black);
+      margin-bottom: var(--space-20);
+    }
+
+    .solutions-header p {
+      color: var(--color-muted-slate);
+    }
+
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-24);
+    }
+
+    .solution-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-lightest-gray);
+      border-radius: var(--radius-signature);
+      padding: var(--space-40);
+      transition: border-color 0.2s ease;
+    }
+
+    .solution-card:hover {
+      border-color: var(--color-border-cool);
+    }
+
+    .solution-number {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-muted-slate);
+      letter-spacing: 0.16px;
+      text-transform: uppercase;
+      margin-bottom: var(--space-20);
+    }
+
+    .solution-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--color-black);
+      margin-bottom: var(--space-16);
+      letter-spacing: -0.2px;
+    }
+
+    .solution-card p {
+      color: var(--color-muted-slate);
+      line-height: 1.6;
+      margin-bottom: var(--space-24);
+    }
+
+    .solution-link {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--color-black);
+      transition: color 0.2s ease;
+    }
+
+    .solution-link:hover {
+      color: var(--color-interaction-blue);
+    }
+
+    .solution-link::after {
+      content: ' \2192';
+    }
+
+    /* ===== CTA Section ===== */
+    .cta {
+      padding: 100px 0;
+      background: var(--color-white);
+      border-top: 1px solid var(--color-lightest-gray);
+    }
+
+    .cta-inner {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-inner .label-uppercase {
+      margin-bottom: var(--space-20);
+    }
+
+    .cta-inner h2 {
+      color: var(--color-black);
+      margin-bottom: var(--space-20);
+    }
+
+    .cta-inner p {
+      color: var(--color-muted-slate);
+      margin-bottom: var(--space-40);
+    }
+
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-16);
+      flex-wrap: wrap;
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      background: linear-gradient(180deg, var(--color-purple-deep) 0%, var(--color-deep-dark) 60%, var(--color-black) 100%);
+      color: var(--color-white);
+      padding: 80px 0 40px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-48);
+      margin-bottom: var(--space-60);
+    }
+
+    .footer-brand .nav-logo {
+      color: var(--color-white);
+      margin-bottom: var(--space-16);
+      display: block;
+    }
+
+    .footer-brand p {
+      color: var(--color-muted-slate);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      max-width: 300px;
+    }
+
+    .footer-col h4 {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.28px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: var(--space-20);
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: var(--space-12);
+    }
+
+    .footer-col a {
+      color: var(--color-muted-slate);
+      font-size: 0.9375rem;
+      transition: color 0.2s ease;
+    }
+
+    .footer-col a:hover {
+      color: var(--color-white);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: var(--space-32);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-16);
+    }
+
+    .footer-bottom p {
+      font-size: 0.8125rem;
+      color: var(--color-muted-slate);
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: var(--space-24);
+      list-style: none;
+    }
+
+    .footer-bottom-links a {
+      font-size: 0.8125rem;
+      color: var(--color-muted-slate);
+      transition: color 0.2s ease;
+    }
+
+    .footer-bottom-links a:hover {
+      color: var(--color-white);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1024px) {
+      .display-hero {
+        font-size: 3rem;
+        letter-spacing: -0.48px;
+      }
+
+      .section-heading {
+        font-size: 2.25rem;
+        letter-spacing: -0.36px;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .showcase-inner {
+        grid-template-columns: 1fr;
+        gap: var(--space-40);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-32);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .display-hero {
+        font-size: 2.5rem;
+        letter-spacing: -0.4px;
+      }
+
+      .section-heading {
+        font-size: 2rem;
+        letter-spacing: -0.32px;
+      }
+
+      .sub-heading {
+        font-size: 1.5rem;
+      }
+
+      .hero {
+        padding: 80px 0 60px;
+      }
+
+      .features,
+      .showcase,
+      .solutions,
+      .cta {
+        padding: 60px 0;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .solutions-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-40);
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 425px) {
+      .display-hero {
+        font-size: 2rem;
+        letter-spacing: -0.32px;
+      }
+
+      .section-heading {
+        font-size: 1.75rem;
+      }
+
+      .container {
+        padding: 0 var(--space-16);
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .btn-primary,
+      .btn-ghost {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .trust-logos {
+        gap: var(--space-24);
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Navigation ===== -->
+  <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="Cohere ホーム">cohere</a>
+      <ul class="nav-links">
+        <li><a href="#features">プロダクト</a></li>
+        <li><a href="#solutions">ソリューション</a></li>
+        <li><a href="#showcase">開発者向け</a></li>
+        <li><a href="#">ドキュメント</a></li>
+        <li><a href="#">価格</a></li>
+        <li><a href="#cta" class="nav-cta">無料で始める</a></li>
+      </ul>
+      <button class="nav-hamburger" aria-label="メニューを開く" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== Hero Section ===== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <p class="label-uppercase hero-label">エンタープライズAIプラットフォーム</p>
+        <h1 class="display-hero">ビジネスの未来を、<br>AIで再定義する</h1>
+        <p class="body-large hero-description">
+          Cohereのエンタープライズ向け大規模言語モデルで、組織全体の生産性を劇的に向上。セキュアなデプロイメント、柔軟なカスタマイズ、業界最高水準のパフォーマンスを実現します。
+        </p>
+        <div class="hero-actions">
+          <a href="#cta" class="btn-primary btn-arrow">今すぐ始める</a>
+          <a href="#showcase" class="btn-ghost btn-arrow">デモを見る</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Trust Bar ===== -->
+  <section class="trust-bar" aria-label="導入企業">
+    <div class="container">
+      <p class="label-uppercase trust-label">世界中の先進企業が信頼</p>
+      <div class="trust-logos">
+        <span class="trust-logo">Oracle</span>
+        <span class="trust-logo">McKinsey</span>
+        <span class="trust-logo">Deloitte</span>
+        <span class="trust-logo">HyperScaler</span>
+        <span class="trust-logo">Fujitsu</span>
+        <span class="trust-logo">LivePerson</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Features Section ===== -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features-header">
+        <p class="label-uppercase">プロダクト</p>
+        <h2 class="section-heading">エンタープライズに<br>最適化されたAI</h2>
+        <p class="body-large">あらゆるビジネスニーズに対応する、包括的なAIモデルスイートを提供します。</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3 class="feature-title">Command R+</h3>
+          <p>高度な推論とRAGに最適化されたフラッグシップモデル。複雑なビジネス課題を的確に解決し、信頼性の高い回答を生成します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </div>
+          <h3 class="feature-title">Embed</h3>
+          <p>業界最高精度のセマンティック検索を実現するエンベディングモデル。100以上の言語に対応し、多言語環境での情報検索を強力にサポートします。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <h3 class="feature-title">Rerank</h3>
+          <p>検索結果の精度を飛躍的に向上させるリランキングモデル。既存の検索システムに統合するだけで、関連性の高い結果を上位に表示します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="feature-title">セキュリティ</h3>
+          <p>SOC 2 Type II準拠。VPC内デプロイメント、データの暗号化、アクセス制御など、エンタープライズレベルのセキュリティを標準装備しています。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h3 class="feature-title">Fine-tuning</h3>
+          <p>自社データでモデルをカスタマイズし、ドメイン固有のタスクで最大のパフォーマンスを引き出します。少量のデータでも効果的な学習が可能です。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <h3 class="feature-title">柔軟なデプロイ</h3>
+          <p>AWS、GCP、Azure、プライベートクラウドに対応。クラウドからオンプレミスまで、お客様のインフラ要件に合わせた柔軟な導入が可能です。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Showcase (Purple Hero Band) ===== -->
+  <section class="showcase" id="showcase">
+    <div class="container">
+      <div class="showcase-inner">
+        <div class="showcase-content">
+          <p class="label-uppercase">開発者向け</p>
+          <h2 class="section-heading">数行のコードで、<br>AIを統合</h2>
+          <p class="body-large">直感的なAPIと充実したSDKで、すぐにプロダクション品質のAIアプリケーションを構築できます。Python、TypeScript、Javaなど主要言語をサポート。</p>
+          <a href="#" class="btn-primary btn-arrow">APIドキュメント</a>
+        </div>
+        <div class="showcase-visual">
+          <div class="showcase-visual-header">
+            <div class="showcase-dot"></div>
+            <div class="showcase-dot"></div>
+            <div class="showcase-dot"></div>
+          </div>
+          <div class="showcase-code">
+            <span class="comment"># Cohere APIでテキスト生成</span><br><br>
+            <span class="keyword">import</span> cohere<br><br>
+            co = cohere.ClientV2(<br>
+            &nbsp;&nbsp;api_key=<span class="string">"your-api-key"</span><br>
+            )<br><br>
+            response = co.chat(<br>
+            &nbsp;&nbsp;model=<span class="string">"command-r-plus"</span>,<br>
+            &nbsp;&nbsp;messages=[{<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"role"</span>: <span class="string">"user"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"content"</span>: <span class="string">"売上レポートを要約して"</span><br>
+            &nbsp;&nbsp;}]<br>
+            )<br><br>
+            <span class="keyword">print</span>(response.message)
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Solutions Section ===== -->
+  <section class="solutions" id="solutions">
+    <div class="container">
+      <div class="solutions-header">
+        <p class="label-uppercase">ソリューション</p>
+        <h2 class="section-heading">あらゆる業界の<br>課題を解決</h2>
+        <p class="body-large">Cohereのプラットフォームは、業界を問わず組織のAI変革を加速します。</p>
+      </div>
+      <div class="solutions-grid">
+        <div class="solution-card">
+          <p class="solution-number">01</p>
+          <h3>カスタマーサポート自動化</h3>
+          <p>AIエージェントが顧客の問い合わせを理解し、正確な回答を自動生成。対応時間を80%削減しながら、顧客満足度を向上させます。</p>
+          <a href="#" class="solution-link">詳しく見る</a>
+        </div>
+        <div class="solution-card">
+          <p class="solution-number">02</p>
+          <h3>社内ナレッジ検索</h3>
+          <p>散在するドキュメント、Slack、Confluenceなどから、自然言語で必要な情報を瞬時に検索。社員の情報探索時間を大幅に短縮します。</p>
+          <a href="#" class="solution-link">詳しく見る</a>
+        </div>
+        <div class="solution-card">
+          <p class="solution-number">03</p>
+          <h3>コンテンツ生成・分析</h3>
+          <p>マーケティングコピー、レポート、メールの自動生成から、大量テキストの分類・感情分析まで。コンテンツワークフローを効率化します。</p>
+          <a href="#" class="solution-link">詳しく見る</a>
+        </div>
+        <div class="solution-card">
+          <p class="solution-number">04</p>
+          <h3>コード支援・開発効率化</h3>
+          <p>コードレビュー、ドキュメント生成、バグ検出をAIが支援。開発チームの生産性を向上させ、高品質なソフトウェアデリバリーを実現します。</p>
+          <a href="#" class="solution-link">詳しく見る</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA Section ===== -->
+  <section class="cta" id="cta">
+    <div class="container">
+      <div class="cta-inner">
+        <p class="label-uppercase">始めましょう</p>
+        <h2 class="section-heading">AIの力で、<br>ビジネスを加速</h2>
+        <p class="body-large">無料トライアルで今すぐCohereのプラットフォームを体験してください。エンタープライズ向けの専用サポートもご用意しています。</p>
+        <div class="cta-actions">
+          <a href="#" class="btn-primary btn-arrow">無料トライアル</a>
+          <a href="#" class="btn-ghost btn-arrow">営業に相談</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="nav-logo">cohere</span>
+          <p>エンタープライズ向けの大規模言語モデルプラットフォーム。安全で、スケーラブルで、カスタマイズ可能なAIソリューションを提供します。</p>
+        </div>
+        <div class="footer-col">
+          <h4>プロダクト</h4>
+          <ul>
+            <li><a href="#">Command R+</a></li>
+            <li><a href="#">Embed</a></li>
+            <li><a href="#">Rerank</a></li>
+            <li><a href="#">Fine-tuning</a></li>
+            <li><a href="#">価格</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>開発者</h4>
+          <ul>
+            <li><a href="#">ドキュメント</a></li>
+            <li><a href="#">APIリファレンス</a></li>
+            <li><a href="#">Playground</a></li>
+            <li><a href="#">ステータス</a></li>
+            <li><a href="#">Changelog</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>会社情報</h4>
+          <ul>
+            <li><a href="#">会社概要</a></li>
+            <li><a href="#">ブログ</a></li>
+            <li><a href="#">採用情報</a></li>
+            <li><a href="#">お問い合わせ</a></li>
+            <li><a href="#">セキュリティ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Cohere. All rights reserved.</p>
+        <ul class="footer-bottom-links">
+          <li><a href="#">プライバシーポリシー</a></li>
+          <li><a href="#">利用規約</a></li>
+          <li><a href="#">Cookieポリシー</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

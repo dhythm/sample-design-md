@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude - Anthropic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       Design Tokens from DESIGN.md
+       ======================================== */
+    :root {
+      /* Primary */
+      --near-black: #141413;
+      --terracotta: #c96442;
+      --coral: #d97757;
+
+      /* Secondary & Accent */
+      --error-crimson: #b53333;
+      --focus-blue: #3898ec;
+
+      /* Surface & Background */
+      --parchment: #f5f4ed;
+      --ivory: #faf9f5;
+      --white: #ffffff;
+      --warm-sand: #e8e6dc;
+      --dark-surface: #30302e;
+      --deep-dark: #141413;
+
+      /* Neutrals & Text */
+      --charcoal-warm: #4d4c48;
+      --olive-gray: #5e5d59;
+      --stone-gray: #87867f;
+      --dark-warm: #3d3d3a;
+      --warm-silver: #b0aea5;
+
+      /* Borders */
+      --border-cream: #f0eee6;
+      --border-warm: #e8e6dc;
+      --border-dark: #30302e;
+
+      /* Ring Shadows */
+      --ring-warm: #d1cfc5;
+      --ring-deep: #c2c0b6;
+
+      /* Typography */
+      --font-serif: 'DM Serif Display', Georgia, serif;
+      --font-sans: 'Inter', system-ui, Arial, sans-serif;
+
+      /* Border Radius Scale */
+      --radius-subtle: 6px;
+      --radius-comfortable: 8px;
+      --radius-generous: 12px;
+      --radius-very: 16px;
+      --radius-highly: 24px;
+      --radius-max: 32px;
+
+      /* Shadows */
+      --shadow-whisper: rgba(0,0,0,0.05) 0px 4px 24px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.60;
+      color: var(--near-black);
+      background-color: var(--parchment);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ========================================
+       Typography
+       ======================================== */
+    .heading-display {
+      font-family: var(--font-serif);
+      font-size: 4rem;
+      font-weight: 400;
+      line-height: 1.10;
+    }
+
+    .heading-section {
+      font-family: var(--font-serif);
+      font-size: 3.25rem;
+      font-weight: 400;
+      line-height: 1.20;
+    }
+
+    .heading-sub-large {
+      font-family: var(--font-serif);
+      font-size: 2.3rem;
+      font-weight: 400;
+      line-height: 1.30;
+    }
+
+    .heading-sub {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.10;
+    }
+
+    .heading-sub-small {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      line-height: 1.20;
+    }
+
+    .heading-feature {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      line-height: 1.20;
+    }
+
+    .body-large {
+      font-size: 1.25rem;
+      line-height: 1.60;
+    }
+
+    .body-standard {
+      font-size: 1rem;
+      line-height: 1.60;
+    }
+
+    .body-small {
+      font-size: 0.94rem;
+      line-height: 1.60;
+    }
+
+    .caption {
+      font-size: 0.88rem;
+      line-height: 1.43;
+    }
+
+    .label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      line-height: 1.25;
+      letter-spacing: 0.12px;
+    }
+
+    .overline {
+      font-size: 0.75rem;
+      font-weight: 500;
+      line-height: 1.60;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .text-secondary {
+      color: var(--olive-gray);
+    }
+
+    .text-tertiary {
+      color: var(--stone-gray);
+    }
+
+    /* ========================================
+       Layout
+       ======================================== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ========================================
+       Buttons
+       ======================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.25;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-terracotta {
+      background-color: var(--terracotta);
+      color: var(--ivory);
+      padding: 12px 24px;
+      border-radius: var(--radius-generous);
+      box-shadow: var(--terracotta) 0px 0px 0px 0px, var(--terracotta) 0px 0px 0px 1px;
+    }
+
+    .btn-terracotta:hover {
+      background-color: var(--coral);
+      box-shadow: var(--coral) 0px 0px 0px 0px, var(--coral) 0px 0px 0px 1px;
+    }
+
+    .btn-warm-sand {
+      background-color: var(--warm-sand);
+      color: var(--charcoal-warm);
+      padding: 10px 16px;
+      border-radius: var(--radius-comfortable);
+      box-shadow: var(--warm-sand) 0px 0px 0px 0px, var(--ring-warm) 0px 0px 0px 1px;
+    }
+
+    .btn-warm-sand:hover {
+      box-shadow: var(--warm-sand) 0px 0px 0px 0px, var(--ring-deep) 0px 0px 0px 1px;
+    }
+
+    .btn-dark {
+      background-color: var(--dark-surface);
+      color: var(--ivory);
+      padding: 10px 16px;
+      border-radius: var(--radius-comfortable);
+      box-shadow: var(--dark-surface) 0px 0px 0px 0px, var(--dark-surface) 0px 0px 0px 1px;
+    }
+
+    .btn-dark:hover {
+      background-color: var(--charcoal-warm);
+    }
+
+    .btn-white {
+      background-color: var(--white);
+      color: var(--near-black);
+      padding: 10px 20px;
+      border-radius: var(--radius-generous);
+      box-shadow: var(--shadow-whisper);
+    }
+
+    .btn-white:hover {
+      background-color: var(--ivory);
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--parchment);
+      border-bottom: 1px solid var(--border-cream);
+      padding: 0 24px;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--near-black);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo-icon {
+      width: 28px;
+      height: 28px;
+      background-color: var(--terracotta);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--ivory);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.94rem;
+      font-weight: 400;
+      color: var(--olive-gray);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--near-black);
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: var(--near-black);
+      margin: 5px 0;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      padding: 100px 24px 120px;
+      text-align: center;
+      background-color: var(--parchment);
+    }
+
+    .hero-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-overline {
+      color: var(--terracotta);
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      color: var(--near-black);
+      margin-bottom: 24px;
+    }
+
+    .hero-subtitle {
+      color: var(--olive-gray);
+      font-size: 1.25rem;
+      line-height: 1.60;
+      max-width: 640px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-visual {
+      max-width: 960px;
+      margin: 64px auto 0;
+      background-color: var(--near-black);
+      border-radius: var(--radius-max);
+      padding: 32px;
+      box-shadow: var(--shadow-whisper);
+    }
+
+    .hero-visual-inner {
+      background-color: var(--dark-surface);
+      border-radius: var(--radius-highly);
+      padding: 40px;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .hero-chat-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .hero-chat-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .hero-chat-avatar.user {
+      background-color: var(--olive-gray);
+    }
+
+    .hero-chat-avatar.claude {
+      background-color: var(--terracotta);
+    }
+
+    .hero-chat-bubble {
+      color: var(--warm-silver);
+      font-size: 0.94rem;
+      line-height: 1.60;
+      max-width: 80%;
+    }
+
+    .hero-chat-bubble.user-msg {
+      color: var(--ivory);
+      font-weight: 500;
+    }
+
+    .hero-chat-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 16px;
+      background-color: var(--terracotta);
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+      margin-left: 2px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ========================================
+       Features Section (Light)
+       ======================================== */
+    .features {
+      padding: 100px 24px;
+      background-color: var(--parchment);
+    }
+
+    .features-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 64px;
+    }
+
+    .features-header .overline {
+      color: var(--terracotta);
+      margin-bottom: 16px;
+    }
+
+    .features-header h2 {
+      margin-bottom: 16px;
+    }
+
+    .features-header p {
+      color: var(--olive-gray);
+      font-size: 1.125rem;
+      line-height: 1.60;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background-color: var(--ivory);
+      border: 1px solid var(--border-cream);
+      border-radius: var(--radius-comfortable);
+      padding: 32px;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--shadow-whisper);
+    }
+
+    .feature-card-icon {
+      width: 48px;
+      height: 48px;
+      background-color: var(--parchment);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-generous);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .feature-card-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--terracotta);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      color: var(--olive-gray);
+      font-size: 0.94rem;
+      line-height: 1.60;
+    }
+
+    /* ========================================
+       Models Section (Dark)
+       ======================================== */
+    .models {
+      padding: 100px 24px;
+      background-color: var(--near-black);
+    }
+
+    .models-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 64px;
+    }
+
+    .models-header .overline {
+      color: var(--coral);
+      margin-bottom: 16px;
+    }
+
+    .models-header h2 {
+      color: var(--ivory);
+      margin-bottom: 16px;
+    }
+
+    .models-header p {
+      color: var(--warm-silver);
+      font-size: 1.125rem;
+      line-height: 1.60;
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .model-card {
+      background-color: var(--dark-surface);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-very);
+      padding: 32px;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .model-card:hover {
+      box-shadow: rgba(201, 100, 66, 0.1) 0px 4px 24px;
+    }
+
+    .model-card-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12px;
+      color: var(--terracotta);
+      background-color: rgba(201, 100, 66, 0.1);
+      padding: 4px 12px;
+      border-radius: var(--radius-highly);
+      margin-bottom: 16px;
+    }
+
+    .model-card h3 {
+      color: var(--ivory);
+      margin-bottom: 12px;
+    }
+
+    .model-card p {
+      color: var(--warm-silver);
+      font-size: 0.94rem;
+      line-height: 1.60;
+      margin-bottom: 24px;
+    }
+
+    .model-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .model-tag {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--stone-gray);
+      background-color: rgba(255,255,255,0.05);
+      padding: 4px 10px;
+      border-radius: var(--radius-subtle);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ========================================
+       Use Cases Section (Light)
+       ======================================== */
+    .use-cases {
+      padding: 100px 24px;
+      background-color: var(--parchment);
+    }
+
+    .use-cases-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 64px;
+    }
+
+    .use-cases-header .overline {
+      color: var(--terracotta);
+      margin-bottom: 16px;
+    }
+
+    .use-cases-header h2 {
+      margin-bottom: 16px;
+    }
+
+    .use-cases-header p {
+      color: var(--olive-gray);
+      font-size: 1.125rem;
+      line-height: 1.60;
+    }
+
+    .use-cases-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .use-case-card {
+      background-color: var(--ivory);
+      border: 1px solid var(--border-cream);
+      border-radius: var(--radius-very);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .use-case-card:hover {
+      box-shadow: var(--shadow-whisper);
+    }
+
+    .use-case-number {
+      font-family: var(--font-serif);
+      font-size: 2.3rem;
+      font-weight: 400;
+      color: var(--border-warm);
+      line-height: 1;
+    }
+
+    .use-case-card h3 {
+      color: var(--near-black);
+    }
+
+    .use-case-card p {
+      color: var(--olive-gray);
+      font-size: 0.94rem;
+      line-height: 1.60;
+    }
+
+    /* ========================================
+       CTA Section (Dark)
+       ======================================== */
+    .cta {
+      padding: 120px 24px;
+      background-color: var(--near-black);
+      text-align: center;
+    }
+
+    .cta-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .cta h2 {
+      color: var(--ivory);
+      margin-bottom: 20px;
+    }
+
+    .cta p {
+      color: var(--warm-silver);
+      font-size: 1.125rem;
+      line-height: 1.60;
+      margin-bottom: 40px;
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      background-color: var(--near-black);
+      border-top: 1px solid var(--border-dark);
+      padding: 64px 24px 40px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--ivory);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-logo-icon {
+      width: 24px;
+      height: 24px;
+      background-color: var(--terracotta);
+      border-radius: 50%;
+    }
+
+    .footer-brand p {
+      color: var(--stone-gray);
+      font-size: 0.88rem;
+      line-height: 1.60;
+      max-width: 280px;
+    }
+
+    .footer-column h4 {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--stone-gray);
+      margin-bottom: 20px;
+    }
+
+    .footer-column ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-column a {
+      font-size: 0.88rem;
+      color: var(--warm-silver);
+      transition: color 0.2s ease;
+    }
+
+    .footer-column a:hover {
+      color: var(--ivory);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-dark);
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-bottom p {
+      color: var(--stone-gray);
+      font-size: 0.75rem;
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-bottom-links a {
+      color: var(--stone-gray);
+      font-size: 0.75rem;
+      transition: color 0.2s ease;
+    }
+
+    .footer-bottom-links a:hover {
+      color: var(--warm-silver);
+    }
+
+    /* ========================================
+       Responsive
+       ======================================== */
+
+    /* Tablet */
+    @media (max-width: 991px) {
+      .heading-display {
+        font-size: 2.75rem;
+      }
+
+      .heading-section {
+        font-size: 2.5rem;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .models-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: block;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      .heading-display {
+        font-size: 2.25rem;
+      }
+
+      .heading-section {
+        font-size: 2rem;
+      }
+
+      .heading-sub-large {
+        font-size: 1.75rem;
+      }
+
+      .hero {
+        padding: 64px 24px 80px;
+      }
+
+      .features, .models, .use-cases {
+        padding: 64px 24px;
+      }
+
+      .cta {
+        padding: 80px 24px;
+      }
+
+      .features-grid,
+      .models-grid,
+      .use-cases-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .hero-visual {
+        padding: 16px;
+        border-radius: var(--radius-very);
+      }
+
+      .hero-visual-inner {
+        padding: 24px;
+        border-radius: var(--radius-generous);
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+
+      .nav-cta .btn-warm-sand {
+        display: none;
+      }
+    }
+
+    /* Small Mobile */
+    @media (max-width: 479px) {
+      .heading-display {
+        font-size: 1.75rem;
+      }
+
+      .heading-section {
+        font-size: 1.6rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== Navigation ==================== -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="nav-logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3C7.5 3 4 6.5 4 11c0 2.5 1.2 4.8 3 6.2V21l3.5-2c.5.1 1 .2 1.5.2 4.5 0 8-3.5 8-8s-3.5-8-8-8z"/>
+          </svg>
+        </span>
+        Claude
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#features">機能</a></li>
+        <li><a href="#models">モデル</a></li>
+        <li><a href="#use-cases">活用事例</a></li>
+        <li><a href="#">API</a></li>
+        <li><a href="#">リサーチ</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="#" class="btn btn-warm-sand">ログイン</a>
+        <a href="#" class="btn btn-terracotta">無料で始める</a>
+      </div>
+
+      <button class="nav-hamburger" aria-label="メニューを開く">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== Hero Section ==================== -->
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="overline hero-overline">Anthropic が開発した AI アシスタント</p>
+      <h1 class="heading-display hero-title">考える力を、<br>あなたのそばに。</h1>
+      <p class="hero-subtitle">
+        Claudeは、思慮深く、正確で、安全なAIアシスタントです。
+        文章作成、分析、コーディング、数学など、幅広いタスクであなたの仕事をサポートします。
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn btn-terracotta">Claudeを試す</a>
+        <a href="#" class="btn btn-warm-sand">APIドキュメント</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-visual-inner">
+        <div class="hero-chat-line">
+          <div class="hero-chat-avatar user"></div>
+          <div class="hero-chat-bubble user-msg">
+            日本の伝統的な庭園設計の基本原則について教えてください。
+          </div>
+        </div>
+        <div class="hero-chat-line">
+          <div class="hero-chat-avatar claude"></div>
+          <div class="hero-chat-bubble">
+            日本庭園の設計には、いくつかの重要な原則があります。まず「借景」は、周囲の自然景観を庭の一部として取り込む技法です。次に「縮景」では、自然の風景を小さなスケールで再現します。石組み、水の流れ、植栽の配置はすべて「間」の美学に基づいており...<span class="hero-chat-cursor"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Features Section ==================== -->
+  <section class="features" id="features">
+    <div class="features-header">
+      <p class="overline">主要な機能</p>
+      <h2 class="heading-section">知性と誠実さを<br>兼ね備えたAI</h2>
+      <p>
+        Claudeは安全性と有用性を両立させるために設計されています。
+        あらゆるタスクにおいて、信頼できるパートナーとなります。
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+        </div>
+        <h3 class="heading-feature">高度な文章作成</h3>
+        <p>ビジネス文書、クリエイティブライティング、技術文書など、あらゆるスタイルの文章を自然で洗練された表現で作成します。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <h3 class="heading-feature">長文の分析と理解</h3>
+        <p>最大20万トークンのコンテキストウィンドウにより、長い文書全体を一度に理解し、正確な分析と要約を提供します。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+            <line x1="14" y1="4" x2="10" y2="20"/>
+          </svg>
+        </div>
+        <h3 class="heading-feature">コード生成と支援</h3>
+        <p>多言語対応のコード生成、デバッグ、リファクタリング。複雑なアルゴリズムの実装からコードレビューまで幅広くサポート。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <h3 class="heading-feature">安全性への取り組み</h3>
+        <p>Constitutional AIの原則に基づき、有害なコンテンツの生成を防ぎ、倫理的で責任あるAIの利用を実現します。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+          </svg>
+        </div>
+        <h3 class="heading-feature">多言語対応</h3>
+        <p>日本語をはじめ、英語、フランス語、スペイン語など多数の言語で自然な対話が可能。翻訳や多言語コンテンツの作成にも対応。</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <h3 class="heading-feature">ビジョン機能</h3>
+        <p>画像やPDFを理解し、チャート分析、文書のデジタル化、ビジュアルコンテンツの説明など、視覚情報の処理を実現します。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Models Section (Dark) ==================== -->
+  <section class="models" id="models">
+    <div class="models-header">
+      <p class="overline">モデルファミリー</p>
+      <h2 class="heading-section">用途に合わせた<br>最適なモデル</h2>
+      <p>
+        それぞれのニーズに応じて、パフォーマンス、速度、コストのバランスを最適化した3つのモデルを提供しています。
+      </p>
+    </div>
+
+    <div class="models-grid">
+      <div class="model-card">
+        <span class="model-card-badge">最高性能</span>
+        <h3 class="heading-sub-small">Opus</h3>
+        <p>最も高度な推論能力を持つフラッグシップモデル。複雑な分析、高度なコーディング、数学的推論において卓越した性能を発揮します。</p>
+        <div class="model-card-tags">
+          <span class="model-tag">高度な推論</span>
+          <span class="model-tag">複雑な分析</span>
+          <span class="model-tag">研究</span>
+        </div>
+      </div>
+
+      <div class="model-card">
+        <span class="model-card-badge">バランス型</span>
+        <h3 class="heading-sub-small">Sonnet</h3>
+        <p>知性とスピードの理想的なバランス。日常的なタスクから高度な分析まで、幅広いユースケースに最適なパフォーマンスを提供します。</p>
+        <div class="model-card-tags">
+          <span class="model-tag">汎用性</span>
+          <span class="model-tag">高速</span>
+          <span class="model-tag">コスト効率</span>
+        </div>
+      </div>
+
+      <div class="model-card">
+        <span class="model-card-badge">高速・軽量</span>
+        <h3 class="heading-sub-small">Haiku</h3>
+        <p>最速のレスポンスと最小のコストを実現。大量のリクエスト処理、リアルタイムアプリケーション、エッジケースに最適です。</p>
+        <div class="model-card-tags">
+          <span class="model-tag">超高速</span>
+          <span class="model-tag">低コスト</span>
+          <span class="model-tag">大規模処理</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Use Cases Section ==================== -->
+  <section class="use-cases" id="use-cases">
+    <div class="use-cases-header">
+      <p class="overline">活用事例</p>
+      <h2 class="heading-section">あらゆる分野で<br>価値を創出</h2>
+      <p>
+        Claudeは多様な業界やユースケースで活用されています。
+        あなたのワークフローにもシームレスに統合できます。
+      </p>
+    </div>
+
+    <div class="use-cases-grid">
+      <div class="use-case-card">
+        <span class="use-case-number">01</span>
+        <h3 class="heading-sub-small">カスタマーサポート</h3>
+        <p>24時間365日、正確で思いやりのある顧客対応を実現。FAQの自動応答から複雑な問い合わせのエスカレーション判断まで、顧客満足度を向上させます。</p>
+      </div>
+
+      <div class="use-case-card">
+        <span class="use-case-number">02</span>
+        <h3 class="heading-sub-small">コンテンツ制作</h3>
+        <p>マーケティングコピー、ブログ記事、SNS投稿、メールマガジンなど、ブランドのトーンに合わせた高品質なコンテンツを効率的に作成します。</p>
+      </div>
+
+      <div class="use-case-card">
+        <span class="use-case-number">03</span>
+        <h3 class="heading-sub-small">ソフトウェア開発</h3>
+        <p>コードの生成、レビュー、デバッグ、ドキュメント作成を支援。開発チームの生産性を大幅に向上させ、より良いソフトウェアの構築を加速します。</p>
+      </div>
+
+      <div class="use-case-card">
+        <span class="use-case-number">04</span>
+        <h3 class="heading-sub-small">データ分析・リサーチ</h3>
+        <p>大量のデータや文献から洞察を抽出し、レポートを作成。市場調査、競合分析、学術研究など、データドリブンな意思決定をサポートします。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CTA Section ==================== -->
+  <section class="cta">
+    <div class="cta-inner">
+      <h2 class="heading-section">Claudeと共に、<br>新しい働き方を。</h2>
+      <p>
+        個人での利用からエンタープライズまで、あなたのニーズに合わせたプランをご用意しています。
+        今すぐ無料で始めましょう。
+      </p>
+      <div class="cta-actions">
+        <a href="#" class="btn btn-terracotta">無料で始める</a>
+        <a href="#" class="btn btn-white">営業に問い合わせ</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Footer ==================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span class="footer-logo-icon"></span>
+            Claude
+          </div>
+          <p>Anthropicが開発した、安全で有用なAIアシスタント。人々の可能性を広げるテクノロジーを目指しています。</p>
+        </div>
+
+        <div class="footer-column">
+          <h4>プロダクト</h4>
+          <ul>
+            <li><a href="#">Claude.ai</a></li>
+            <li><a href="#">API</a></li>
+            <li><a href="#">Claude for Enterprise</a></li>
+            <li><a href="#">料金プラン</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>リソース</h4>
+          <ul>
+            <li><a href="#">ドキュメント</a></li>
+            <li><a href="#">APIリファレンス</a></li>
+            <li><a href="#">ステータス</a></li>
+            <li><a href="#">変更履歴</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>会社情報</h4>
+          <ul>
+            <li><a href="#">Anthropicについて</a></li>
+            <li><a href="#">リサーチ</a></li>
+            <li><a href="#">採用情報</a></li>
+            <li><a href="#">ブログ</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Anthropic, PBC. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">利用規約</a>
+          <a href="#">プライバシーポリシー</a>
+          <a href="#">セキュリティ</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

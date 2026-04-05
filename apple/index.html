@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple - 革新を、あなたの手に。</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* =============================================
+       Apple Design System - CSS Custom Properties
+       ============================================= */
+    :root {
+      /* Primary Colors */
+      --color-pure-black: #000000;
+      --color-light-gray: #f5f5f7;
+      --color-near-black: #1d1d1f;
+
+      /* Interactive Colors */
+      --color-apple-blue: #0071e3;
+      --color-link-blue: #0066cc;
+      --color-bright-blue: #2997ff;
+
+      /* Text Colors */
+      --color-white: #ffffff;
+      --color-text-secondary: rgba(0, 0, 0, 0.8);
+      --color-text-tertiary: rgba(0, 0, 0, 0.48);
+
+      /* Surface Colors */
+      --color-dark-surface-1: #272729;
+      --color-dark-surface-3: #28282a;
+
+      /* Button States */
+      --color-button-active: #ededf2;
+      --color-button-default-light: #fafafc;
+
+      /* Shadows */
+      --shadow-card: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px;
+
+      /* Navigation */
+      --nav-bg: rgba(0, 0, 0, 0.8);
+      --nav-blur: saturate(180%) blur(20px);
+      --nav-height: 48px;
+
+      /* Typography - using Inter as web-safe fallback for SF Pro */
+      --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+      /* Border Radius */
+      --radius-micro: 5px;
+      --radius-standard: 8px;
+      --radius-comfortable: 11px;
+      --radius-large: 12px;
+      --radius-pill: 980px;
+      --radius-circle: 50%;
+
+      /* Layout */
+      --max-content-width: 980px;
+    }
+
+    /* =============================================
+       Reset & Base
+       ============================================= */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.47;
+      letter-spacing: -0.374px;
+      color: var(--color-near-black);
+      background-color: var(--color-white);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* =============================================
+       Navigation
+       ============================================= */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: var(--nav-height);
+      background: var(--nav-bg);
+      backdrop-filter: var(--nav-blur);
+      -webkit-backdrop-filter: var(--nav-blur);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-inner {
+      width: 100%;
+      max-width: var(--max-content-width);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo svg {
+      width: 17px;
+      height: 48px;
+      fill: var(--color-white);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--color-white);
+      letter-spacing: -0.12px;
+      line-height: 1.33;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .nav-actions svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--color-white);
+      opacity: 0.8;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-actions svg:hover {
+      opacity: 1;
+    }
+
+    .nav-hamburger {
+      display: none;
+      width: 18px;
+      height: 18px;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: var(--color-white);
+    }
+
+    /* =============================================
+       Hero Section
+       ============================================= */
+    .hero {
+      background: var(--color-pure-black);
+      color: var(--color-white);
+      padding-top: var(--nav-height);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: var(--max-content-width);
+      padding: 80px 20px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-body);
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 1.19;
+      letter-spacing: 0.231px;
+      color: var(--color-bright-blue);
+      margin-bottom: 8px;
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: 56px;
+      font-weight: 600;
+      line-height: 1.07;
+      letter-spacing: -0.28px;
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-display);
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 1.19;
+      letter-spacing: 0.231px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 32px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-product {
+      margin-top: 48px;
+      width: 100%;
+      max-width: 680px;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      border-radius: var(--radius-large);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-product-visual {
+      width: 70%;
+      height: 60%;
+      background: var(--color-dark-surface-1);
+      border-radius: 8px;
+      border: 2px solid #333;
+      position: relative;
+    }
+
+    .hero-product-visual::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 24px;
+      background: #1a1a1e;
+      border-radius: 6px 6px 0 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-product-visual::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 6px;
+      background: #555;
+      border-radius: 50%;
+    }
+
+    /* =============================================
+       Buttons
+       ============================================= */
+    .btn-primary {
+      display: inline-block;
+      background: var(--color-apple-blue);
+      color: var(--color-white);
+      padding: 8px 15px;
+      border-radius: var(--radius-standard);
+      border: 1px solid transparent;
+      font-family: var(--font-body);
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 2.41;
+      letter-spacing: normal;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: #0077ed;
+    }
+
+    .btn-primary:focus {
+      outline: 2px solid var(--color-apple-blue);
+      outline-offset: 2px;
+    }
+
+    .btn-pill {
+      display: inline-block;
+      background: transparent;
+      padding: 8px 20px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-body);
+      font-size: 17px;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-pill--light {
+      color: var(--color-white);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .btn-pill--light:hover {
+      color: var(--color-white);
+      border-color: var(--color-white);
+    }
+
+    .btn-pill--blue {
+      color: var(--color-link-blue);
+      border: 1px solid var(--color-link-blue);
+    }
+
+    .btn-pill--blue:hover {
+      background: var(--color-link-blue);
+      color: var(--color-white);
+    }
+
+    .btn-pill--filled {
+      background: var(--color-apple-blue);
+      color: var(--color-white);
+      border: 1px solid var(--color-apple-blue);
+    }
+
+    .btn-pill--filled:hover {
+      background: #0077ed;
+      border-color: #0077ed;
+    }
+
+    /* =============================================
+       Section Shared Styles
+       ============================================= */
+    .section {
+      width: 100%;
+      padding: 100px 20px;
+    }
+
+    .section--dark {
+      background: var(--color-pure-black);
+      color: var(--color-white);
+    }
+
+    .section--light {
+      background: var(--color-light-gray);
+      color: var(--color-near-black);
+    }
+
+    .section-inner {
+      max-width: var(--max-content-width);
+      margin: 0 auto;
+    }
+
+    .section-headline {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 1.10;
+      letter-spacing: normal;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-family: var(--font-display);
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 1.19;
+      letter-spacing: 0.231px;
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section--dark .section-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .section--light .section-subtitle {
+      color: var(--color-text-secondary);
+    }
+
+    /* =============================================
+       Product Showcase (Dark Section)
+       ============================================= */
+    .product-showcase {
+      text-align: center;
+    }
+
+    .product-showcase-visual {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 48px;
+      aspect-ratio: 1 / 1;
+      background: radial-gradient(circle at center, #1a1a2e 0%, var(--color-pure-black) 70%);
+      border-radius: var(--radius-large);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-showcase-phone {
+      width: 180px;
+      height: 360px;
+      background: var(--color-dark-surface-3);
+      border-radius: 32px;
+      border: 3px solid #444;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-showcase-phone::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 24px;
+      background: var(--color-pure-black);
+      border-radius: 0 0 16px 16px;
+    }
+
+    .product-showcase-phone-screen {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      right: 3px;
+      bottom: 3px;
+      background: linear-gradient(180deg, #1a0533 0%, #0a1628 50%, #0d1f3c 100%);
+      border-radius: 29px;
+    }
+
+    .product-showcase-ctas {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* =============================================
+       Features / Cards Section
+       ============================================= */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--color-white);
+      border-radius: var(--radius-standard);
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .feature-card-visual {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-card-visual--1 {
+      background: linear-gradient(135deg, #e8e8ed 0%, #d2d2d7 100%);
+    }
+
+    .feature-card-visual--2 {
+      background: linear-gradient(135deg, #f0e6d3 0%, #e5d5b8 100%);
+    }
+
+    .feature-card-visual--3 {
+      background: linear-gradient(135deg, #d4e5f7 0%, #b8d4f0 100%);
+    }
+
+    .feature-card-visual--4 {
+      background: linear-gradient(135deg, #e2d5f0 0%, #d0bfe5 100%);
+    }
+
+    .feature-card-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+    }
+
+    .feature-card-body {
+      padding: 28px 28px 32px;
+    }
+
+    .feature-card-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 1.14;
+      letter-spacing: 0.196px;
+      margin-bottom: 8px;
+      color: var(--color-near-black);
+    }
+
+    .feature-card-desc {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      letter-spacing: -0.224px;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .feature-card-link {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      letter-spacing: -0.224px;
+      color: var(--color-link-blue);
+      transition: text-decoration 0.2s ease;
+    }
+
+    .feature-card-link:hover {
+      text-decoration: underline;
+    }
+
+    .feature-card-link::after {
+      content: ' >';
+    }
+
+    /* =============================================
+       Product Cards Row (Dark)
+       ============================================= */
+    .products-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .product-card {
+      background: var(--color-dark-surface-1);
+      border-radius: var(--radius-standard);
+      overflow: hidden;
+      text-align: center;
+      padding: 40px 24px 32px;
+    }
+
+    .product-card-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+
+    .product-card-name {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 1.14;
+      letter-spacing: 0.196px;
+      margin-bottom: 8px;
+    }
+
+    .product-card-desc {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      letter-spacing: -0.224px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 20px;
+    }
+
+    .product-card-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .product-card-link {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      letter-spacing: -0.224px;
+      color: var(--color-bright-blue);
+    }
+
+    .product-card-link:hover {
+      text-decoration: underline;
+    }
+
+    .product-card-link::after {
+      content: ' >';
+    }
+
+    /* =============================================
+       CTA Section
+       ============================================= */
+    .cta-section {
+      text-align: center;
+    }
+
+    .cta-headline {
+      font-family: var(--font-display);
+      font-size: 56px;
+      font-weight: 600;
+      line-height: 1.07;
+      letter-spacing: -0.28px;
+      margin-bottom: 16px;
+    }
+
+    .cta-body {
+      font-family: var(--font-body);
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 1.19;
+      letter-spacing: 0.231px;
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section--light .cta-body {
+      color: var(--color-text-secondary);
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* =============================================
+       Footer
+       ============================================= */
+    .footer {
+      background: var(--color-light-gray);
+      padding: 20px 20px 32px;
+      border-top: 1px solid #d2d2d7;
+    }
+
+    .footer-inner {
+      max-width: var(--max-content-width);
+      margin: 0 auto;
+    }
+
+    .footer-legal {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.33;
+      letter-spacing: -0.12px;
+      color: var(--color-text-secondary);
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #d2d2d7;
+    }
+
+    .footer-columns {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #d2d2d7;
+    }
+
+    .footer-column-title {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.33;
+      letter-spacing: -0.12px;
+      color: var(--color-near-black);
+      margin-bottom: 10px;
+    }
+
+    .footer-column-links {
+      list-style: none;
+    }
+
+    .footer-column-links li {
+      margin-bottom: 6px;
+    }
+
+    .footer-column-links a {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.33;
+      letter-spacing: -0.12px;
+      color: var(--color-text-secondary);
+      transition: color 0.2s ease;
+    }
+
+    .footer-column-links a:hover {
+      color: var(--color-link-blue);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .footer-copyright {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.33;
+      letter-spacing: -0.12px;
+      color: var(--color-text-secondary);
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 16px;
+      list-style: none;
+    }
+
+    .footer-bottom-links a {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.33;
+      letter-spacing: -0.12px;
+      color: var(--color-text-secondary);
+    }
+
+    .footer-bottom-links a:hover {
+      color: var(--color-link-blue);
+    }
+
+    .footer-bottom-links li + li::before {
+      content: '';
+    }
+
+    /* =============================================
+       Responsive Design
+       ============================================= */
+
+    /* Tablet (834px and below) */
+    @media (max-width: 834px) {
+      .hero-headline {
+        font-size: 40px;
+      }
+
+      .hero-subtitle {
+        font-size: 19px;
+      }
+
+      .section-headline {
+        font-size: 32px;
+      }
+
+      .cta-headline {
+        font-size: 40px;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .products-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-columns {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+    }
+
+    /* Mobile (480px and below) */
+    @media (max-width: 480px) {
+      .hero-headline {
+        font-size: 28px;
+      }
+
+      .hero-subtitle {
+        font-size: 17px;
+      }
+
+      .hero-eyebrow {
+        font-size: 17px;
+      }
+
+      .section {
+        padding: 64px 20px;
+      }
+
+      .section-headline {
+        font-size: 28px;
+      }
+
+      .section-subtitle {
+        font-size: 17px;
+        margin-bottom: 40px;
+      }
+
+      .cta-headline {
+        font-size: 28px;
+      }
+
+      .cta-body {
+        font-size: 17px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .products-row {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-columns {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-ctas {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .product-showcase-phone {
+        width: 140px;
+        height: 280px;
+      }
+
+      .feature-card-title {
+        font-size: 21px;
+      }
+
+      .product-card-name {
+        font-size: 21px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="Apple">
+        <svg viewBox="0 0 17 48" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15.5 19.1c-.1-3.2 2.6-4.7 2.7-4.8-1.5-2.2-3.8-2.5-4.6-2.5-2-.2-3.8 1.2-4.8 1.2s-2.5-1.1-4.1-1.1C2.4 12 .1 14 .1 18.2c0 2.5.9 5.1 2 6.8 1 1.4 2.1 3 3.7 2.9 1.5-.1 2-1 3.8-1s2.3 1 3.9.9c1.6 0 2.5-1.4 3.5-2.8.7-1 1.2-2.1 1.5-3.2-3.2-1.2-3.5-5.2 0-7.5zM12.7 9.7c.8-1 1.4-2.4 1.2-3.7-1.2.1-2.7.8-3.5 1.8-.8.9-1.5 2.3-1.3 3.6 1.4.1 2.8-.7 3.6-1.7z"/>
+        </svg>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#">Store</a></li>
+        <li><a href="#">Mac</a></li>
+        <li><a href="#">iPad</a></li>
+        <li><a href="#">iPhone</a></li>
+        <li><a href="#">Watch</a></li>
+        <li><a href="#">AirPods</a></li>
+        <li><a href="#">TV & Home</a></li>
+        <li><a href="#">エンターテインメント</a></li>
+        <li><a href="#">サポート</a></li>
+      </ul>
+      <div class="nav-actions">
+        <svg viewBox="0 0 16 16" aria-label="検索">
+          <path d="M11.5 10.5L15 14l-1 1-3.5-3.5a6 6 0 1 1 1-1zM6.5 11a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z"/>
+        </svg>
+        <svg viewBox="0 0 16 16" aria-label="ショッピングバッグ">
+          <path d="M4 4.5a4 4 0 0 1 8 0V6h1.5a1 1 0 0 1 1 1v7.5a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1H4V4.5zm1 0V6h6V4.5a3 3 0 0 0-6 0z"/>
+        </svg>
+        <div class="nav-hamburger" aria-label="メニュー" role="button" tabindex="0">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Apple Intelligence</p>
+      <h1 class="hero-headline">あなたのための<br>パーソナルAI。</h1>
+      <p class="hero-subtitle">MacBook Pro、iPhone、iPadの力を引き出す、まったく新しい知性。</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn-pill btn-pill--light">さらに詳しく</a>
+        <a href="#" class="btn-pill btn-pill--filled">購入する</a>
+      </div>
+      <div class="hero-product">
+        <div class="hero-product-visual">
+          <div style="position:absolute;top:32px;left:12px;right:12px;bottom:12px;background:linear-gradient(180deg,#0a0a1a 0%,#1a0a2e 100%);border-radius:2px;display:flex;align-items:center;justify-content:center;">
+            <div style="color:rgba(255,255,255,0.15);font-size:48px;font-weight:600;font-family:var(--font-display);letter-spacing:-1px;">MacBook Pro</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Showcase (Dark Section) - iPhone -->
+  <section class="section section--dark">
+    <div class="section-inner product-showcase">
+      <h2 class="section-headline">iPhone 16 Pro</h2>
+      <p class="section-subtitle">プロの性能を、あなたのポケットに。</p>
+      <div class="product-showcase-visual">
+        <div class="product-showcase-phone">
+          <div class="product-showcase-phone-screen"></div>
+        </div>
+      </div>
+      <div class="product-showcase-ctas">
+        <a href="#" class="btn-pill btn-pill--light">さらに詳しく</a>
+        <a href="#" class="btn-pill btn-pill--filled">購入する</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features / Cards Section (Light) -->
+  <section class="section section--light">
+    <div class="section-inner">
+      <h2 class="section-headline">あなたの毎日を、もっと先へ。</h2>
+      <p class="section-subtitle">Appleのエコシステムが、すべてをシームレスにつなぎます。</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-card-visual feature-card-visual--1">
+            <div class="feature-card-icon">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                <rect width="80" height="80" rx="18" fill="#6e6e73"/>
+                <rect x="16" y="20" width="48" height="32" rx="4" fill="#f5f5f7"/>
+                <rect x="28" y="56" width="24" height="4" rx="2" fill="#f5f5f7"/>
+              </svg>
+            </div>
+          </div>
+          <div class="feature-card-body">
+            <h3 class="feature-card-title">Mac</h3>
+            <p class="feature-card-desc">Apple M4チップ搭載。圧倒的なパフォーマンスと驚異的なバッテリー駆動時間を実現。あなたのクリエイティビティを限界なく解き放ちます。</p>
+            <a href="#" class="feature-card-link">さらに詳しく</a>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-visual feature-card-visual--2">
+            <div class="feature-card-icon">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                <rect width="80" height="80" rx="18" fill="#a08050"/>
+                <rect x="20" y="10" width="40" height="56" rx="6" fill="#f5f5f7"/>
+                <circle cx="40" cy="58" r="3" fill="#a08050"/>
+              </svg>
+            </div>
+          </div>
+          <div class="feature-card-body">
+            <h3 class="feature-card-title">iPad</h3>
+            <p class="feature-card-desc">M4チップとLiquid Retinaディスプレイ。Apple Pencil Proに対応し、クリエイティブのプロも満足するパワフルなタブレット。</p>
+            <a href="#" class="feature-card-link">さらに詳しく</a>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-visual feature-card-visual--3">
+            <div class="feature-card-icon">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                <rect width="80" height="80" rx="18" fill="#4a90d9"/>
+                <circle cx="40" cy="36" r="16" fill="#f5f5f7"/>
+                <rect x="32" y="56" width="16" height="8" rx="4" fill="#f5f5f7"/>
+              </svg>
+            </div>
+          </div>
+          <div class="feature-card-body">
+            <h3 class="feature-card-title">Apple Watch</h3>
+            <p class="feature-card-desc">健康を見守り、毎日を豊かにする。心拍数、血中酸素、睡眠トラッキングなど、先進的な健康機能を搭載。</p>
+            <a href="#" class="feature-card-link">さらに詳しく</a>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-visual feature-card-visual--4">
+            <div class="feature-card-icon">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                <rect width="80" height="80" rx="18" fill="#8b5fcf"/>
+                <ellipse cx="32" cy="38" rx="10" ry="14" fill="#f5f5f7"/>
+                <ellipse cx="48" cy="38" rx="10" ry="14" fill="#f5f5f7"/>
+                <rect x="30" y="52" width="20" height="6" rx="3" fill="#f5f5f7"/>
+              </svg>
+            </div>
+          </div>
+          <div class="feature-card-body">
+            <h3 class="feature-card-title">AirPods</h3>
+            <p class="feature-card-desc">パーソナライズされた空間オーディオ。アダプティブノイズキャンセリングで、あなただけの音楽体験を。</p>
+            <a href="#" class="feature-card-link">さらに詳しく</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Cards Row (Dark) -->
+  <section class="section section--dark">
+    <div class="section-inner">
+      <h2 class="section-headline">アクセサリで、さらに広がる体験。</h2>
+      <p class="section-subtitle">あなたのApple製品をさらに活用するための厳選アクセサリ。</p>
+      <div class="products-row">
+        <div class="product-card">
+          <div class="product-card-icon">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <rect x="8" y="14" width="48" height="30" rx="4" fill="#555"/>
+              <rect x="12" y="18" width="40" height="22" rx="2" fill="#1a1a1e"/>
+              <rect x="20" y="46" width="24" height="4" rx="2" fill="#555"/>
+            </svg>
+          </div>
+          <h3 class="product-card-name">Studio Display</h3>
+          <p class="product-card-desc">5K Retinaディスプレイ。あなたのデスクに、スタジオクオリティの映像を。</p>
+          <div class="product-card-links">
+            <a href="#" class="product-card-link">さらに詳しく</a>
+            <a href="#" class="product-card-link">購入する</a>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-card-icon">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <rect x="14" y="16" width="36" height="8" rx="4" fill="#555"/>
+              <rect x="16" y="28" width="32" height="20" rx="4" fill="#444"/>
+              <rect x="20" y="32" width="24" height="12" rx="2" fill="#333"/>
+            </svg>
+          </div>
+          <h3 class="product-card-name">Magic Keyboard</h3>
+          <p class="product-card-desc">Touch ID搭載。快適なタイピングと先進的なセキュリティ。</p>
+          <div class="product-card-links">
+            <a href="#" class="product-card-link">さらに詳しく</a>
+            <a href="#" class="product-card-link">購入する</a>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-card-icon">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <circle cx="32" cy="32" r="20" fill="#555"/>
+              <circle cx="32" cy="32" r="14" fill="#444"/>
+              <circle cx="32" cy="32" r="4" fill="#2997ff"/>
+            </svg>
+          </div>
+          <h3 class="product-card-name">HomePod</h3>
+          <p class="product-card-desc">空間オーディオで、部屋全体を音で満たす。Siriで、あなたのスマートホームをコントロール。</p>
+          <div class="product-card-links">
+            <a href="#" class="product-card-link">さらに詳しく</a>
+            <a href="#" class="product-card-link">購入する</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section (Light) -->
+  <section class="section section--light">
+    <div class="section-inner cta-section">
+      <h2 class="cta-headline">Apple Store。</h2>
+      <p class="cta-body">あなたにぴったりの製品を見つけよう。スペシャリストがお手伝いします。オンラインでも、お近くのストアでも。</p>
+      <div class="cta-buttons">
+        <a href="#" class="btn-pill btn-pill--blue">最寄りのストアを探す</a>
+        <a href="#" class="btn-primary">オンラインで購入する</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-legal">
+        * Apple Intelligenceは、M1以降を搭載したiPadおよびMac、iPhone 16以降のモデルでご利用いただけます。一部の機能、言語、地域によってはご利用いただけない場合があります。
+      </p>
+      <div class="footer-columns">
+        <div>
+          <h4 class="footer-column-title">ショッピング&amp;サポート</h4>
+          <ul class="footer-column-links">
+            <li><a href="#">Apple Store</a></li>
+            <li><a href="#">Mac</a></li>
+            <li><a href="#">iPad</a></li>
+            <li><a href="#">iPhone</a></li>
+            <li><a href="#">Watch</a></li>
+            <li><a href="#">AirPods</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-column-title">サービス</h4>
+          <ul class="footer-column-links">
+            <li><a href="#">Apple Music</a></li>
+            <li><a href="#">Apple TV+</a></li>
+            <li><a href="#">Apple Arcade</a></li>
+            <li><a href="#">iCloud</a></li>
+            <li><a href="#">Apple One</a></li>
+            <li><a href="#">Apple Card</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-column-title">アカウント</h4>
+          <ul class="footer-column-links">
+            <li><a href="#">Apple IDの管理</a></li>
+            <li><a href="#">Apple Store アカウント</a></li>
+            <li><a href="#">iCloud.com</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-column-title">Appleのこだわり</h4>
+          <ul class="footer-column-links">
+            <li><a href="#">アクセシビリティ</a></li>
+            <li><a href="#">環境</a></li>
+            <li><a href="#">プライバシー</a></li>
+            <li><a href="#">サプライチェーン</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-column-title">Appleについて</h4>
+          <ul class="footer-column-links">
+            <li><a href="#">Newsroom</a></li>
+            <li><a href="#">Appleのリーダーシップ</a></li>
+            <li><a href="#">採用情報</a></li>
+            <li><a href="#">投資家の皆様へ</a></li>
+            <li><a href="#">イベント</a></li>
+            <li><a href="#">お問い合わせ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">Copyright &copy; 2026 Apple Inc. All rights reserved.</p>
+        <ul class="footer-bottom-links">
+          <li><a href="#">プライバシーポリシー</a></li>
+          <li><a href="#">利用規約</a></li>
+          <li><a href="#">法的情報</a></li>
+          <li><a href="#">サイトマップ</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

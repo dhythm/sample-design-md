@@ -1,0 +1,23 @@
+{
+  "name": "sample-design-md",
+  "version": "1.0.0",
+  "description": "https://github.com/VoltAgent/awesome-design-md",
+  "homepage": "https://github.com/dhythm/sample-design-md#readme",
+  "bugs": {
+    "url": "https://github.com/dhythm/sample-design-md/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhythm/sample-design-md.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "agent-browser": "^0.24.1"
+  }
+}

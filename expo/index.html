@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expo - Build one project. Run it everywhere.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       Design System: CSS Custom Properties
+       ======================================== */
+    :root {
+      /* Primary */
+      --expo-black: #000000;
+      --near-black: #1c2024;
+
+      /* Secondary & Accent */
+      --link-cobalt: #0d74ce;
+      --legal-blue: #476cff;
+      --widget-sky: #47c2ff;
+      --preview-purple: #8145b5;
+
+      /* Surface & Background */
+      --cloud-gray: #f0f0f3;
+      --pure-white: #ffffff;
+      --widget-dark: #1a1a1a;
+      --banner-dark: #171717;
+
+      /* Neutrals & Text */
+      --slate-gray: #60646c;
+      --mid-slate: #555860;
+      --silver: #b0b4ba;
+      --pewter: #999999;
+      --light-silver: #cccccc;
+      --dark-slate: #363a3f;
+      --charcoal: #333333;
+
+      /* Semantic */
+      --warning-amber: #ab6400;
+      --destructive-rose: #eb8e90;
+      --border-lavender: #e0e1e6;
+      --input-border: #d9d9e0;
+      --dark-focus-ring: #2547d0;
+
+      /* Shadows */
+      --shadow-whisper: rgba(0,0,0,0.08) 0px 3px 6px, rgba(0,0,0,0.07) 0px 2px 4px;
+      --shadow-elevated: rgba(0,0,0,0.1) 0px 10px 20px, rgba(0,0,0,0.05) 0px 3px 6px;
+
+      /* Typography */
+      --font-primary: 'Inter', -apple-system, system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+      /* Spacing */
+      --section-gap: 144px;
+      --container-max: 1200px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.40;
+      color: var(--near-black);
+      background-color: var(--cloud-gray);
+    }
+
+    a {
+      color: var(--link-cobalt);
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    a:hover {
+      opacity: 0.8;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ========================================
+       Container
+       ======================================== */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(240, 240, 243, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-lavender);
+    }
+
+    .nav-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--expo-black);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--near-black);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--slate-gray);
+      opacity: 1;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--pure-white);
+      border: 1px solid var(--input-border);
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--slate-gray);
+    }
+
+    .nav-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    .btn-signup {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 20px;
+      background: var(--expo-black);
+      color: var(--pure-white);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn-signup:hover {
+      opacity: 0.85;
+      color: var(--pure-white);
+    }
+
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--expo-black);
+      margin: 4px 0;
+      border-radius: 2px;
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      padding: 120px 0 var(--section-gap);
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: var(--pure-white);
+      border: 1px solid var(--border-lavender);
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--slate-gray);
+      margin-bottom: 32px;
+    }
+
+    .hero-badge-new {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      background: var(--expo-black);
+      color: var(--pure-white);
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1.10;
+      letter-spacing: -3px;
+      color: var(--expo-black);
+      max-width: 800px;
+      margin: 0 auto 24px;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--slate-gray);
+      max-width: 560px;
+      margin: 0 auto 48px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 80px;
+    }
+
+    .btn-dark-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: var(--expo-black);
+      color: var(--pure-white);
+      font-family: var(--font-primary);
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn-dark-pill:hover {
+      opacity: 0.85;
+      color: var(--pure-white);
+    }
+
+    .btn-white-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: var(--pure-white);
+      color: var(--near-black);
+      font-family: var(--font-primary);
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 9999px;
+      border: 1px solid var(--input-border);
+      cursor: pointer;
+      text-decoration: none;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .btn-white-pill:hover {
+      box-shadow: var(--shadow-whisper);
+      color: var(--near-black);
+      opacity: 1;
+    }
+
+    .hero-terminal {
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--banner-dark);
+      border-radius: 16px;
+      padding: 24px 32px;
+      text-align: left;
+    }
+
+    .hero-terminal-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .hero-terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .hero-terminal-dot:nth-child(1) { background: #ff5f57; }
+    .hero-terminal-dot:nth-child(2) { background: #febc2e; }
+    .hero-terminal-dot:nth-child(3) { background: #28c840; }
+
+    .hero-terminal code {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--light-silver);
+    }
+
+    .hero-terminal .prompt {
+      color: var(--widget-sky);
+    }
+
+    .hero-terminal .command {
+      color: var(--pure-white);
+    }
+
+    /* ========================================
+       Logos / Social Proof
+       ======================================== */
+    .logos-section {
+      padding: 0 0 var(--section-gap);
+      text-align: center;
+    }
+
+    .logos-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--silver);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 40px;
+    }
+
+    .logos-grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 48px;
+    }
+
+    .logo-item {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--silver);
+      letter-spacing: -0.5px;
+    }
+
+    /* ========================================
+       Features Section
+       ======================================== */
+    .features {
+      padding: 0 0 var(--section-gap);
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .features-header h2 {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.10;
+      letter-spacing: -2px;
+      color: var(--expo-black);
+      margin-bottom: 16px;
+    }
+
+    .features-header p {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--slate-gray);
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.50;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--pure-white);
+      border: 1px solid var(--border-lavender);
+      border-radius: 16px;
+      padding: 32px;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--shadow-whisper);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--cloud-gray);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.20;
+      letter-spacing: -0.25px;
+      color: var(--near-black);
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.40;
+      color: var(--slate-gray);
+    }
+
+    .feature-card .feature-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--link-cobalt);
+    }
+
+    .feature-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .feature-card:hover .feature-link svg {
+      transform: translateX(3px);
+    }
+
+    /* ========================================
+       Showcase Section (large feature)
+       ======================================== */
+    .showcase {
+      padding: 0 0 var(--section-gap);
+    }
+
+    .showcase-card {
+      background: var(--pure-white);
+      border: 1px solid var(--border-lavender);
+      border-radius: 24px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .showcase-content {
+      padding: 64px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .showcase-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--preview-purple);
+      margin-bottom: 16px;
+    }
+
+    .showcase-content h2 {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.10;
+      letter-spacing: -1.5px;
+      color: var(--expo-black);
+      margin-bottom: 16px;
+    }
+
+    .showcase-content p {
+      font-size: 16px;
+      line-height: 1.50;
+      color: var(--slate-gray);
+      margin-bottom: 32px;
+    }
+
+    .showcase-visual {
+      background: var(--banner-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      min-height: 400px;
+    }
+
+    .showcase-code {
+      width: 100%;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.60;
+      color: var(--light-silver);
+    }
+
+    .showcase-code .keyword { color: var(--widget-sky); }
+    .showcase-code .string { color: #a5d6ff; }
+    .showcase-code .func { color: #d2a8ff; }
+    .showcase-code .comment { color: var(--pewter); }
+    .showcase-code .tag { color: var(--destructive-rose); }
+    .showcase-code .attr { color: #79c0ff; }
+
+    /* ========================================
+       Stats Section
+       ======================================== */
+    .stats {
+      padding: 0 0 var(--section-gap);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .stat-card {
+      background: var(--pure-white);
+      border: 1px solid var(--border-lavender);
+      border-radius: 16px;
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.10;
+      color: var(--expo-black);
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--slate-gray);
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta {
+      padding: 0 0 var(--section-gap);
+    }
+
+    .cta-card {
+      background: var(--expo-black);
+      border-radius: 24px;
+      padding: 96px 48px;
+      text-align: center;
+    }
+
+    .cta-card h2 {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.10;
+      letter-spacing: -2px;
+      color: var(--pure-white);
+      margin-bottom: 16px;
+    }
+
+    .cta-card p {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--pewter);
+      max-width: 480px;
+      margin: 0 auto 40px;
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .btn-white-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: var(--pure-white);
+      color: var(--expo-black);
+      font-family: var(--font-primary);
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn-white-cta:hover {
+      opacity: 0.9;
+      color: var(--expo-black);
+    }
+
+    .btn-outline-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: transparent;
+      color: var(--pure-white);
+      font-family: var(--font-primary);
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 9999px;
+      border: 1px solid var(--dark-slate);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .btn-outline-cta:hover {
+      border-color: var(--pewter);
+      color: var(--pure-white);
+      opacity: 1;
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      border-top: 1px solid var(--border-lavender);
+      padding: 64px 0 48px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 64px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      line-height: 1.50;
+      color: var(--slate-gray);
+      margin-top: 16px;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--near-black);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: 10px;
+    }
+
+    .footer-col a {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--slate-gray);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-col a:hover {
+      color: var(--near-black);
+      opacity: 1;
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 32px;
+      border-top: 1px solid var(--border-lavender);
+    }
+
+    .footer-copyright {
+      font-size: 14px;
+      color: var(--silver);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-legal a {
+      font-size: 14px;
+      color: var(--silver);
+    }
+
+    .footer-legal a:hover {
+      color: var(--slate-gray);
+      opacity: 1;
+    }
+
+    /* ========================================
+       Responsive: Tablet
+       ======================================== */
+    @media (max-width: 1024px) {
+      :root {
+        --section-gap: 96px;
+      }
+
+      .hero h1 {
+        font-size: 48px;
+        letter-spacing: -2px;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .showcase-card {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase-visual {
+        min-height: 300px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 32px;
+      }
+
+      .footer-brand {
+        grid-column: 1 / -1;
+      }
+    }
+
+    /* ========================================
+       Responsive: Mobile
+       ======================================== */
+    @media (max-width: 640px) {
+      :root {
+        --section-gap: 80px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-status {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: block;
+      }
+
+      .hero {
+        padding-top: 80px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+        letter-spacing: -1.5px;
+      }
+
+      .hero-subtitle {
+        font-size: 16px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        margin-bottom: 48px;
+      }
+
+      .btn-dark-pill,
+      .btn-white-pill {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero-terminal {
+        padding: 20px 24px;
+      }
+
+      .hero-terminal code {
+        font-size: 13px;
+      }
+
+      .features-header h2 {
+        font-size: 36px;
+        letter-spacing: -1.5px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase-content {
+        padding: 32px 24px;
+      }
+
+      .showcase-content h2 {
+        font-size: 28px;
+        letter-spacing: -1px;
+      }
+
+      .showcase-visual {
+        padding: 24px;
+        min-height: 250px;
+      }
+
+      .showcase-code {
+        font-size: 12px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .stat-card {
+        padding: 24px 16px;
+      }
+
+      .stat-number {
+        font-size: 36px;
+      }
+
+      .cta-card {
+        padding: 64px 24px;
+        border-radius: 16px;
+      }
+
+      .cta-card h2 {
+        font-size: 32px;
+        letter-spacing: -1.5px;
+      }
+
+      .cta-card p {
+        font-size: 16px;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+
+      .btn-white-cta,
+      .btn-outline-cta {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+
+      .footer-brand {
+        grid-column: 1 / -1;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       Navigation
+       ======================================== -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a href="#" class="nav-logo">expo</a>
+        <ul class="nav-links">
+          <li><a href="#">Docs</a></li>
+          <li><a href="#">EAS</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Changelog</a></li>
+          <li><a href="#">Star Us</a></li>
+        </ul>
+      </div>
+      <div class="nav-right">
+        <div class="nav-status">
+          <span class="nav-status-dot"></span>
+          All Systems Operational
+        </div>
+        <a href="#" class="btn-signup">Sign Up</a>
+        <button class="nav-hamburger" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================================
+       Hero Section
+       ======================================== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="hero-badge-new">New</span>
+        Expo SDK 52 is now available
+      </div>
+      <h1>Build one project. Run it everywhere.</h1>
+      <p class="hero-subtitle">
+        Expo is an open-source platform for making universal native apps for Android, iOS, and the web with JavaScript and React.
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn-dark-pill">
+          Get Started
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#" class="btn-white-pill">
+          Read the Docs
+        </a>
+      </div>
+      <div class="hero-terminal">
+        <div class="hero-terminal-bar">
+          <span class="hero-terminal-dot"></span>
+          <span class="hero-terminal-dot"></span>
+          <span class="hero-terminal-dot"></span>
+        </div>
+        <code>
+          <span class="prompt">$</span> <span class="command">npx create-expo-app@latest my-app</span><br>
+          <br>
+          <span style="color: #28c840;">&#10003;</span> Created a new Expo project<br>
+          <br>
+          <span class="prompt">$</span> <span class="command">cd my-app && npx expo start</span><br>
+          <br>
+          Starting Metro Bundler<br>
+          <span style="color: #28c840;">&#10003;</span> Web is waiting on <span style="color: var(--widget-sky);">http://localhost:8081</span>
+        </code>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Logos / Social Proof
+       ======================================== -->
+  <section class="logos-section">
+    <div class="container">
+      <p class="logos-label">Trusted by teams at</p>
+      <div class="logos-grid">
+        <span class="logo-item">Microsoft</span>
+        <span class="logo-item">Shopify</span>
+        <span class="logo-item">Coinbase</span>
+        <span class="logo-item">Discord</span>
+        <span class="logo-item">Spotify</span>
+        <span class="logo-item">Pizza Hut</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Features Section
+       ======================================== -->
+  <section class="features">
+    <div class="container">
+      <div class="features-header">
+        <h2>Everything you need to build great apps</h2>
+        <p>
+          A complete set of tools and services that help you develop, build, deploy, and iterate on your apps.
+        </p>
+      </div>
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3>Expo Go</h3>
+          <p>Instantly preview your project on your device. No build step required during development.</p>
+          <a href="#" class="feature-link">
+            Learn more
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3>EAS Build</h3>
+          <p>Build your app in the cloud for any platform. No need for Xcode or Android Studio on your machine.</p>
+          <a href="#" class="feature-link">
+            Learn more
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+          </div>
+          <h3>EAS Update</h3>
+          <p>Ship updates instantly over the air. Fix bugs and add features without going through app review.</p>
+          <a href="#" class="feature-link">
+            Learn more
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Feature 4 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>EAS Submit</h3>
+          <p>Submit your app to the Apple App Store and Google Play Store with a single CLI command.</p>
+          <a href="#" class="feature-link">
+            Learn more
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Feature 5 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+          <h3>Expo Modules</h3>
+          <p>Access native APIs with a rich library of well-maintained, cross-platform modules.</p>
+          <a href="#" class="feature-link">
+            Learn more
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Feature 6 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3>Expo Router</h3>
+          <p>File-based routing for native and web. Build universal apps with shared navigation structure.</p>
+          <a href="#" class="feature-link">
+            Learn more
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Showcase Section
+       ======================================== -->
+  <section class="showcase">
+    <div class="container">
+      <div class="showcase-card">
+        <div class="showcase-content">
+          <span class="showcase-label">Developer Experience</span>
+          <h2>Write once, run natively on every platform</h2>
+          <p>
+            Build truly native apps with React using a single codebase. Expo Router brings file-based routing to React Native, making it easy to build and maintain complex navigation structures across iOS, Android, and the web.
+          </p>
+          <a href="#" class="btn-dark-pill" style="align-self: flex-start;">
+            Explore Expo Router
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <div class="showcase-visual">
+          <div class="showcase-code">
+            <span class="comment">// app/(tabs)/index.tsx</span><br>
+            <span class="keyword">import</span> { View, Text } <span class="keyword">from</span> <span class="string">'react-native'</span>;<br>
+            <br>
+            <span class="keyword">export default function</span> <span class="func">HomeScreen</span>() {<br>
+            &nbsp;&nbsp;<span class="keyword">return</span> (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">View</span> <span class="attr">style</span>={styles.container}&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">Text</span> <span class="attr">style</span>={styles.title}&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to Expo<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="tag">Text</span>&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="tag">View</span>&gt;<br>
+            &nbsp;&nbsp;);<br>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Stats Section
+       ======================================== -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">700K+</div>
+          <div class="stat-label">GitHub Stars & Forks</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">1M+</div>
+          <div class="stat-label">Apps built with Expo</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">150K+</div>
+          <div class="stat-label">Developers in community</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Built-in native modules</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       CTA Section
+       ======================================== -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-card">
+        <h2>Start building today</h2>
+        <p>
+          Create your first Expo project in minutes. No credit card required. Free for open-source and personal projects.
+        </p>
+        <div class="cta-actions">
+          <a href="#" class="btn-white-cta">
+            Get Started for Free
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#" class="btn-outline-cta">
+            Contact Sales
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Footer
+       ======================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">expo</a>
+          <p>The platform for making universal native apps with React that run on Android, iOS, and the web.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#">Expo Go</a></li>
+            <li><a href="#">EAS Build</a></li>
+            <li><a href="#">EAS Submit</a></li>
+            <li><a href="#">EAS Update</a></li>
+            <li><a href="#">Expo Modules</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API Reference</a></li>
+            <li><a href="#">Examples</a></li>
+            <li><a href="#">Changelog</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <ul>
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">Discord</a></li>
+            <li><a href="#">Forums</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">YouTube</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Security</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copyright">&copy; 2026 Expo. All rights reserved.</span>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

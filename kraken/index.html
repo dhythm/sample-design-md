@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kraken - 暗号資産取引プラットフォーム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       Design System: CSS Custom Properties
+       ======================================== */
+    :root {
+      /* Primary */
+      --color-purple: #7132f5;
+      --color-purple-dark: #5741d8;
+      --color-purple-deep: #5b1ecf;
+      --color-purple-subtle: rgba(133, 91, 251, 0.16);
+      --color-purple-hover: #6028e0;
+
+      /* Text & Neutrals */
+      --color-near-black: #101114;
+      --color-cool-gray: #686b82;
+      --color-silver-blue: #9497a9;
+      --color-dark-gray: #484b5e;
+
+      /* Backgrounds & Borders */
+      --color-white: #ffffff;
+      --color-border-gray: #dedee5;
+      --color-gray-subtle: rgba(148, 151, 169, 0.08);
+
+      /* Semantic */
+      --color-green: #149e61;
+      --color-green-subtle: rgba(20, 158, 97, 0.16);
+      --color-green-dark: #026b3f;
+
+      /* Shadows */
+      --shadow-subtle: rgba(0, 0, 0, 0.03) 0px 4px 24px;
+      --shadow-micro: rgba(16, 24, 40, 0.04) 0px 1px 4px;
+
+      /* Typography */
+      --font-brand: 'IBM Plex Sans', Helvetica, Arial, sans-serif;
+      --font-product: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+      /* Border Radius */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-full: 9999px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-product);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.38;
+      color: var(--color-near-black);
+      background-color: var(--color-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: var(--color-purple);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--color-purple-deep);
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ========================================
+       Utility
+       ======================================== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.33;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+    }
+
+    .badge--success {
+      background: var(--color-green-subtle);
+      color: var(--color-green-dark);
+    }
+
+    .badge--neutral {
+      background: rgba(104, 107, 130, 0.12);
+      color: var(--color-dark-gray);
+    }
+
+    /* ========================================
+       Buttons
+       ======================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-product);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.38;
+      padding: 13px 24px;
+      border-radius: var(--radius-lg);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      gap: 8px;
+    }
+
+    .btn--primary {
+      background: var(--color-purple);
+      color: var(--color-white);
+    }
+
+    .btn--primary:hover {
+      background: var(--color-purple-hover);
+      color: var(--color-white);
+    }
+
+    .btn--outlined {
+      background: var(--color-white);
+      color: var(--color-purple-dark);
+      border: 1px solid var(--color-purple-dark);
+    }
+
+    .btn--outlined:hover {
+      background: var(--color-purple-subtle);
+      color: var(--color-purple-dark);
+    }
+
+    .btn--white {
+      background: var(--color-white);
+      color: var(--color-near-black);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .btn--white:hover {
+      box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 24px;
+      color: var(--color-near-black);
+    }
+
+    .btn--secondary {
+      background: var(--color-gray-subtle);
+      color: var(--color-near-black);
+    }
+
+    .btn--secondary:hover {
+      background: rgba(148, 151, 169, 0.16);
+      color: var(--color-near-black);
+    }
+
+    .btn--sm {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+
+    .btn--lg {
+      padding: 16px 32px;
+      font-size: 18px;
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border-gray);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .nav__logo {
+      font-family: var(--font-brand);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-near-black);
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav__logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--color-purple);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav__logo-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav__link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-near-black);
+      transition: color 0.2s ease;
+    }
+
+    .nav__link:hover {
+      color: var(--color-purple);
+    }
+
+    .nav__actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav__toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .nav__toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--color-near-black);
+      margin: 5px 0;
+      transition: all 0.3s ease;
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      padding: 140px 0 80px;
+      background: linear-gradient(180deg, rgba(113, 50, 245, 0.04) 0%, rgba(255, 255, 255, 1) 100%);
+      overflow: hidden;
+    }
+
+    .hero__inner {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .hero__content {
+      flex: 1;
+      max-width: 560px;
+    }
+
+    .hero__badge {
+      margin-bottom: 20px;
+    }
+
+    .hero__title {
+      font-family: var(--font-brand);
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.17;
+      letter-spacing: -1px;
+      color: var(--color-near-black);
+      margin-bottom: 20px;
+    }
+
+    .hero__title span {
+      color: var(--color-purple);
+    }
+
+    .hero__description {
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--color-cool-gray);
+      margin-bottom: 32px;
+      max-width: 480px;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero__stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--color-border-gray);
+    }
+
+    .hero__stat-value {
+      font-family: var(--font-brand);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.29;
+      letter-spacing: -0.5px;
+      color: var(--color-near-black);
+    }
+
+    .hero__stat-label {
+      font-size: 14px;
+      color: var(--color-silver-blue);
+      margin-top: 4px;
+    }
+
+    .hero__visual {
+      flex: 1;
+      position: relative;
+    }
+
+    .hero__card {
+      background: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-subtle);
+      padding: 32px;
+      position: relative;
+    }
+
+    .hero__card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .hero__card-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-cool-gray);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero__card-price {
+      font-family: var(--font-brand);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.22;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .hero__card-change {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-green);
+    }
+
+    .hero__chart {
+      margin-top: 24px;
+      height: 120px;
+      position: relative;
+    }
+
+    .hero__chart svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero__mini-cards {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .hero__mini-card {
+      flex: 1;
+      background: var(--color-gray-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+
+    .hero__mini-card-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-silver-blue);
+      margin-bottom: 4px;
+    }
+
+    .hero__mini-card-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-near-black);
+    }
+
+    .hero__mini-card-change {
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .hero__mini-card-change--up {
+      color: var(--color-green);
+    }
+
+    .hero__mini-card-change--down {
+      color: #d94040;
+    }
+
+    /* ========================================
+       Features Section
+       ======================================== */
+    .features {
+      padding: 100px 0;
+    }
+
+    .section__header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 60px;
+    }
+
+    .section__badge {
+      margin-bottom: 16px;
+    }
+
+    .section__title {
+      font-family: var(--font-brand);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.22;
+      letter-spacing: -0.5px;
+      color: var(--color-near-black);
+      margin-bottom: 16px;
+    }
+
+    .section__description {
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--color-cool-gray);
+    }
+
+    .features__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border-gray);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--shadow-subtle);
+      border-color: transparent;
+      transform: translateY(-2px);
+    }
+
+    .feature-card__icon {
+      width: 48px;
+      height: 48px;
+      background: var(--color-purple-subtle);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .feature-card__icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--color-purple);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feature-card__title {
+      font-family: var(--font-product);
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.20;
+      color: var(--color-near-black);
+      margin-bottom: 12px;
+    }
+
+    .feature-card__text {
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--color-cool-gray);
+    }
+
+    /* ========================================
+       Prices / Crypto Table Section
+       ======================================== */
+    .prices {
+      padding: 100px 0;
+      background: rgba(113, 50, 245, 0.02);
+    }
+
+    .prices__table {
+      background: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-micro);
+      overflow: hidden;
+    }
+
+    .prices__table-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 140px;
+      gap: 16px;
+      padding: 16px 24px;
+      background: var(--color-gray-subtle);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-silver-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .prices__table-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 140px;
+      gap: 16px;
+      padding: 20px 24px;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border-gray);
+      transition: background 0.2s ease;
+    }
+
+    .prices__table-row:last-child {
+      border-bottom: none;
+    }
+
+    .prices__table-row:hover {
+      background: rgba(113, 50, 245, 0.02);
+    }
+
+    .prices__coin {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .prices__coin-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: white;
+    }
+
+    .prices__coin-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .prices__coin-symbol {
+      font-size: 14px;
+      color: var(--color-silver-blue);
+    }
+
+    .prices__value {
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .prices__change {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .prices__change--up { color: var(--color-green); }
+    .prices__change--down { color: #d94040; }
+
+    .prices__action .btn {
+      width: 100%;
+      font-size: 14px;
+      padding: 8px 16px;
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta {
+      padding: 100px 0;
+    }
+
+    .cta__inner {
+      background: linear-gradient(135deg, var(--color-purple) 0%, var(--color-purple-deep) 100%);
+      border-radius: 24px;
+      padding: 80px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta__inner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .cta__inner::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .cta__title {
+      font-family: var(--font-brand);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.22;
+      letter-spacing: -0.5px;
+      color: var(--color-white);
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta__description {
+      font-size: 18px;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 32px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta__actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta__features {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      margin-top: 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta__feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .cta__feature svg {
+      width: 20px;
+      height: 20px;
+      stroke: rgba(255, 255, 255, 0.9);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      padding: 60px 0 32px;
+      border-top: 1px solid var(--color-border-gray);
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer__brand-name {
+      font-family: var(--font-brand);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-near-black);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer__brand-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--color-cool-gray);
+      max-width: 280px;
+    }
+
+    .footer__col-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-near-black);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer__link {
+      font-size: 14px;
+      color: var(--color-cool-gray);
+      transition: color 0.2s ease;
+    }
+
+    .footer__link:hover {
+      color: var(--color-purple);
+    }
+
+    .footer__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid var(--color-border-gray);
+      font-size: 12px;
+      color: var(--color-silver-blue);
+    }
+
+    .footer__socials {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer__social {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--color-gray-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease;
+    }
+
+    .footer__social:hover {
+      background: var(--color-purple-subtle);
+    }
+
+    .footer__social svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--color-cool-gray);
+    }
+
+    /* ========================================
+       Responsive
+       ======================================== */
+    @media (max-width: 1024px) {
+      .hero__inner {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero__content {
+        max-width: 100%;
+      }
+
+      .hero__description {
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero__actions {
+        justify-content: center;
+      }
+
+      .hero__stats {
+        justify-content: center;
+      }
+
+      .hero__visual {
+        max-width: 500px;
+        width: 100%;
+      }
+
+      .features__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 32px;
+      }
+
+      .footer__grid > div:first-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding: 120px 0 60px;
+      }
+
+      .hero__title {
+        font-size: 36px;
+        letter-spacing: -0.5px;
+      }
+
+      .hero__stats {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+      }
+
+      .section__title {
+        font-size: 28px;
+      }
+
+      .features__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .prices__table-header,
+      .prices__table-row {
+        grid-template-columns: 2fr 1fr 1fr;
+      }
+
+      .prices__table-header > *:nth-child(4),
+      .prices__table-header > *:nth-child(5),
+      .prices__table-row > *:nth-child(4),
+      .prices__table-row > *:nth-child(5) {
+        display: none;
+      }
+
+      .cta__inner {
+        padding: 48px 24px;
+      }
+
+      .cta__title {
+        font-size: 28px;
+      }
+
+      .cta__features {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .nav__links {
+        display: none;
+      }
+
+      .nav__actions .btn--outlined {
+        display: none;
+      }
+
+      .nav__toggle {
+        display: block;
+      }
+    }
+
+    @media (max-width: 425px) {
+      .hero__title {
+        font-size: 28px;
+      }
+
+      .hero__actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero__mini-cards {
+        flex-direction: column;
+      }
+
+      .cta__actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== Navigation ==================== -->
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo">
+        <div class="nav__logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        Kraken
+      </a>
+      <ul class="nav__links">
+        <li><a href="#features" class="nav__link">機能</a></li>
+        <li><a href="#prices" class="nav__link">価格</a></li>
+        <li><a href="#" class="nav__link">NFT</a></li>
+        <li><a href="#" class="nav__link">マージン取引</a></li>
+        <li><a href="#" class="nav__link">サポート</a></li>
+      </ul>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--outlined btn--sm">ログイン</a>
+        <a href="#" class="btn btn--primary btn--sm">口座開設</a>
+      </div>
+      <button class="nav__toggle" aria-label="メニュー">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== Hero Section ==================== -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <div class="hero__badge">
+          <span class="badge badge--success">200以上の暗号資産に対応</span>
+        </div>
+        <h1 class="hero__title">
+          暗号資産の<span>未来</span>を、<br>今すぐ始めよう。
+        </h1>
+        <p class="hero__description">
+          Krakenは2011年の創業以来、世界中のトレーダーに信頼されるセキュアな暗号資産取引プラットフォームです。低い手数料と高い流動性で、最高の取引体験を提供します。
+        </p>
+        <div class="hero__actions">
+          <a href="#" class="btn btn--primary btn--lg">無料で口座開設</a>
+          <a href="#" class="btn btn--outlined btn--lg">取引を始める</a>
+        </div>
+        <div class="hero__stats">
+          <div>
+            <div class="hero__stat-value">$207B+</div>
+            <div class="hero__stat-label">四半期取引高</div>
+          </div>
+          <div>
+            <div class="hero__stat-value">10M+</div>
+            <div class="hero__stat-label">グローバルユーザー</div>
+          </div>
+          <div>
+            <div class="hero__stat-value">190+</div>
+            <div class="hero__stat-label">対応国</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero__visual">
+        <div class="hero__card">
+          <div class="hero__card-header">
+            <span class="hero__card-title">Bitcoin / JPY</span>
+            <span class="badge badge--success">LIVE</span>
+          </div>
+          <div class="hero__card-price">&#165;15,482,350</div>
+          <div class="hero__card-change">+3.24% (24h)</div>
+          <div class="hero__chart">
+            <svg viewBox="0 0 400 120" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="chartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#7132f5;stop-opacity:0.2"/>
+                  <stop offset="100%" style="stop-color:#7132f5;stop-opacity:0"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,100 Q30,90 60,85 T120,70 T180,45 T240,55 T300,30 T360,25 T400,15" fill="none" stroke="#7132f5" stroke-width="2.5"/>
+              <path d="M0,100 Q30,90 60,85 T120,70 T180,45 T240,55 T300,30 T360,25 T400,15 V120 H0 Z" fill="url(#chartGrad)"/>
+            </svg>
+          </div>
+          <div class="hero__mini-cards">
+            <div class="hero__mini-card">
+              <div class="hero__mini-card-name">ETH</div>
+              <div class="hero__mini-card-value">&#165;538,200</div>
+              <div class="hero__mini-card-change hero__mini-card-change--up">+2.18%</div>
+            </div>
+            <div class="hero__mini-card">
+              <div class="hero__mini-card-name">SOL</div>
+              <div class="hero__mini-card-value">&#165;28,450</div>
+              <div class="hero__mini-card-change hero__mini-card-change--up">+5.42%</div>
+            </div>
+            <div class="hero__mini-card">
+              <div class="hero__mini-card-name">DOT</div>
+              <div class="hero__mini-card-value">&#165;1,285</div>
+              <div class="hero__mini-card-change hero__mini-card-change--down">-1.03%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Features Section ==================== -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section__header">
+        <div class="section__badge">
+          <span class="badge badge--neutral">プラットフォーム</span>
+        </div>
+        <h2 class="section__title">プロが選ぶ、取引機能</h2>
+        <p class="section__description">
+          初心者からプロトレーダーまで、あらゆるニーズに応える高機能な取引ツールを提供します。
+        </p>
+      </div>
+      <div class="features__grid">
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="feature-card__title">業界最高のセキュリティ</h3>
+          <p class="feature-card__text">
+            コールドストレージ、二要素認証、SSL暗号化など、複数層のセキュリティで資産を保護します。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3 class="feature-card__title">高速約定エンジン</h3>
+          <p class="feature-card__text">
+            ミリ秒単位の超低遅延約定で、市場の瞬間的な動きを逃しません。プロ仕様の取引体験を実現。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3 class="feature-card__title">業界最低水準の手数料</h3>
+          <p class="feature-card__text">
+            メイカー手数料0.02%から。取引量に応じたティア制で、アクティブトレーダーほどお得に取引できます。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </div>
+          <h3 class="feature-card__title">高度なチャートツール</h3>
+          <p class="feature-card__text">
+            TradingView統合チャートで、100以上のテクニカル指標とカスタムレイアウトに対応しています。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.219-8.56"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3 class="feature-card__title">ステーキング報酬</h3>
+          <p class="feature-card__text">
+            対象の暗号資産をステーキングして、最大年利21%のリワードを獲得。資産を眠らせずに増やせます。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 class="feature-card__title">24時間サポート</h3>
+          <p class="feature-card__text">
+            年中無休のカスタマーサポート。ライブチャットで平均応答時間は5分以内を維持しています。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Prices Section ==================== -->
+  <section class="prices" id="prices">
+    <div class="container">
+      <div class="section__header">
+        <div class="section__badge">
+          <span class="badge badge--neutral">マーケット</span>
+        </div>
+        <h2 class="section__title">人気の暗号資産</h2>
+        <p class="section__description">
+          リアルタイムで市場を確認し、数クリックで取引を開始できます。
+        </p>
+      </div>
+      <div class="prices__table">
+        <div class="prices__table-header">
+          <span>通貨</span>
+          <span>価格</span>
+          <span>24h変動</span>
+          <span>時価総額</span>
+          <span></span>
+        </div>
+        <div class="prices__table-row">
+          <div class="prices__coin">
+            <div class="prices__coin-icon" style="background: #f7931a;">B</div>
+            <div>
+              <div class="prices__coin-name">Bitcoin</div>
+              <div class="prices__coin-symbol">BTC</div>
+            </div>
+          </div>
+          <div class="prices__value">&#165;15,482,350</div>
+          <div class="prices__change prices__change--up">+3.24%</div>
+          <div class="prices__value">&#165;302.5T</div>
+          <div class="prices__action"><a href="#" class="btn btn--primary btn--sm">取引</a></div>
+        </div>
+        <div class="prices__table-row">
+          <div class="prices__coin">
+            <div class="prices__coin-icon" style="background: #627eea;">E</div>
+            <div>
+              <div class="prices__coin-name">Ethereum</div>
+              <div class="prices__coin-symbol">ETH</div>
+            </div>
+          </div>
+          <div class="prices__value">&#165;538,200</div>
+          <div class="prices__change prices__change--up">+2.18%</div>
+          <div class="prices__value">&#165;64.8T</div>
+          <div class="prices__action"><a href="#" class="btn btn--primary btn--sm">取引</a></div>
+        </div>
+        <div class="prices__table-row">
+          <div class="prices__coin">
+            <div class="prices__coin-icon" style="background: #00d4aa;">S</div>
+            <div>
+              <div class="prices__coin-name">Solana</div>
+              <div class="prices__coin-symbol">SOL</div>
+            </div>
+          </div>
+          <div class="prices__value">&#165;28,450</div>
+          <div class="prices__change prices__change--up">+5.42%</div>
+          <div class="prices__value">&#165;12.3T</div>
+          <div class="prices__action"><a href="#" class="btn btn--primary btn--sm">取引</a></div>
+        </div>
+        <div class="prices__table-row">
+          <div class="prices__coin">
+            <div class="prices__coin-icon" style="background: #e6007a;">D</div>
+            <div>
+              <div class="prices__coin-name">Polkadot</div>
+              <div class="prices__coin-symbol">DOT</div>
+            </div>
+          </div>
+          <div class="prices__value">&#165;1,285</div>
+          <div class="prices__change prices__change--down">-1.03%</div>
+          <div class="prices__value">&#165;1.8T</div>
+          <div class="prices__action"><a href="#" class="btn btn--primary btn--sm">取引</a></div>
+        </div>
+        <div class="prices__table-row">
+          <div class="prices__coin">
+            <div class="prices__coin-icon" style="background: #2775ca;">U</div>
+            <div>
+              <div class="prices__coin-name">USD Coin</div>
+              <div class="prices__coin-symbol">USDC</div>
+            </div>
+          </div>
+          <div class="prices__value">&#165;155.20</div>
+          <div class="prices__change prices__change--up">+0.01%</div>
+          <div class="prices__value">&#165;5.2T</div>
+          <div class="prices__action"><a href="#" class="btn btn--primary btn--sm">取引</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CTA Section ==================== -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta__inner">
+        <h2 class="cta__title">暗号資産の取引を、今日から始めましょう</h2>
+        <p class="cta__description">
+          口座開設は最短5分。本人確認が完了したら、すぐに取引を開始できます。
+        </p>
+        <div class="cta__actions">
+          <a href="#" class="btn btn--white btn--lg">無料で口座開設</a>
+          <a href="#" class="btn btn--lg" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3);">アプリをダウンロード</a>
+        </div>
+        <div class="cta__features">
+          <div class="cta__feature">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            手数料 0.02%~
+          </div>
+          <div class="cta__feature">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            200以上の通貨ペア
+          </div>
+          <div class="cta__feature">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            24時間サポート
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Footer ==================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand-name">
+            <div class="nav__logo-icon" style="width:28px;height:28px;border-radius:6px;">
+              <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:white;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            Kraken
+          </div>
+          <p class="footer__brand-desc">
+            2011年創業。世界190以上の国と地域で、1,000万人を超えるユーザーに利用されている暗号資産取引プラットフォーム。
+          </p>
+        </div>
+        <div>
+          <h4 class="footer__col-title">プロダクト</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">現物取引</a></li>
+            <li><a href="#" class="footer__link">マージン取引</a></li>
+            <li><a href="#" class="footer__link">先物取引</a></li>
+            <li><a href="#" class="footer__link">NFTマーケット</a></li>
+            <li><a href="#" class="footer__link">ステーキング</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">リソース</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">ヘルプセンター</a></li>
+            <li><a href="#" class="footer__link">ブログ</a></li>
+            <li><a href="#" class="footer__link">API ドキュメント</a></li>
+            <li><a href="#" class="footer__link">手数料一覧</a></li>
+            <li><a href="#" class="footer__link">ステータスページ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">会社情報</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Krakenについて</a></li>
+            <li><a href="#" class="footer__link">採用情報</a></li>
+            <li><a href="#" class="footer__link">プレスルーム</a></li>
+            <li><a href="#" class="footer__link">コンプライアンス</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title">法的情報</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">利用規約</a></li>
+            <li><a href="#" class="footer__link">プライバシーポリシー</a></li>
+            <li><a href="#" class="footer__link">クッキーポリシー</a></li>
+            <li><a href="#" class="footer__link">リスク開示</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2011-2026 Payward, Inc. All rights reserved. Kraken is a registered trademark.</span>
+        <div class="footer__socials">
+          <a href="#" class="footer__social" aria-label="Twitter">
+            <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+          </a>
+          <a href="#" class="footer__social" aria-label="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </a>
+          <a href="#" class="footer__social" aria-label="Discord">
+            <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

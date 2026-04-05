@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Together AI — AI-Native Cloud</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Design System Custom Properties ===== */
+    :root {
+      /* Primary Colors */
+      --color-dark-blue: #010120;
+      --color-white: #ffffff;
+      --color-magenta: #ef2cc1;
+      --color-orange: #fc4c02;
+
+      /* Supporting Palette */
+      --color-lavender: #bdbbff;
+      --color-shadow: rgba(1, 1, 32, 0.1);
+      --color-shadow-strong: rgba(1, 1, 32, 0.18);
+
+      /* Functional */
+      --color-text-primary: #010120;
+      --color-text-secondary: #3a3a5c;
+      --color-text-light: rgba(255, 255, 255, 0.85);
+      --color-text-on-dark: #ffffff;
+      --color-border: rgba(1, 1, 32, 0.08);
+      --color-surface-light: #f8f8fc;
+
+      /* Typography — "The Future" approximated by Space Grotesk */
+      --font-display: 'Space Grotesk', sans-serif;
+      /* PP Neue Montreal Mono approximated by Space Mono */
+      --font-mono: 'Space Mono', monospace;
+
+      /* Letter spacing */
+      --tracking-tight: -1.92px;
+      --tracking-body: -0.4px;
+      --tracking-mono: 1.6px;
+
+      /* Spacing (8px base) */
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 24px;
+      --space-4: 32px;
+      --space-5: 40px;
+      --space-6: 48px;
+      --space-8: 64px;
+      --space-10: 80px;
+      --space-12: 96px;
+      --space-15: 120px;
+
+      /* Radius */
+      --radius: 4px;
+    }
+
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-display);
+      font-weight: 400;
+      letter-spacing: var(--tracking-body);
+      color: var(--color-text-primary);
+      background: var(--color-white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ===== Utility ===== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-3);
+    }
+
+    .mono-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: var(--tracking-mono);
+      text-transform: uppercase;
+      color: var(--color-lavender);
+    }
+
+    .mono-label--dark {
+      color: var(--color-text-secondary);
+    }
+
+    /* ===== Navigation ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: var(--space-2) 0;
+      background: rgba(1, 1, 32, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav__logo {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: var(--tracking-tight);
+      color: var(--color-white);
+    }
+
+    .nav__logo span {
+      color: var(--color-lavender);
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: 14px;
+      color: var(--color-text-light);
+      letter-spacing: var(--tracking-body);
+      transition: color 0.2s;
+    }
+
+    .nav__links a:hover {
+      color: var(--color-white);
+    }
+
+    .nav__cta {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-white) !important;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 8px 20px;
+      border-radius: var(--radius);
+      transition: background 0.2s;
+    }
+
+    .nav__cta:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .nav__mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-1);
+    }
+
+    .nav__mobile-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--color-white);
+      margin: 5px 0;
+      transition: 0.2s;
+    }
+
+    /* ===== Hero Section (Dark Zone) ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: var(--color-dark-blue);
+      overflow: hidden;
+      padding: var(--space-15) 0 var(--space-10);
+    }
+
+    .hero__gradient {
+      position: absolute;
+      top: -30%;
+      right: -20%;
+      width: 80%;
+      height: 140%;
+      background: radial-gradient(
+        ellipse at 60% 40%,
+        rgba(239, 44, 193, 0.15) 0%,
+        rgba(189, 187, 255, 0.1) 30%,
+        rgba(252, 76, 2, 0.05) 60%,
+        transparent 80%
+      );
+      pointer-events: none;
+    }
+
+    .hero__gradient-secondary {
+      position: absolute;
+      bottom: -20%;
+      left: -10%;
+      width: 60%;
+      height: 80%;
+      background: radial-gradient(
+        ellipse at 30% 60%,
+        rgba(189, 187, 255, 0.08) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    .hero__label {
+      margin-bottom: var(--space-3);
+    }
+
+    .hero__title {
+      font-size: clamp(48px, 7vw, 80px);
+      font-weight: 500;
+      letter-spacing: var(--tracking-tight);
+      line-height: 1.05;
+      color: var(--color-white);
+      margin-bottom: var(--space-3);
+    }
+
+    .hero__subtitle {
+      font-size: clamp(18px, 2.2vw, 22px);
+      font-weight: 300;
+      color: var(--color-text-light);
+      line-height: 1.5;
+      max-width: 600px;
+      margin-bottom: var(--space-5);
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: var(--tracking-body);
+      padding: 14px 28px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn--primary {
+      background: var(--color-white);
+      color: var(--color-dark-blue);
+    }
+
+    .btn--primary:hover {
+      background: var(--color-surface-light);
+      transform: translateY(-1px);
+    }
+
+    .btn--ghost {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--color-white);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+    }
+
+    .btn--ghost:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .btn--dark {
+      background: var(--color-dark-blue);
+      color: var(--color-white);
+    }
+
+    .btn--dark:hover {
+      background: #0a0a3a;
+      transform: translateY(-1px);
+    }
+
+    /* ===== Stats Strip ===== */
+    .stats {
+      background: var(--color-dark-blue);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: var(--space-8) 0;
+    }
+
+    .stats__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+      text-align: center;
+    }
+
+    .stats__number {
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 500;
+      letter-spacing: var(--tracking-tight);
+      color: var(--color-white);
+      line-height: 1;
+      margin-bottom: var(--space-1);
+    }
+
+    .stats__label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: var(--tracking-mono);
+      text-transform: uppercase;
+      color: var(--color-lavender);
+    }
+
+    /* ===== Features Section (Light Zone) ===== */
+    .features {
+      padding: var(--space-15) 0;
+      background: var(--color-white);
+    }
+
+    .features__header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto var(--space-10);
+    }
+
+    .features__label {
+      margin-bottom: var(--space-2);
+    }
+
+    .features__title {
+      font-size: clamp(32px, 4.5vw, 48px);
+      font-weight: 500;
+      letter-spacing: var(--tracking-tight);
+      line-height: 1.1;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-2);
+    }
+
+    .features__subtitle {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
+    .features__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-3);
+    }
+
+    .card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: var(--space-5) var(--space-4);
+      box-shadow: 0 2px 16px var(--color-shadow);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: 0 8px 32px var(--color-shadow-strong);
+      transform: translateY(-4px);
+    }
+
+    .card__icon {
+      width: 48px;
+      height: 48px;
+      background: var(--color-surface-light);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card__icon::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(189, 187, 255, 0.3), rgba(239, 44, 193, 0.08));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card:hover .card__icon::before {
+      opacity: 1;
+    }
+
+    .card__icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--color-dark-blue);
+      fill: none;
+      stroke-width: 1.5;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card__title {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: var(--tracking-tight);
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-1);
+    }
+
+    .card__text {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ===== Models Section (Dark Zone) ===== */
+    .models {
+      padding: var(--space-15) 0;
+      background: var(--color-dark-blue);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .models__gradient {
+      position: absolute;
+      top: -40%;
+      left: -20%;
+      width: 70%;
+      height: 160%;
+      background: radial-gradient(
+        ellipse at 40% 50%,
+        rgba(189, 187, 255, 0.06) 0%,
+        transparent 60%
+      );
+      pointer-events: none;
+    }
+
+    .models__header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto var(--space-10);
+      position: relative;
+      z-index: 1;
+    }
+
+    .models__title {
+      font-size: clamp(32px, 4.5vw, 48px);
+      font-weight: 500;
+      letter-spacing: var(--tracking-tight);
+      line-height: 1.1;
+      color: var(--color-white);
+      margin-bottom: var(--space-2);
+    }
+
+    .models__subtitle {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--color-text-light);
+      line-height: 1.6;
+    }
+
+    .models__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .model-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      padding: var(--space-4);
+      backdrop-filter: blur(8px);
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .model-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(189, 187, 255, 0.2);
+    }
+
+    .model-card__name {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: var(--tracking-tight);
+      color: var(--color-white);
+      margin-bottom: var(--space-1);
+    }
+
+    .model-card__provider {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: var(--tracking-mono);
+      text-transform: uppercase;
+      color: var(--color-lavender);
+      margin-bottom: var(--space-2);
+    }
+
+    .model-card__desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--color-text-light);
+      line-height: 1.5;
+      margin-bottom: var(--space-3);
+    }
+
+    .model-card__stats {
+      display: flex;
+      gap: var(--space-3);
+    }
+
+    .model-card__stat-value {
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: var(--tracking-tight);
+      color: var(--color-white);
+      line-height: 1;
+    }
+
+    .model-card__stat-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: var(--tracking-mono);
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 4px;
+    }
+
+    /* ===== CTA Section (Light Zone) ===== */
+    .cta {
+      padding: var(--space-15) 0;
+      background: var(--color-surface-light);
+      text-align: center;
+    }
+
+    .cta__inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .cta__title {
+      font-size: clamp(32px, 4.5vw, 48px);
+      font-weight: 500;
+      letter-spacing: var(--tracking-tight);
+      line-height: 1.1;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-2);
+    }
+
+    .cta__text {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      margin-bottom: var(--space-5);
+    }
+
+    .cta__actions {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    /* ===== Footer (Dark Zone) ===== */
+    .footer {
+      background: var(--color-dark-blue);
+      padding: var(--space-8) 0 var(--space-4);
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+
+    .footer__brand-name {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: var(--tracking-tight);
+      color: var(--color-white);
+      margin-bottom: var(--space-2);
+    }
+
+    .footer__brand-name span {
+      color: var(--color-lavender);
+    }
+
+    .footer__brand-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--color-text-light);
+      line-height: 1.6;
+      max-width: 280px;
+    }
+
+    .footer__col-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: var(--tracking-mono);
+      text-transform: uppercase;
+      color: var(--color-lavender);
+      margin-bottom: var(--space-3);
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .footer__links a {
+      font-size: 14px;
+      color: var(--color-text-light);
+      transition: color 0.2s;
+    }
+
+    .footer__links a:hover {
+      color: var(--color-white);
+    }
+
+    .footer__bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: var(--space-3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer__copy {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .footer__socials {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .footer__socials a {
+      color: rgba(255, 255, 255, 0.4);
+      transition: color 0.2s;
+    }
+
+    .footer__socials a:hover {
+      color: var(--color-white);
+    }
+
+    .footer__socials svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1024px) {
+      .features__grid,
+      .models__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-5);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav__links {
+        display: none;
+      }
+
+      .nav__mobile-toggle {
+        display: block;
+      }
+
+      .stats__grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-3);
+      }
+
+      .features__grid,
+      .models__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero__title {
+        font-size: 40px;
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        gap: var(--space-2);
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo">together<span>.ai</span></a>
+      <ul class="nav__links">
+        <li><a href="#features">Products</a></li>
+        <li><a href="#models">Models</a></li>
+        <li><a href="#">Docs</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Research</a></li>
+        <li><a href="#" class="nav__cta">Start Building</a></li>
+      </ul>
+      <button class="nav__mobile-toggle" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero__gradient"></div>
+    <div class="hero__gradient-secondary"></div>
+    <div class="container">
+      <div class="hero__content">
+        <p class="mono-label hero__label">AI-Native Cloud</p>
+        <h1 class="hero__title">The fastest cloud for building AI</h1>
+        <p class="hero__subtitle">Train, fine-tune, and run inference on leading open-source models. Together AI delivers the performance and scale you need to ship AI products faster.</p>
+        <div class="hero__actions">
+          <a href="#" class="btn btn--primary">Get Started Free</a>
+          <a href="#" class="btn btn--ghost">View Documentation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats__grid">
+        <div>
+          <div class="stats__number">200+</div>
+          <div class="stats__label">Open-Source Models</div>
+        </div>
+        <div>
+          <div class="stats__number">4x</div>
+          <div class="stats__label">Faster Inference</div>
+        </div>
+        <div>
+          <div class="stats__number">99.9%</div>
+          <div class="stats__label">Uptime SLA</div>
+        </div>
+        <div>
+          <div class="stats__number">50K+</div>
+          <div class="stats__label">Developers</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features__header">
+        <p class="mono-label mono-label--dark features__label">Platform</p>
+        <h2 class="features__title">Everything you need to build with AI</h2>
+        <p class="features__subtitle">A complete platform for training, fine-tuning, and deploying open-source AI models at production scale.</p>
+      </div>
+      <div class="features__grid">
+
+        <div class="card">
+          <div class="card__icon">
+            <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linejoin="round" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="card__title">Together Inference</h3>
+          <p class="card__text">Run the fastest inference on 200+ leading open-source models with a single API call. Optimized for throughput and latency.</p>
+        </div>
+
+        <div class="card">
+          <div class="card__icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="card__title">Fine-Tuning</h3>
+          <p class="card__text">Customize any open-source model with your own data. From LoRA to full fine-tuning, achieve state-of-the-art results on your tasks.</p>
+        </div>
+
+        <div class="card">
+          <div class="card__icon">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h4" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="card__title">Custom Training</h3>
+          <p class="card__text">Train models from scratch on dedicated GPU clusters. Together handles the infrastructure so you can focus on research.</p>
+        </div>
+
+        <div class="card">
+          <div class="card__icon">
+            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="card__title">Together Embeddings</h3>
+          <p class="card__text">Generate high-quality vector embeddings for RAG, search, and classification. Enterprise-grade accuracy at scale.</p>
+        </div>
+
+        <div class="card">
+          <div class="card__icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="card__title">Enterprise Security</h3>
+          <p class="card__text">SOC 2 compliant infrastructure with dedicated deployments, VPC peering, and data isolation for enterprise workloads.</p>
+        </div>
+
+        <div class="card">
+          <div class="card__icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="card__title">OpenAI-Compatible API</h3>
+          <p class="card__text">Drop-in replacement for OpenAI's API. Migrate your existing applications in minutes with zero code changes.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Models (Dark Zone) -->
+  <section class="models" id="models">
+    <div class="models__gradient"></div>
+    <div class="container">
+      <div class="models__header">
+        <p class="mono-label">Popular Models</p>
+        <h2 class="models__title">Run the best open-source models</h2>
+        <p class="models__subtitle">Access leading models from Meta, Mistral, Qwen, and more through a single, unified API.</p>
+      </div>
+      <div class="models__grid">
+
+        <div class="model-card">
+          <h3 class="model-card__name">Llama 3.3 70B</h3>
+          <p class="model-card__provider">Meta</p>
+          <p class="model-card__desc">Meta's most capable open-source model. Exceptional performance across reasoning, coding, and instruction following.</p>
+          <div class="model-card__stats">
+            <div>
+              <div class="model-card__stat-value">70B</div>
+              <div class="model-card__stat-label">Parameters</div>
+            </div>
+            <div>
+              <div class="model-card__stat-value">128K</div>
+              <div class="model-card__stat-label">Context</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="model-card">
+          <h3 class="model-card__name">Qwen 2.5 72B</h3>
+          <p class="model-card__provider">Alibaba</p>
+          <p class="model-card__desc">Leading multilingual model with strong performance across benchmarks. Excellent for coding and mathematical reasoning.</p>
+          <div class="model-card__stats">
+            <div>
+              <div class="model-card__stat-value">72B</div>
+              <div class="model-card__stat-label">Parameters</div>
+            </div>
+            <div>
+              <div class="model-card__stat-value">128K</div>
+              <div class="model-card__stat-label">Context</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="model-card">
+          <h3 class="model-card__name">DeepSeek R1</h3>
+          <p class="model-card__provider">DeepSeek</p>
+          <p class="model-card__desc">Advanced reasoning model with chain-of-thought capabilities. State-of-the-art on complex reasoning tasks.</p>
+          <div class="model-card__stats">
+            <div>
+              <div class="model-card__stat-value">671B</div>
+              <div class="model-card__stat-label">Parameters</div>
+            </div>
+            <div>
+              <div class="model-card__stat-value">64K</div>
+              <div class="model-card__stat-label">Context</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA (Light Zone) -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta__inner">
+        <p class="mono-label mono-label--dark" style="margin-bottom: 16px;">Get Started</p>
+        <h2 class="cta__title">Start building with open-source AI</h2>
+        <p class="cta__text">Sign up for free and get $5 in credits. No credit card required. Scale to production when you're ready.</p>
+        <div class="cta__actions">
+          <a href="#" class="btn btn--dark">Create Free Account</a>
+          <a href="#" class="btn" style="background: transparent; color: var(--color-dark-blue); border: 1px solid var(--color-border);">Talk to Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (Dark Zone) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+
+        <div>
+          <div class="footer__brand-name">together<span>.ai</span></div>
+          <p class="footer__brand-desc">The AI-Native Cloud. Build, train, and scale AI with the fastest infrastructure for open-source models.</p>
+        </div>
+
+        <div>
+          <h4 class="footer__col-title">Products</h4>
+          <ul class="footer__links">
+            <li><a href="#">Inference</a></li>
+            <li><a href="#">Fine-Tuning</a></li>
+            <li><a href="#">Custom Training</a></li>
+            <li><a href="#">Embeddings</a></li>
+            <li><a href="#">GPU Clusters</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer__col-title">Resources</h4>
+          <ul class="footer__links">
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API Reference</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Research</a></li>
+            <li><a href="#">Changelog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer__col-title">Company</h4>
+          <ul class="footer__links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Security</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2026 Together AI, Inc. All rights reserved.</p>
+        <div class="footer__socials">
+          <a href="#" aria-label="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </a>
+          <a href="#" aria-label="X / Twitter">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="#" aria-label="Discord">
+            <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.947 2.418-2.157 2.418z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

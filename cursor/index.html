@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursor - AIファーストのコードエディタ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       Design Tokens (from Cursor DESIGN.md)
+       ======================================== */
+    :root {
+      /* Primary Colors */
+      --cursor-dark: #26251e;
+      --cursor-cream: #f2f1ed;
+      --cursor-light: #e6e5e0;
+      --pure-white: #ffffff;
+
+      /* Accent */
+      --color-accent: #f54e00;
+      --color-gold: #c08532;
+
+      /* Semantic */
+      --color-error: #cf2d56;
+      --color-success: #1f8a65;
+
+      /* Timeline / Feature */
+      --color-thinking: #dfa88f;
+      --color-grep: #9fc9a2;
+      --color-read: #9fbbe0;
+      --color-edit: #c0a8dd;
+
+      /* Surface Scale */
+      --surface-100: #f7f7f4;
+      --surface-200: #f2f1ed;
+      --surface-300: #ebeae5;
+      --surface-400: #e6e5e0;
+      --surface-500: #e1e0db;
+
+      /* Border */
+      --border-primary: rgba(38, 37, 30, 0.1);
+      --border-medium: rgba(38, 37, 30, 0.2);
+      --border-strong: rgba(38, 37, 30, 0.55);
+
+      /* Text */
+      --text-primary: #26251e;
+      --text-secondary: rgba(38, 37, 30, 0.55);
+      --text-tertiary: rgba(38, 37, 30, 0.6);
+
+      /* Shadows */
+      --shadow-ambient: rgba(0,0,0,0.02) 0px 0px 16px, rgba(0,0,0,0.008) 0px 0px 8px;
+      --shadow-elevated: rgba(0,0,0,0.14) 0px 28px 70px, rgba(0,0,0,0.1) 0px 14px 32px;
+      --shadow-focus: rgba(0,0,0,0.1) 0px 4px 12px;
+
+      /* Typography - using Google Fonts as fallbacks for custom Cursor fonts */
+      --font-display: 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      --font-serif: 'Playfair Display', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+      --font-system: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 64px;
+      --space-4xl: 96px;
+
+      /* Border Radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 10px;
+      --radius-pill: 9999px;
+
+      /* Transitions */
+      --transition-color: 150ms ease;
+      --transition-shadow: 200ms ease;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-serif);
+      font-size: 17.28px;
+      font-weight: 400;
+      line-height: 1.35;
+      color: var(--text-primary);
+      background-color: var(--surface-200);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: none;
+      transition: color var(--transition-color);
+    }
+
+    a:hover {
+      color: var(--color-error);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* ========================================
+       Layout
+       ======================================== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--surface-200);
+      border-bottom: 1px solid var(--border-primary);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.11px;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .nav-logo:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-logo-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--cursor-dark);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xl);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-system);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: color var(--transition-color);
+    }
+
+    .nav-links a:hover {
+      color: var(--color-error);
+    }
+
+    .nav-cta {
+      background-color: var(--surface-300);
+      color: var(--text-primary) !important;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: color var(--transition-color);
+      text-decoration: none;
+    }
+
+    .nav-cta:hover {
+      color: var(--color-error) !important;
+    }
+
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-sm);
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--text-primary);
+      margin: 4px 0;
+      border-radius: 1px;
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      padding: var(--space-4xl) 0 var(--space-3xl);
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface-400);
+      color: var(--text-tertiary);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 400;
+      padding: 3px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: var(--space-xl);
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--color-success);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 72px;
+      font-weight: 700;
+      line-height: 1.10;
+      letter-spacing: -2.16px;
+      color: var(--text-primary);
+      margin-bottom: var(--space-lg);
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-serif);
+      font-size: 19.2px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto var(--space-2xl);
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-3xl);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background-color: var(--cursor-dark);
+      color: var(--cursor-cream);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition-color);
+    }
+
+    .btn-primary:hover {
+      background-color: #3a392f;
+      color: var(--cursor-cream);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background-color: var(--surface-300);
+      color: var(--text-primary);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color var(--transition-color);
+    }
+
+    .btn-secondary:hover {
+      color: var(--color-error);
+    }
+
+    .hero-visual {
+      position: relative;
+      max-width: 960px;
+      margin: 0 auto;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border-primary);
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .hero-editor {
+      background: #1e1e1e;
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      min-height: 400px;
+      position: relative;
+    }
+
+    .editor-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: var(--space-md);
+    }
+
+    .editor-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .editor-dot--red { background: #ff5f57; }
+    .editor-dot--yellow { background: #febc2e; }
+    .editor-dot--green { background: #28c840; }
+
+    .editor-code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.67;
+      color: #d4d4d4;
+    }
+
+    .editor-code .keyword { color: #c586c0; }
+    .editor-code .function { color: #dcdcaa; }
+    .editor-code .string { color: #ce9178; }
+    .editor-code .comment { color: #6a9955; }
+    .editor-code .type { color: #4ec9b0; }
+    .editor-code .variable { color: #9cdcfe; }
+    .editor-code .number { color: #b5cea8; }
+
+    .editor-ai-panel {
+      position: absolute;
+      top: var(--space-2xl);
+      right: var(--space-md);
+      width: 280px;
+      background: var(--surface-200);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .ai-panel-header {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ai-panel-header::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--color-accent);
+      border-radius: 50%;
+    }
+
+    .ai-step {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: 6px 0;
+      font-family: var(--font-system);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .ai-step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .ai-step-label {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    /* ========================================
+       Trusted By
+       ======================================== */
+    .trusted {
+      padding: var(--space-2xl) 0;
+      text-align: center;
+      border-top: 1px solid var(--border-primary);
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    .trusted-label {
+      font-family: var(--font-system);
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.048px;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-lg);
+    }
+
+    .trusted-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2xl);
+      flex-wrap: wrap;
+    }
+
+    .trusted-logo {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: -0.36px;
+    }
+
+    /* ========================================
+       Features Section
+       ======================================== */
+    .features {
+      padding: var(--space-4xl) 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-3xl);
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      background: var(--surface-400);
+      color: var(--text-tertiary);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 400;
+      padding: 3px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: var(--space-md);
+    }
+
+    .section-header h2 {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.20;
+      letter-spacing: -0.72px;
+      color: var(--text-primary);
+      margin-bottom: var(--space-md);
+    }
+
+    .section-header p {
+      font-family: var(--font-serif);
+      font-size: 17.28px;
+      font-weight: 400;
+      line-height: 1.35;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+    }
+
+    .feature-card {
+      background: var(--surface-400);
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-md);
+      padding: var(--space-xl);
+      transition: box-shadow var(--transition-shadow);
+    }
+
+    .feature-card:hover {
+      box-shadow: rgba(0,0,0,0.14) 0px 28px 70px, rgba(0,0,0,0.1) 0px 14px 32px;
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-md);
+      font-size: 20px;
+    }
+
+    .feature-icon--thinking { background: var(--color-thinking); }
+    .feature-icon--grep { background: var(--color-grep); }
+    .feature-icon--read { background: var(--color-read); }
+    .feature-icon--edit { background: var(--color-edit); }
+    .feature-icon--accent { background: var(--color-accent); color: white; }
+    .feature-icon--gold { background: var(--color-gold); color: white; }
+
+    .feature-card h3 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.30;
+      letter-spacing: -0.11px;
+      color: var(--text-primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .feature-card p {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--text-secondary);
+    }
+
+    .feature-card .feature-tag {
+      display: inline-flex;
+      background: var(--surface-500);
+      color: var(--text-tertiary);
+      font-family: var(--font-display);
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      margin-top: var(--space-md);
+    }
+
+    /* ========================================
+       AI Timeline Section
+       ======================================== */
+    .timeline-section {
+      padding: var(--space-4xl) 0;
+      background: var(--surface-100);
+      border-top: 1px solid var(--border-primary);
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    .timeline-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3xl);
+      align-items: center;
+    }
+
+    .timeline-content h2 {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.20;
+      letter-spacing: -0.72px;
+      color: var(--text-primary);
+      margin-bottom: var(--space-md);
+    }
+
+    .timeline-content p {
+      font-family: var(--font-serif);
+      font-size: 17.28px;
+      line-height: 1.50;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-xl);
+    }
+
+    .timeline-visual {
+      background: var(--surface-200);
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: var(--space-xl);
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--border-primary);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: var(--space-lg);
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: calc(-1 * var(--space-xl) + 4px);
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--surface-200);
+    }
+
+    .timeline-item-label {
+      font-family: var(--font-system);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-item-desc {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    .timeline-item--thinking .timeline-dot { background: var(--color-thinking); }
+    .timeline-item--thinking .timeline-item-label { color: #b8784e; }
+    .timeline-item--grep .timeline-dot { background: var(--color-grep); }
+    .timeline-item--grep .timeline-item-label { color: #4a8a4e; }
+    .timeline-item--read .timeline-dot { background: var(--color-read); }
+    .timeline-item--read .timeline-item-label { color: #4a7db0; }
+    .timeline-item--edit .timeline-dot { background: var(--color-edit); }
+    .timeline-item--edit .timeline-item-label { color: #8a6ab5; }
+
+    /* ========================================
+       Code Section
+       ======================================== */
+    .code-section {
+      padding: var(--space-4xl) 0;
+    }
+
+    .code-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3xl);
+      align-items: center;
+    }
+
+    .code-block {
+      background: #1e1e1e;
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.67;
+      color: #d4d4d4;
+      white-space: pre;
+    }
+
+    .code-content h2 {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.20;
+      letter-spacing: -0.72px;
+      color: var(--text-primary);
+      margin-bottom: var(--space-md);
+    }
+
+    .code-content p {
+      font-family: var(--font-serif);
+      font-size: 17.28px;
+      line-height: 1.50;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-lg);
+    }
+
+    .code-features {
+      list-style: none;
+    }
+
+    .code-features li {
+      font-family: var(--font-system);
+      font-size: 15px;
+      color: var(--text-primary);
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--border-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .code-features li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      flex-shrink: 0;
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta {
+      padding: var(--space-4xl) 0;
+      background: var(--surface-400);
+      border-top: 1px solid var(--border-primary);
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -1.44px;
+      color: var(--text-primary);
+      margin-bottom: var(--space-md);
+    }
+
+    .cta p {
+      font-family: var(--font-serif);
+      font-size: 19.2px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto var(--space-xl);
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+    }
+
+    .btn-accent {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background-color: var(--color-accent);
+      color: var(--pure-white);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition-color);
+    }
+
+    .btn-accent:hover {
+      background-color: #e04500;
+      color: var(--pure-white);
+    }
+
+    .cta-note {
+      font-family: var(--font-system);
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-top: var(--space-md);
+    }
+
+    /* ========================================
+       Pricing Preview
+       ======================================== */
+    .pricing {
+      padding: var(--space-4xl) 0;
+      border-top: 1px solid var(--border-primary);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+    }
+
+    .pricing-card {
+      background: var(--surface-200);
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-md);
+      padding: var(--space-xl);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pricing-card--featured {
+      background: var(--cursor-dark);
+      color: var(--cursor-cream);
+      border-color: transparent;
+    }
+
+    .pricing-card--featured .pricing-price,
+    .pricing-card--featured .pricing-name {
+      color: var(--cursor-cream);
+    }
+
+    .pricing-card--featured .pricing-desc {
+      color: rgba(242, 241, 237, 0.6);
+    }
+
+    .pricing-card--featured .pricing-feature {
+      color: rgba(242, 241, 237, 0.8);
+      border-bottom-color: rgba(242, 241, 237, 0.1);
+    }
+
+    .pricing-name {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .pricing-price {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.72px;
+      color: var(--text-primary);
+      margin-bottom: var(--space-xs);
+    }
+
+    .pricing-price span {
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: normal;
+    }
+
+    .pricing-desc {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-lg);
+      line-height: 1.45;
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: var(--space-lg);
+      flex-grow: 1;
+    }
+
+    .pricing-feature {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--text-secondary);
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--border-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .pricing-feature::before {
+      content: '✓';
+      color: var(--color-success);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .pricing-card--featured .pricing-feature::before {
+      color: var(--color-grep);
+    }
+
+    .pricing-btn {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color var(--transition-color);
+    }
+
+    .pricing-btn--default {
+      background: var(--surface-300);
+      color: var(--text-primary);
+    }
+
+    .pricing-btn--default:hover {
+      color: var(--color-error);
+    }
+
+    .pricing-btn--featured {
+      background: var(--color-accent);
+      color: var(--pure-white);
+    }
+
+    .pricing-btn--featured:hover {
+      background: #e04500;
+      color: var(--pure-white);
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      padding: var(--space-3xl) 0 var(--space-xl);
+      border-top: 1px solid var(--border-primary);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-2xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .footer-brand p {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-top: var(--space-md);
+      max-width: 320px;
+    }
+
+    .footer-heading {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-primary);
+      margin-bottom: var(--space-md);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer-links a {
+      font-family: var(--font-system);
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--transition-color);
+    }
+
+    .footer-links a:hover {
+      color: var(--color-accent);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-lg);
+      border-top: 1px solid var(--border-primary);
+    }
+
+    .footer-bottom p {
+      font-family: var(--font-system);
+      font-size: 13px;
+      color: var(--text-tertiary);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: var(--space-md);
+    }
+
+    .footer-social a {
+      font-family: var(--font-system);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* ========================================
+       Responsive
+       ======================================== */
+    @media (max-width: 1279px) {
+      .hero h1 {
+        font-size: 56px;
+        letter-spacing: -1.68px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero h1 {
+        font-size: 42px;
+        letter-spacing: -0.84px;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .pricing-card:last-child {
+        grid-column: span 2;
+      }
+
+      .timeline-layout,
+      .code-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .code-layout {
+        direction: ltr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-xl);
+      }
+
+      .editor-ai-panel {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding: var(--space-3xl) 0 var(--space-2xl);
+      }
+
+      .hero h1 {
+        font-size: 36px;
+        letter-spacing: -0.72px;
+      }
+
+      .hero-subtitle {
+        font-size: 17.28px;
+      }
+
+      .section-header h2,
+      .timeline-content h2,
+      .code-content h2 {
+        font-size: 28px;
+        letter-spacing: -0.56px;
+      }
+
+      .cta h2 {
+        font-size: 36px;
+        letter-spacing: -0.72px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pricing-card:last-child {
+        grid-column: span 1;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 var(--space-md);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: block;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+        letter-spacing: -0.64px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+
+      .cta h2 {
+        font-size: 28px;
+        letter-spacing: -0.56px;
+      }
+
+      .hero-editor {
+        min-height: 260px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="nav-logo-icon">
+          <svg viewBox="0 0 16 16" fill="none">
+            <path d="M3 3L8 1L13 3L8 5L3 3Z" fill="#f2f1ed"/>
+            <path d="M3 3V10L8 12V5L3 3Z" fill="#a8a7a0"/>
+            <path d="M13 3V10L8 12V5L13 3Z" fill="#f2f1ed" fill-opacity="0.6"/>
+          </svg>
+        </span>
+        Cursor
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">機能</a></li>
+        <li><a href="#pricing">料金</a></li>
+        <li><a href="#">ドキュメント</a></li>
+        <li><a href="#">ブログ</a></li>
+        <li><a href="#">チェンジログ</a></li>
+        <li><a href="#" class="nav-cta">ダウンロード</a></li>
+      </ul>
+      <button class="nav-hamburger" aria-label="メニュー">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        新機能: Background Agent がリリースされました
+      </div>
+      <h1>AIと共にコードを書く、新しい体験</h1>
+      <p class="hero-subtitle">
+        Cursorは、AIネイティブに設計されたコードエディタです。
+        あなたのコードベースを深く理解し、自然言語で指示するだけで、
+        複雑な編集やリファクタリングを実現します。
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 1L2 4.5V11.5L8 15L14 11.5V4.5L8 1ZM8 2.5L12.5 5L8 7.5L3.5 5L8 2.5Z"/>
+          </svg>
+          無料でダウンロード
+        </a>
+        <a href="#" class="btn-secondary">デモを見る →</a>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-editor">
+          <div class="editor-titlebar">
+            <span class="editor-dot editor-dot--red"></span>
+            <span class="editor-dot editor-dot--yellow"></span>
+            <span class="editor-dot editor-dot--green"></span>
+          </div>
+          <div class="editor-code">
+<span class="comment">// AIが提案したリファクタリング</span>
+<span class="keyword">async function</span> <span class="function">fetchUserData</span>(<span class="variable">userId</span>: <span class="type">string</span>) {
+  <span class="keyword">try</span> {
+    <span class="keyword">const</span> <span class="variable">response</span> = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`/api/users/${<span class="variable">userId</span>}`</span>);
+    <span class="keyword">if</span> (!<span class="variable">response</span>.<span class="variable">ok</span>) {
+      <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">`HTTP ${<span class="variable">response</span>.<span class="variable">status</span>}`</span>);
+    }
+    <span class="keyword">return await</span> <span class="variable">response</span>.<span class="function">json</span>();
+  } <span class="keyword">catch</span> (<span class="variable">error</span>) {
+    <span class="function">handleError</span>(<span class="variable">error</span>, <span class="string">'fetchUserData'</span>);
+    <span class="keyword">return null</span>;
+  }
+}
+          </div>
+          <div class="editor-ai-panel">
+            <div class="ai-panel-header">Cursor AI</div>
+            <div class="ai-step">
+              <span class="ai-step-dot" style="background: var(--color-thinking)"></span>
+              <div>
+                <div class="ai-step-label">思考中</div>
+                コンテキストを分析しています...
+              </div>
+            </div>
+            <div class="ai-step">
+              <span class="ai-step-dot" style="background: var(--color-grep)"></span>
+              <div>
+                <div class="ai-step-label">検索</div>
+                関連ファイルを3件検出
+              </div>
+            </div>
+            <div class="ai-step">
+              <span class="ai-step-dot" style="background: var(--color-read)"></span>
+              <div>
+                <div class="ai-step-label">読み取り</div>
+                依存関係を解析中
+              </div>
+            </div>
+            <div class="ai-step">
+              <span class="ai-step-dot" style="background: var(--color-edit)"></span>
+              <div>
+                <div class="ai-step-label">編集</div>
+                エラーハンドリングを追加
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trusted By -->
+  <section class="trusted">
+    <div class="container">
+      <p class="trusted-label">世界中のエンジニアチームに採用されています</p>
+      <div class="trusted-logos">
+        <span class="trusted-logo">OpenAI</span>
+        <span class="trusted-logo">Shopify</span>
+        <span class="trusted-logo">Instacart</span>
+        <span class="trusted-logo">Replit</span>
+        <span class="trusted-logo">Midjourney</span>
+        <span class="trusted-logo">Perplexity</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">機能</span>
+        <h2>コーディングの未来を、今すぐ体験</h2>
+        <p>VS Codeの拡張性とAIの力を融合。あなたの生産性を飛躍的に向上させる機能を紹介します。</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--thinking">🧠</div>
+          <h3>Tab 予測補完</h3>
+          <p>次に書くべきコードを文脈から予測。Tabキーを押すだけで、関数全体やロジックの続きが自動で補完されます。</p>
+          <span class="feature-tag">AI補完</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--edit">✏️</div>
+          <h3>Cmd+K インライン編集</h3>
+          <p>コードを選択して自然言語で指示。リファクタリング、バグ修正、型の追加など、あらゆる編集をAIが実行します。</p>
+          <span class="feature-tag">インライン</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--read">💬</div>
+          <h3>AI チャット</h3>
+          <p>コードベース全体を理解したAIアシスタント。設計の相談、デバッグ、ドキュメント作成まで、エディタ内で完結します。</p>
+          <span class="feature-tag">チャット</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--grep">🔍</div>
+          <h3>コードベース検索</h3>
+          <p>@codebaseメンションで、プロジェクト全体から関連コードを自動検索。大規模なリポジトリでも瞬時にコンテキストを取得。</p>
+          <span class="feature-tag">検索</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--accent">⚡</div>
+          <h3>マルチファイル編集</h3>
+          <p>Composer機能で複数ファイルにまたがる変更を一度に実行。機能追加やリファクタリングをプロジェクト全体で統一的に適用。</p>
+          <span class="feature-tag">Composer</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon--gold">🔒</div>
+          <h3>プライバシー優先</h3>
+          <p>Privacy Modeを有効にすれば、コードはモデルプロバイダのサーバーに保存されません。SOC 2認証取得済み。</p>
+          <span class="feature-tag">セキュリティ</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Timeline -->
+  <section class="timeline-section">
+    <div class="container">
+      <div class="timeline-layout">
+        <div class="timeline-content">
+          <span class="section-tag">AIエージェント</span>
+          <h2>コードを理解し、自律的に行動するAI</h2>
+          <p>
+            Cursorのエージェントは、あなたのコードベースを深く理解した上で、
+            思考、検索、読み取り、編集の4ステップで複雑なタスクを自律的に遂行します。
+            バックグラウンドで動作するため、あなたの作業を止めることはありません。
+          </p>
+          <a href="#" class="btn-secondary">詳しく見る →</a>
+        </div>
+        <div class="timeline-visual">
+          <div class="timeline">
+            <div class="timeline-item timeline-item--thinking">
+              <span class="timeline-dot"></span>
+              <div class="timeline-item-label">Thinking</div>
+              <div class="timeline-item-desc">ユーザーのリクエストを分析し、実行計画を策定しています。認証ミドルウェアの追加が必要です。</div>
+            </div>
+            <div class="timeline-item timeline-item--grep">
+              <span class="timeline-dot"></span>
+              <div class="timeline-item-label">Grep</div>
+              <div class="timeline-item-desc">auth.ts、middleware.ts、routes/api.ts を検索。既存の認証パターンを特定しました。</div>
+            </div>
+            <div class="timeline-item timeline-item--read">
+              <span class="timeline-dot"></span>
+              <div class="timeline-item-label">Read</div>
+              <div class="timeline-item-desc">関連する3ファイルの依存関係とインターフェースを解析しました。</div>
+            </div>
+            <div class="timeline-item timeline-item--edit">
+              <span class="timeline-dot"></span>
+              <div class="timeline-item-label">Edit</div>
+              <div class="timeline-item-desc">認証ミドルウェアを作成し、APIルートに適用しました。テストも追加済みです。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Section -->
+  <section class="code-section">
+    <div class="container">
+      <div class="code-layout">
+        <div class="code-block">
+          <pre><span style="color:#6a9955">// .cursorrules</span>
+<span style="color:#c586c0">あなたは</span><span style="color:#d4d4d4">TypeScriptの</span>
+<span style="color:#d4d4d4">エキスパートです。</span>
+
+<span style="color:#6a9955">// プロジェクト固有のルール:</span>
+<span style="color:#c586c0">- </span><span style="color:#ce9178">関数型スタイルを優先</span>
+<span style="color:#c586c0">- </span><span style="color:#ce9178">classは使用しない</span>
+<span style="color:#c586c0">- </span><span style="color:#ce9178">エラーハンドリングを必ず実装</span>
+<span style="color:#c586c0">- </span><span style="color:#ce9178">テスト駆動開発で進める</span>
+<span style="color:#c586c0">- </span><span style="color:#ce9178">日本語でコメントを記述</span>
+
+<span style="color:#6a9955">// AIはこのルールに従い</span>
+<span style="color:#6a9955">// コードを生成します</span></pre>
+        </div>
+        <div class="code-content">
+          <span class="section-tag">カスタマイズ</span>
+          <h2>あなたのルールで、AIをカスタマイズ</h2>
+          <p>
+            .cursorrules ファイルでプロジェクト固有のコーディング規約を定義。
+            AIはあなたのチームのスタイルを学習し、一貫性のあるコードを生成します。
+          </p>
+          <ul class="code-features">
+            <li>プロジェクトごとのルール設定</li>
+            <li>コーディング規約の自動適用</li>
+            <li>チーム全体での一貫性を維持</li>
+            <li>フレームワーク固有のパターンを学習</li>
+            <li>VS Code拡張機能との完全互換</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="pricing">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">料金プラン</span>
+        <h2>あなたに合ったプランを選択</h2>
+        <p>個人開発者からエンタープライズまで、あらゆるニーズに対応するプランをご用意しています。</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-name">Hobby</div>
+          <div class="pricing-price">無料</div>
+          <p class="pricing-desc">AIコーディングを試してみたい方に。基本的な機能を無料で利用できます。</p>
+          <ul class="pricing-features">
+            <li class="pricing-feature">2,000回のコード補完 / 月</li>
+            <li class="pricing-feature">50回のプレミアムリクエスト / 月</li>
+            <li class="pricing-feature">VS Code拡張機能との互換性</li>
+            <li class="pricing-feature">コミュニティサポート</li>
+          </ul>
+          <a href="#" class="pricing-btn pricing-btn--default">無料で始める</a>
+        </div>
+        <div class="pricing-card pricing-card--featured">
+          <div class="pricing-name">Pro</div>
+          <div class="pricing-price">$20 <span>/ 月</span></div>
+          <p class="pricing-desc">プロフェッショナルな開発者のための、フル機能プランです。</p>
+          <ul class="pricing-features">
+            <li class="pricing-feature">無制限のコード補完</li>
+            <li class="pricing-feature">500回のプレミアムリクエスト / 月</li>
+            <li class="pricing-feature">無制限のスローリクエスト</li>
+            <li class="pricing-feature">Background Agent アクセス</li>
+            <li class="pricing-feature">優先サポート</li>
+          </ul>
+          <a href="#" class="pricing-btn pricing-btn--featured">Proを始める</a>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-name">Business</div>
+          <div class="pricing-price">$40 <span>/ ユーザー / 月</span></div>
+          <p class="pricing-desc">チームでの利用に最適化された、管理機能付きプランです。</p>
+          <ul class="pricing-features">
+            <li class="pricing-feature">Proの全機能を含む</li>
+            <li class="pricing-feature">チーム管理ダッシュボード</li>
+            <li class="pricing-feature">使用状況の分析</li>
+            <li class="pricing-feature">Privacy Mode 標準搭載</li>
+            <li class="pricing-feature">SAML SSO 対応</li>
+          </ul>
+          <a href="#" class="pricing-btn pricing-btn--default">営業に問い合わせ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <h2>今すぐCursorを始めよう</h2>
+      <p>
+        数分でセットアップ完了。VS Codeの設定や拡張機能をワンクリックでインポートできます。
+      </p>
+      <div class="cta-actions">
+        <a href="#" class="btn-accent">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 1L2 4.5V11.5L8 15L14 11.5V4.5L8 1ZM8 2.5L12.5 5L8 7.5L3.5 5L8 2.5Z"/>
+          </svg>
+          無料ダウンロード
+        </a>
+        <a href="#" class="btn-secondary">ドキュメントを見る →</a>
+      </div>
+      <p class="cta-note">macOS、Windows、Linux対応 ・ VS Codeからワンクリック移行</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">
+            <span class="nav-logo-icon">
+              <svg viewBox="0 0 16 16" fill="none">
+                <path d="M3 3L8 1L13 3L8 5L3 3Z" fill="#f2f1ed"/>
+                <path d="M3 3V10L8 12V5L3 3Z" fill="#a8a7a0"/>
+                <path d="M13 3V10L8 12V5L13 3Z" fill="#f2f1ed" fill-opacity="0.6"/>
+              </svg>
+            </span>
+            Cursor
+          </a>
+          <p>AIファーストのコードエディタ。VS Codeの使いやすさと、最先端のAI機能を兼ね備えた、次世代の開発環境です。</p>
+        </div>
+        <div>
+          <h4 class="footer-heading">製品</h4>
+          <ul class="footer-links">
+            <li><a href="#">ダウンロード</a></li>
+            <li><a href="#">料金</a></li>
+            <li><a href="#">チェンジログ</a></li>
+            <li><a href="#">ドキュメント</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">会社</h4>
+          <ul class="footer-links">
+            <li><a href="#">ブログ</a></li>
+            <li><a href="#">採用情報</a></li>
+            <li><a href="#">お問い合わせ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">法的事項</h4>
+          <ul class="footer-links">
+            <li><a href="#">プライバシーポリシー</a></li>
+            <li><a href="#">利用規約</a></li>
+            <li><a href="#">セキュリティ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Cursor. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#">Twitter</a>
+          <a href="#">GitHub</a>
+          <a href="#">Discord</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

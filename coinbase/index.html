@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coinbase - 暗号資産の未来を、すべての人に</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* Primary */
+      --cb-blue: #0052ff;
+      --white: #ffffff;
+      --near-black: #0a0b0d;
+      --cool-gray: #eef0f3;
+
+      /* Interactive */
+      --hover-blue: #578bfa;
+      --link-blue: #0667d0;
+      --muted-border: rgba(91, 97, 110, 0.2);
+
+      /* Surface */
+      --dark-card: #282b31;
+      --light-surface: rgba(247, 247, 247, 0.88);
+
+      /* Typography — fallback to Inter since CoinbaseDisplay/Sans/Text are proprietary */
+      --font-display: 'Inter', sans-serif;
+      --font-sans: 'Inter', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      color: var(--near-black);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--muted-border);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-sans);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--cb-blue);
+      text-decoration: none;
+    }
+    .nav-logo svg {
+      width: 28px;
+      height: 28px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--near-black);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--cb-blue); }
+    .nav-cta { display: flex; gap: 12px; align-items: center; }
+
+    /* Buttons */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      background: var(--cb-blue);
+      color: var(--white);
+      padding: 12px 24px;
+      border-radius: 56px;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      line-height: 1.20;
+      border: 1px solid var(--cb-blue);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-primary:hover {
+      background: var(--hover-blue);
+      border-color: var(--hover-blue);
+    }
+    .btn-primary:focus-visible {
+      outline: 2px solid var(--near-black);
+      outline-offset: 2px;
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      background: var(--cool-gray);
+      color: var(--near-black);
+      padding: 12px 24px;
+      border-radius: 56px;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      line-height: 1.20;
+      border: 1px solid var(--cool-gray);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover {
+      background: var(--hover-blue);
+      color: var(--white);
+      border-color: var(--hover-blue);
+    }
+    .btn-secondary:focus-visible {
+      outline: 2px solid var(--near-black);
+      outline-offset: 2px;
+    }
+    .btn-outlined {
+      display: inline-flex;
+      align-items: center;
+      background: transparent;
+      color: var(--cb-blue);
+      padding: 12px 24px;
+      border-radius: 56px;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      line-height: 1.20;
+      border: 1px solid var(--cb-blue);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-outlined:hover {
+      background: var(--cb-blue);
+      color: var(--white);
+    }
+    .btn-nav {
+      padding: 8px 20px;
+      font-size: 14px;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 120px 32px 100px;
+      max-width: 1080px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 80px;
+      font-weight: 400;
+      line-height: 1.00;
+      color: var(--near-black);
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+    .hero h1 .blue { color: var(--cb-blue); }
+    .hero p {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.56;
+      color: #5b616e;
+      max-width: 560px;
+      margin: 0 auto 40px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Features (cards on white) */
+    .features {
+      padding: 100px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cb-blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .features h2 {
+      font-family: var(--font-display);
+      font-size: 52px;
+      font-weight: 400;
+      line-height: 1.00;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .features > p {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.56;
+      color: #5b616e;
+      max-width: 560px;
+      margin: 0 auto 64px;
+      text-align: center;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      padding: 32px;
+      background: var(--white);
+      border: 1px solid var(--muted-border);
+      border-radius: 16px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--cb-blue);
+    }
+    .feature-card .icon {
+      width: 48px;
+      height: 48px;
+      background: var(--cb-blue);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--white);
+    }
+    .feature-card h3 {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.33;
+      color: var(--near-black);
+      margin-bottom: 10px;
+    }
+    .feature-card p {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: #5b616e;
+    }
+
+    /* Dark section */
+    .dark-section {
+      background: var(--near-black);
+      padding: 100px 32px;
+      color: var(--white);
+    }
+    .dark-section .inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .dark-section .section-label {
+      color: var(--hover-blue);
+    }
+    .dark-section h2 {
+      font-family: var(--font-display);
+      font-size: 52px;
+      font-weight: 400;
+      line-height: 1.00;
+      text-align: center;
+      margin-bottom: 16px;
+      color: var(--white);
+    }
+    .dark-section > .inner > p {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.56;
+      max-width: 560px;
+      margin: 0 auto 64px;
+      text-align: center;
+    }
+    .dark-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .dark-card {
+      padding: 32px;
+      background: var(--dark-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      transition: border-color 0.2s;
+    }
+    .dark-card:hover {
+      border-color: var(--cb-blue);
+    }
+    .dark-card h3 {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.33;
+      margin-bottom: 10px;
+      color: var(--white);
+    }
+    .dark-card p {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.50;
+    }
+
+    /* Metrics */
+    .metrics {
+      padding: 100px 32px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .metrics h2 {
+      font-family: var(--font-display);
+      font-size: 52px;
+      font-weight: 400;
+      line-height: 1.00;
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+    .metric-item .number {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 1.00;
+      color: var(--cb-blue);
+      margin-bottom: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+    .metric-item p {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      color: #5b616e;
+      line-height: 1.50;
+    }
+
+    /* CTA */
+    .cta-section {
+      background: var(--cool-gray);
+      padding: 120px 32px;
+      text-align: center;
+    }
+    .cta-section h2 {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      line-height: 1.00;
+      color: var(--near-black);
+      margin-bottom: 24px;
+    }
+    .cta-section p {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.56;
+      color: #5b616e;
+      margin-bottom: 40px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--near-black);
+      padding: 64px 32px 32px;
+      color: var(--white);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+    .footer-brand {
+      font-family: var(--font-sans);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-brand svg { width: 24px; height: 24px; }
+    .footer-tagline {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.50;
+      max-width: 240px;
+    }
+    .footer-col h4 {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .footer-col a {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      margin-bottom: 10px;
+      transition: color 0.15s;
+    }
+    .footer-col a:hover { color: var(--cb-blue); }
+    .footer-bottom {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.35);
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Responsive */
+    @media (max-width: 896px) {
+      .hero h1 { font-size: 52px; }
+      .features h2, .dark-section h2, .metrics h2 { font-size: 36px; }
+      .cta-section h2 { font-size: 42px; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .hero { padding: 80px 20px 60px; }
+      .hero h1 { font-size: 40px; }
+      .features, .metrics { padding: 60px 20px; }
+      .dark-section { padding: 60px 20px; }
+      .cta-section { padding: 80px 20px; }
+      .cta-section h2 { font-size: 36px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .dark-grid { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .nav { padding: 0 20px; }
+    }
+    @media (max-width: 576px) {
+      .hero h1 { font-size: 32px; }
+      .features h2, .dark-section h2, .metrics h2 { font-size: 28px; }
+      .cta-section h2 { font-size: 28px; }
+      .metric-item .number { font-size: 36px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="512" cy="512" r="512" fill="#0052ff"/>
+        <path d="M512.147 692c-99.405 0-180-80.595-180-180s80.595-180 180-180c89.746 0 164.253 65.639 177.623 151.5H834.5C820.369 339.193 680.5 219 512.147 219 350.051 219 216 349.144 216 512s134.051 293 296.147 293C680.5 805 820.369 684.807 834.5 540.5H689.77C676.4 626.361 601.893 692 512.147 692z" fill="white"/>
+      </svg>
+      Coinbase
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">探索</a></li>
+      <li><a href="#">学ぶ</a></li>
+      <li><a href="#">個人向け</a></li>
+      <li><a href="#">法人向け</a></li>
+      <li><a href="#">開発者</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#" class="btn-outlined btn-nav">ログイン</a>
+      <a href="#" class="btn-primary btn-nav">無料登録</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>暗号資産の未来を、<br><span class="blue">すべての人に。</span></h1>
+    <p>Coinbaseは、暗号資産の購入・売却・管理を誰でも簡単に行えるプラットフォームです。信頼性の高いインフラで、あなたの資産を安全に守ります。</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-primary">無料で始める</a>
+      <a href="#" class="btn-secondary">暗号資産について学ぶ</a>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="section-label">主要機能</div>
+    <h2>シンプルで安全な暗号資産体験</h2>
+    <p>初心者からプロのトレーダーまで、あらゆるニーズに対応する包括的なプラットフォーム。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon">&#x26A1;</div>
+        <h3>かんたん取引</h3>
+        <p>数タップでBitcoin、Ethereum、その他250以上の暗号資産を売買。直感的なインターフェースで、初めての方でもすぐに始められます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F512;</div>
+        <h3>業界最高水準のセキュリティ</h3>
+        <p>資産の98%をオフラインのコールドストレージで保管。二段階認証、保険保護、24時間体制の監視で大切な資産を守ります。</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F4C8;</div>
+        <h3>ステーキング報酬</h3>
+        <p>対象の暗号資産を保有するだけで報酬を獲得。面倒な技術的設定は不要で、年利最大6%のリターンを得られます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F310;</div>
+        <h3>Coinbase Wallet</h3>
+        <p>自己管理型ウォレットで、NFT、DeFi、dAppsの世界にアクセス。Web3のすべてを一つのアプリで体験できます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F3E6;</div>
+        <h3>Coinbase Prime</h3>
+        <p>機関投資家向けの包括的な暗号資産プラットフォーム。高度な取引ツール、カストディ、融資をワンストップで提供。</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#x1F4B3;</div>
+        <h3>Coinbase Card</h3>
+        <p>暗号資産で日常の買い物を。Visaデビットカードで、どこでも暗号資産を使って支払い。最大4%の暗号資産キャッシュバック。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dark Section -->
+  <section class="dark-section">
+    <div class="inner">
+      <div class="section-label">なぜCoinbaseか</div>
+      <h2>信頼されるプラットフォーム</h2>
+      <p>世界100カ国以上のユーザーが選ぶ、最も信頼される暗号資産取引所。</p>
+      <div class="dark-grid">
+        <div class="dark-card">
+          <h3>規制準拠</h3>
+          <p>米国で初めて上場した暗号資産企業として、最も厳格な規制基準を満たしています。透明性の高い運営で、ユーザーの信頼を獲得。</p>
+        </div>
+        <div class="dark-card">
+          <h3>保険保護</h3>
+          <p>ホットウォレットに保管されるデジタル資産は保険で保護。万が一のセキュリティ侵害にも対応できる体制を整えています。</p>
+        </div>
+        <div class="dark-card">
+          <h3>高度なインフラ</h3>
+          <p>99.99%の稼働率を誇るエンタープライズグレードのインフラストラクチャ。取引量の急増にも安定したパフォーマンスを提供。</p>
+        </div>
+        <div class="dark-card">
+          <h3>教育リソース</h3>
+          <p>Coinbase Learnで暗号資産の基礎から応用まで学習可能。クイズに答えて暗号資産を獲得できる「学んで稼ぐ」プログラムも提供。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metrics -->
+  <section class="metrics">
+    <h2>数字で見る Coinbase</h2>
+    <div class="metrics-grid">
+      <div class="metric-item">
+        <div class="number">110M+</div>
+        <p>認証済みユーザー</p>
+      </div>
+      <div class="metric-item">
+        <div class="number">$330B+</div>
+        <p>プラットフォーム上の資産</p>
+      </div>
+      <div class="metric-item">
+        <div class="number">100+</div>
+        <p>対応国・地域</p>
+      </div>
+      <div class="metric-item">
+        <div class="number">250+</div>
+        <p>取扱い暗号資産</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <h2>暗号資産を始めよう</h2>
+    <p>アカウント作成は無料。数分で最初の暗号資産を購入できます。</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-primary">無料で始める</a>
+      <a href="#" class="btn-outlined">詳しく見る</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="footer-brand">
+            <svg viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="512" cy="512" r="512" fill="#0052ff"/>
+              <path d="M512.147 692c-99.405 0-180-80.595-180-180s80.595-180 180-180c89.746 0 164.253 65.639 177.623 151.5H834.5C820.369 339.193 680.5 219 512.147 219 350.051 219 216 349.144 216 512s134.051 293 296.147 293C680.5 805 820.369 684.807 834.5 540.5H689.77C676.4 626.361 601.893 692 512.147 692z" fill="white"/>
+            </svg>
+            Coinbase
+          </div>
+          <p class="footer-tagline">暗号資産の経済的自由を、すべての人に届けるためのプラットフォーム。</p>
+        </div>
+        <div class="footer-col">
+          <h4>プロダクト</h4>
+          <a href="#">取引所</a>
+          <a href="#">Wallet</a>
+          <a href="#">Prime</a>
+          <a href="#">Card</a>
+          <a href="#">Cloud</a>
+        </div>
+        <div class="footer-col">
+          <h4>学ぶ</h4>
+          <a href="#">暗号資産の基礎</a>
+          <a href="#">ヒントと教育</a>
+          <a href="#">マーケット情報</a>
+          <a href="#">学んで稼ぐ</a>
+        </div>
+        <div class="footer-col">
+          <h4>会社情報</h4>
+          <a href="#">About</a>
+          <a href="#">採用情報</a>
+          <a href="#">ブログ</a>
+          <a href="#">プレスリリース</a>
+          <a href="#">法的事項</a>
+        </div>
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <a href="#">ヘルプセンター</a>
+          <a href="#">お問い合わせ</a>
+          <a href="#">システム状況</a>
+          <a href="#">ドキュメント</a>
+          <a href="#">API</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Coinbase, Inc. All rights reserved.
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

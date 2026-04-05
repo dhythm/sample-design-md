@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PostHog - プロダクトアナリティクスプラットフォーム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Design System Custom Properties ===== */
+    :root {
+      /* Primary */
+      --olive-ink: #4d4f46;
+      --deep-olive: #23251d;
+      --posthog-orange: #F54E00;
+
+      /* Secondary & Accent */
+      --amber-gold: #F7A501;
+      --gold-border: #b17816;
+      --focus-blue: #3b82f6;
+
+      /* Surface & Background */
+      --warm-parchment: #fdfdf8;
+      --sage-cream: #eeefe9;
+      --light-sage: #e5e7e0;
+      --warm-tan: #d4c9b8;
+      --hover-white: #f4f4f4;
+
+      /* Neutrals & Text */
+      --muted-olive: #65675e;
+      --sage-placeholder: #9ea096;
+      --sage-border: #bfc1b7;
+      --light-border: #b6b7af;
+      --dark-text: #111827;
+
+      /* CTA */
+      --dark-cta: #1e1f23;
+
+      /* Typography */
+      --font-primary: 'IBM Plex Sans', -apple-system, system-ui, 'Avenir Next', Avenir, 'Segoe UI', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, Arial, sans-serif;
+
+      /* Spacing */
+      --container-max: 1200px;
+    }
+
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--olive-ink);
+      background-color: var(--warm-parchment);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: var(--deep-olive);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    a:hover {
+      color: var(--posthog-orange);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* ===== Container ===== */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ===== Navigation ===== */
+    .nav {
+      background-color: var(--warm-parchment);
+      border-bottom: 1px solid var(--sage-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--deep-olive);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-logo .logo-icon {
+      font-size: 28px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.50;
+      color: var(--deep-olive);
+      transition: color 0.15s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--posthog-orange);
+      text-decoration: underline;
+    }
+
+    .nav-cta {
+      background-color: var(--dark-cta);
+      color: #fff !important;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.15s ease, color 0.15s ease;
+      text-decoration: none !important;
+    }
+
+    .nav-cta:hover {
+      opacity: 0.7;
+      color: var(--amber-gold) !important;
+    }
+
+    .nav-cta:active {
+      opacity: 0.8;
+      transform: scale(0.98);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: var(--deep-olive);
+    }
+
+    .mobile-menu-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* ===== Hero Section ===== */
+    .hero {
+      padding: 80px 0 64px;
+      text-align: center;
+    }
+
+    .hero-label {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted-olive);
+      background-color: var(--sage-cream);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      color: var(--deep-olive);
+      max-width: 800px;
+      margin: 0 auto 24px;
+    }
+
+    .hero p {
+      font-size: 19.3px;
+      font-weight: 400;
+      line-height: 1.56;
+      color: var(--muted-olive);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      letter-spacing: -0.48px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--dark-cta);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: var(--font-primary);
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.15s ease, color 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.7;
+      color: var(--amber-gold);
+    }
+
+    .btn-primary:active {
+      opacity: 0.8;
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--light-sage);
+      color: var(--olive-ink);
+      padding: 14px 28px;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: var(--font-primary);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--hover-white);
+      color: var(--posthog-orange);
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid var(--sage-border);
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-number {
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1.20;
+      letter-spacing: -0.75px;
+      color: var(--deep-olive);
+    }
+
+    .hero-stat-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted-olive);
+      margin-top: 4px;
+    }
+
+    /* ===== Trust Bar ===== */
+    .trust-bar {
+      padding: 40px 0;
+      border-top: 1px solid var(--sage-border);
+      border-bottom: 1px solid var(--sage-border);
+    }
+
+    .trust-bar-label {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--sage-placeholder);
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    .trust-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .trust-logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--sage-border);
+      letter-spacing: -0.5px;
+    }
+
+    /* ===== Features Section ===== */
+    .features {
+      padding: 80px 0;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted-olive);
+      margin-bottom: 12px;
+    }
+
+    .section-heading {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.50;
+      color: var(--deep-olive);
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.56;
+      color: var(--muted-olive);
+      max-width: 600px;
+      margin-bottom: 48px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background-color: var(--warm-parchment);
+      border: 1px solid var(--sage-border);
+      border-radius: 6px;
+      padding: 24px;
+      transition: border-color 0.15s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--light-border);
+    }
+
+    .feature-card:hover .feature-card-title {
+      color: var(--posthog-orange);
+    }
+
+    .feature-card-icon {
+      width: 48px;
+      height: 48px;
+      background-color: var(--sage-cream);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card-title {
+      font-size: 21.4px;
+      font-weight: 700;
+      line-height: 1.40;
+      letter-spacing: -0.54px;
+      color: var(--deep-olive);
+      margin-bottom: 8px;
+      transition: color 0.15s ease;
+    }
+
+    .feature-card-desc {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.71;
+      color: var(--muted-olive);
+    }
+
+    .feature-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--deep-olive);
+      margin-top: 16px;
+      transition: color 0.15s ease;
+    }
+
+    .feature-card-link:hover {
+      color: var(--posthog-orange);
+    }
+
+    /* ===== Product Showcase ===== */
+    .showcase {
+      padding: 64px 0;
+      background-color: var(--sage-cream);
+      border-top: 1px solid var(--sage-border);
+      border-bottom: 1px solid var(--sage-border);
+    }
+
+    .showcase .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .showcase-content {
+      max-width: 480px;
+    }
+
+    .showcase-visual {
+      background-color: var(--warm-parchment);
+      border: 1px solid var(--sage-border);
+      border-radius: 6px;
+      padding: 32px;
+      min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .showcase-placeholder {
+      text-align: center;
+      color: var(--sage-placeholder);
+    }
+
+    .showcase-placeholder .placeholder-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    .showcase-placeholder p {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* ===== How It Works ===== */
+    .how-it-works {
+      padding: 80px 0;
+    }
+
+    .how-it-works .section-heading {
+      text-align: center;
+    }
+
+    .how-it-works .section-desc {
+      text-align: center;
+      margin: 0 auto 48px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .step-card {
+      text-align: center;
+      padding: 32px 24px;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: var(--dark-cta);
+      color: #fff;
+      border-radius: 9999px;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .step-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.40;
+      letter-spacing: -0.5px;
+      color: var(--deep-olive);
+      margin-bottom: 12px;
+    }
+
+    .step-desc {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.71;
+      color: var(--muted-olive);
+    }
+
+    /* ===== Testimonial ===== */
+    .testimonial {
+      padding: 64px 0;
+      border-top: 1px solid var(--sage-border);
+      border-bottom: 1px solid var(--sage-border);
+    }
+
+    .testimonial-card {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .testimonial-quote {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.50;
+      color: var(--deep-olive);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--olive-ink);
+    }
+
+    .testimonial-role {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--muted-olive);
+      margin-top: 4px;
+    }
+
+    /* ===== CTA Section ===== */
+    .cta-section {
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .cta-section .cta-box {
+      background-color: var(--sage-cream);
+      border: 1px solid var(--sage-border);
+      border-radius: 6px;
+      padding: 64px 48px;
+    }
+
+    .cta-hedgehog {
+      font-size: 64px;
+      margin-bottom: 24px;
+    }
+
+    .cta-section h2 {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.30;
+      color: var(--deep-olive);
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.56;
+      color: var(--muted-olive);
+      max-width: 520px;
+      margin: 0 auto 32px;
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .cta-note {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--sage-placeholder);
+      margin-top: 16px;
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      background-color: var(--sage-cream);
+      border-top: 1px solid var(--sage-border);
+      padding: 48px 0 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--deep-olive);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-brand-desc {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.71;
+      color: var(--muted-olive);
+      max-width: 280px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--olive-ink);
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--muted-olive);
+      transition: color 0.15s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--posthog-orange);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--sage-border);
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copyright {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--sage-placeholder);
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-bottom-links a {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--sage-placeholder);
+    }
+
+    .footer-bottom-links a:hover {
+      color: var(--posthog-orange);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1024px) {
+      .hero h1 {
+        font-size: 40px;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .hero {
+        padding: 48px 0 40px;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+        letter-spacing: -1px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .hero-stats {
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+
+      .hero-stat-number {
+        font-size: 24px;
+      }
+
+      .features {
+        padding: 48px 0;
+      }
+
+      .section-heading {
+        font-size: 28px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase .container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .showcase-content {
+        max-width: 100%;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .cta-section .cta-box {
+        padding: 40px 24px;
+      }
+
+      .cta-section h2 {
+        font-size: 28px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .trust-logos {
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 425px) {
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .btn-primary, .btn-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+
+      .cta-actions .btn-primary,
+      .cta-actions .btn-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">&#x1F994;</span>
+        PostHog
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">プロダクト</a></li>
+        <li><a href="#how-it-works">ドキュメント</a></li>
+        <li><a href="#pricing">料金</a></li>
+        <li><a href="#community">コミュニティ</a></li>
+        <li><a href="#" class="nav-cta">無料で始める</a></li>
+      </ul>
+      <button class="mobile-menu-btn" aria-label="メニューを開く">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12h18M3 6h18M3 18h18"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <span class="hero-label">オープンソース プロダクトアナリティクス</span>
+      <h1>プロダクトを成功に導く、<br>オールインワン分析プラットフォーム</h1>
+      <p>イベント分析、セッションリプレイ、フィーチャーフラグ、A/Bテストをひとつのプラットフォームで。エンジニアが愛するプロダクトアナリティクス。</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">無料で始める &rarr;</a>
+        <a href="#" class="btn-secondary">デモを見る</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-number">70K+</div>
+          <div class="hero-stat-label">導入企業</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">100B+</div>
+          <div class="hero-stat-label">月間イベント処理</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">15K+</div>
+          <div class="hero-stat-label">GitHubスター</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Bar -->
+  <section class="trust-bar">
+    <div class="container">
+      <div class="trust-bar-label">世界中のチームに選ばれています</div>
+      <div class="trust-logos">
+        <span class="trust-logo">Airbus</span>
+        <span class="trust-logo">Y Combinator</span>
+        <span class="trust-logo">Phantom</span>
+        <span class="trust-logo">Hasura</span>
+        <span class="trust-logo">Staples</span>
+        <span class="trust-logo">Landmark</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <span class="section-label">プロダクト</span>
+      <h2 class="section-heading">必要なすべてが、ここに</h2>
+      <p class="section-desc">プロダクト分析に必要なツールをひとつのプラットフォームに統合。複数のツールを行き来する必要はもうありません。</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon">&#x1F4CA;</div>
+          <h3 class="feature-card-title">プロダクトアナリティクス</h3>
+          <p class="feature-card-desc">ファネル分析、リテンション、ユーザーパスなど、プロダクトの成長に必要なインサイトを自動で取得。SQLなしで高度な分析が可能です。</p>
+          <a href="#" class="feature-card-link">詳しく見る &rarr;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">&#x1F3AC;</div>
+          <h3 class="feature-card-title">セッションリプレイ</h3>
+          <p class="feature-card-desc">ユーザーが実際にどのようにプロダクトを使っているかを録画で確認。バグの発見やUX改善のヒントを見つけましょう。</p>
+          <a href="#" class="feature-card-link">詳しく見る &rarr;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">&#x1F6A9;</div>
+          <h3 class="feature-card-title">フィーチャーフラグ</h3>
+          <p class="feature-card-desc">新機能を安全にロールアウト。特定のユーザーグループにのみ機能を公開し、段階的にリリースを管理できます。</p>
+          <a href="#" class="feature-card-link">詳しく見る &rarr;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">&#x1F9EA;</div>
+          <h3 class="feature-card-title">A/Bテスト</h3>
+          <p class="feature-card-desc">統計的に有意な実験を簡単に実行。フィーチャーフラグと連携して、データドリブンな意思決定を実現します。</p>
+          <a href="#" class="feature-card-link">詳しく見る &rarr;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">&#x1F4E6;</div>
+          <h3 class="feature-card-title">データウェアハウス</h3>
+          <p class="feature-card-desc">Stripe、Hubspot、Salesforceなどの外部データをPostHogに統合。すべてのデータを一箇所で分析できます。</p>
+          <a href="#" class="feature-card-link">詳しく見る &rarr;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">&#x1F50D;</div>
+          <h3 class="feature-card-title">サーベイ</h3>
+          <p class="feature-card-desc">プロダクト内でユーザーに直接質問。定量データと定性データを組み合わせて、より深いインサイトを獲得できます。</p>
+          <a href="#" class="feature-card-link">詳しく見る &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Showcase -->
+  <section class="showcase">
+    <div class="container">
+      <div class="showcase-content">
+        <span class="section-label">開発者フレンドリー</span>
+        <h2 class="section-heading">エンジニアのためのアナリティクス</h2>
+        <p class="section-desc">1行のコードでイベント追跡を開始。オートキャプチャ、API、SDK、そしてオープンソース。あなたのデータは、あなたのものです。</p>
+        <a href="#" class="btn-primary">ドキュメントを読む &rarr;</a>
+      </div>
+      <div class="showcase-visual">
+        <div class="showcase-placeholder">
+          <div class="placeholder-icon">&#x1F994;</div>
+          <p>プロダクトダッシュボードのプレビュー</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <span class="section-label" style="display: block; text-align: center;">はじめ方</span>
+      <h2 class="section-heading">3ステップで分析開始</h2>
+      <p class="section-desc">セットアップは驚くほど簡単。数分でプロダクト分析を始められます。</p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3 class="step-title">スニペットを追加</h3>
+          <p class="step-desc">JavaScriptの1行スニペットをサイトに貼るだけ。React、Next.js、Vue、Flutterなど主要フレームワークのSDKも用意しています。</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3 class="step-title">自動でデータ収集</h3>
+          <p class="step-desc">オートキャプチャがページビュー、クリック、フォーム送信を自動追跡。カスタムイベントも簡単に定義できます。</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3 class="step-title">インサイトを発見</h3>
+          <p class="step-desc">ダッシュボードでトレンド、ファネル、リテンションを可視化。データドリブンなプロダクト改善を今日から始めましょう。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="testimonial">
+    <div class="container">
+      <div class="testimonial-card">
+        <p class="testimonial-quote">&ldquo;PostHogに切り替えてから、プロダクトチームのデータ分析スピードが劇的に向上しました。エンジニアが自らインサイトを引き出せるようになったのが最大の変化です。&rdquo;</p>
+        <p class="testimonial-author">田中 太郎</p>
+        <p class="testimonial-role">プロダクトマネージャー, TechStartup Inc.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box">
+        <div class="cta-hedgehog">&#x1F994;</div>
+        <h2>プロダクト分析を、<br>今日から始めよう</h2>
+        <p>無料プランで月間100万イベントまで追跡可能。クレジットカード不要で、すぐにスタートできます。</p>
+        <div class="cta-actions">
+          <a href="#" class="btn-primary">無料で始める &rarr;</a>
+          <a href="#" class="btn-secondary">営業に相談する</a>
+        </div>
+        <p class="cta-note">セットアップは5分以内 &middot; クレジットカード不要 &middot; いつでもキャンセル可能</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name">
+            <span>&#x1F994;</span> PostHog
+          </div>
+          <p class="footer-brand-desc">オープンソースのプロダクトアナリティクスプラットフォーム。エンジニアが愛する分析ツールを、あなたのチームにも。</p>
+        </div>
+        <div>
+          <h4 class="footer-col-title">プロダクト</h4>
+          <ul class="footer-links">
+            <li><a href="#">プロダクトアナリティクス</a></li>
+            <li><a href="#">セッションリプレイ</a></li>
+            <li><a href="#">フィーチャーフラグ</a></li>
+            <li><a href="#">A/Bテスト</a></li>
+            <li><a href="#">サーベイ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">リソース</h4>
+          <ul class="footer-links">
+            <li><a href="#">ドキュメント</a></li>
+            <li><a href="#">チュートリアル</a></li>
+            <li><a href="#">API リファレンス</a></li>
+            <li><a href="#">ブログ</a></li>
+            <li><a href="#">チェンジログ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">会社情報</h4>
+          <ul class="footer-links">
+            <li><a href="#">私たちについて</a></li>
+            <li><a href="#">キャリア</a></li>
+            <li><a href="#">お問い合わせ</a></li>
+            <li><a href="#">利用規約</a></li>
+            <li><a href="#">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2026 PostHog, Inc. All rights reserved.</p>
+        <ul class="footer-bottom-links">
+          <li><a href="#">GitHub</a></li>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

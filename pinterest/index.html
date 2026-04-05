@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pinterest - アイデアを見つけよう</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       Pinterest Design System - CSS Custom Properties
+       ======================================== */
+    :root {
+      /* Primary */
+      --color-pinterest-red: #e60023;
+      --color-green-700: #103c25;
+      --color-green-700-hover: #0b2819;
+
+      /* Text */
+      --color-plum-black: #211922;
+      --color-black: #000000;
+      --color-olive-gray: #62625b;
+      --color-warm-silver: #91918c;
+      --color-white: #ffffff;
+
+      /* Interactive */
+      --color-focus-blue: #435ee5;
+      --color-performance-purple: #6845ab;
+      --color-recommendation-purple: #7e238b;
+      --color-link-blue: #2b48d4;
+      --color-error-red: #9e0a0a;
+
+      /* Surface */
+      --color-sand-gray: #e5e5e0;
+      --color-warm-light: #e0e0d9;
+      --color-warm-wash: hsla(60, 20%, 98%, 0.5);
+      --color-fog: #f6f6f3;
+      --color-border-disabled: #c8c8c1;
+      --color-hover-gray: #bcbcb3;
+      --color-dark-surface: #33332e;
+
+      /* Typography */
+      --font-family: "Noto Sans JP", -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+      --font-size-hero: 4.38rem;
+      --font-size-heading: 1.75rem;
+      --font-size-body: 1rem;
+      --font-size-caption-bold: 0.88rem;
+      --font-size-caption: 0.75rem;
+
+      --font-weight-regular: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 80px;
+      --space-3xl: 100px;
+
+      /* Border Radius */
+      --radius-card: 12px;
+      --radius-button: 16px;
+      --radius-feature: 20px;
+      --radius-container: 28px;
+      --radius-tab: 32px;
+      --radius-hero: 40px;
+      --radius-circle: 50%;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-regular);
+      line-height: 1.4;
+      color: var(--color-plum-black);
+      background-color: var(--color-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ========================================
+       Utility
+       ======================================== */
+    .container {
+      max-width: 1312px;
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-white);
+      border-bottom: 1px solid var(--color-fog);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-sm) 0;
+      max-width: 1312px;
+      margin: 0 auto;
+      padding-left: var(--space-md);
+      padding-right: var(--space-md);
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex-shrink: 0;
+    }
+
+    .nav__logo-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--color-pinterest-red);
+    }
+
+    .nav__logo-text {
+      font-size: 1.25rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-pinterest-red);
+      letter-spacing: -0.5px;
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      list-style: none;
+    }
+
+    .nav__link {
+      padding: 6px 14px;
+      border-radius: var(--radius-button);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-black);
+      transition: background-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav__link:hover {
+      background-color: var(--color-fog);
+    }
+
+    .nav__link--active {
+      background-color: var(--color-black);
+      color: var(--color-white);
+    }
+
+    .nav__link--active:hover {
+      background-color: var(--color-plum-black);
+    }
+
+    .nav__search {
+      flex: 1;
+      position: relative;
+    }
+
+    .nav__search-input {
+      width: 100%;
+      padding: 11px 15px 11px 44px;
+      border: 1px solid transparent;
+      border-radius: var(--radius-button);
+      background: var(--color-fog);
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      color: var(--color-plum-black);
+      outline: none;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .nav__search-input::placeholder {
+      color: var(--color-olive-gray);
+    }
+
+    .nav__search-input:focus {
+      border-color: var(--color-focus-blue);
+      background: var(--color-white);
+      box-shadow: 0 0 0 2px rgba(67, 94, 229, 0.2);
+    }
+
+    .nav__search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      fill: var(--color-olive-gray);
+      pointer-events: none;
+    }
+
+    .nav__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex-shrink: 0;
+    }
+
+    .nav__action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-circle);
+      background: var(--color-warm-light);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .nav__action-btn:hover {
+      background: var(--color-hover-gray);
+    }
+
+    .nav__action-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--color-plum-black);
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      padding: var(--space-2xl) 0;
+      text-align: center;
+      background: var(--color-white);
+      overflow: hidden;
+    }
+
+    .hero__badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--color-warm-wash);
+      border: 1px solid var(--color-sand-gray);
+      border-radius: var(--radius-button);
+      font-size: var(--font-size-caption-bold);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-olive-gray);
+      margin-bottom: var(--space-lg);
+    }
+
+    .hero__title {
+      font-size: var(--font-size-hero);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.05;
+      color: var(--color-plum-black);
+      margin-bottom: var(--space-lg);
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero__title-accent {
+      color: var(--color-pinterest-red);
+    }
+
+    .hero__subtitle {
+      font-size: 1.125rem;
+      color: var(--color-olive-gray);
+      line-height: 1.6;
+      max-width: 560px;
+      margin: 0 auto var(--space-xl);
+    }
+
+    .hero__actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-2xl);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      padding: 12px 24px;
+      border: 2px solid transparent;
+      border-radius: var(--radius-button);
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      text-decoration: none;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn--primary {
+      background: var(--color-pinterest-red);
+      color: var(--color-white);
+    }
+
+    .btn--primary:hover {
+      background: #cc001f;
+    }
+
+    .btn--secondary {
+      background: var(--color-sand-gray);
+      color: var(--color-black);
+    }
+
+    .btn--secondary:hover {
+      background: var(--color-hover-gray);
+    }
+
+    .btn--large {
+      padding: 16px 32px;
+      font-size: 1.125rem;
+    }
+
+    .btn--white {
+      background: var(--color-white);
+      color: var(--color-black);
+    }
+
+    .btn--white:hover {
+      background: var(--color-fog);
+    }
+
+    /* Hero Masonry Grid */
+    .hero__grid {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+
+    .hero__grid-col {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      flex: 0 0 200px;
+    }
+
+    .hero__grid-col:nth-child(odd) {
+      margin-top: 40px;
+    }
+
+    .hero__pin {
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: var(--color-fog);
+      aspect-ratio: auto;
+    }
+
+    .hero__pin--tall {
+      height: 260px;
+    }
+
+    .hero__pin--medium {
+      height: 200px;
+    }
+
+    .hero__pin--short {
+      height: 160px;
+    }
+
+    .hero__pin-color {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-caption);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-white);
+    }
+
+    /* ========================================
+       Features Section
+       ======================================== */
+    .features {
+      padding: var(--space-3xl) 0;
+      background: var(--color-fog);
+    }
+
+    .features__header {
+      text-align: center;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .features__label {
+      display: inline-block;
+      font-size: var(--font-size-caption-bold);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-pinterest-red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: var(--space-md);
+    }
+
+    .features__title {
+      font-size: var(--font-size-heading);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -1.2px;
+      color: var(--color-plum-black);
+      margin-bottom: var(--space-md);
+    }
+
+    .features__subtitle {
+      font-size: var(--font-size-body);
+      color: var(--color-olive-gray);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .features__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+    }
+
+    .feature-card {
+      background: var(--color-white);
+      border-radius: var(--radius-feature);
+      padding: var(--space-xl);
+      transition: transform 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .feature-card__icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-md);
+    }
+
+    .feature-card__icon--red {
+      background: #fce8ec;
+    }
+
+    .feature-card__icon--purple {
+      background: #f0e8f7;
+    }
+
+    .feature-card__icon--green {
+      background: #e8f5ee;
+    }
+
+    .feature-card__icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .feature-card__title {
+      font-size: 1.125rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-plum-black);
+      margin-bottom: var(--space-sm);
+    }
+
+    .feature-card__text {
+      font-size: var(--font-size-body);
+      color: var(--color-olive-gray);
+      line-height: 1.5;
+    }
+
+    /* ========================================
+       Masonry Showcase
+       ======================================== */
+    .showcase {
+      padding: var(--space-3xl) 0;
+      background: var(--color-white);
+    }
+
+    .showcase__header {
+      text-align: center;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .showcase__label {
+      display: inline-block;
+      font-size: var(--font-size-caption-bold);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-performance-purple);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: var(--space-md);
+    }
+
+    .showcase__title {
+      font-size: var(--font-size-heading);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -1.2px;
+      color: var(--color-plum-black);
+      margin-bottom: var(--space-md);
+    }
+
+    .showcase__subtitle {
+      font-size: var(--font-size-body);
+      color: var(--color-olive-gray);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .masonry {
+      columns: 4;
+      column-gap: var(--space-md);
+    }
+
+    .pin-card {
+      break-inside: avoid;
+      margin-bottom: var(--space-md);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: var(--color-fog);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .pin-card:hover {
+      transform: scale(1.02);
+    }
+
+    .pin-card__image {
+      width: 100%;
+      display: block;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .pin-card__content {
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .pin-card__title {
+      font-size: var(--font-size-caption-bold);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-plum-black);
+      margin-bottom: var(--space-xs);
+    }
+
+    .pin-card__meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: var(--font-size-caption);
+      color: var(--color-olive-gray);
+    }
+
+    .pin-card__avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-circle);
+      background: var(--color-warm-light);
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta {
+      padding: var(--space-3xl) 0;
+      background: var(--color-dark-surface);
+      text-align: center;
+    }
+
+    .cta__container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta__icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto var(--space-lg);
+    }
+
+    .cta__icon svg {
+      width: 100%;
+      height: 100%;
+      fill: var(--color-pinterest-red);
+    }
+
+    .cta__title {
+      font-size: 2.5rem;
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-white);
+      margin-bottom: var(--space-md);
+      line-height: 1.1;
+    }
+
+    .cta__text {
+      font-size: 1.125rem;
+      color: var(--color-warm-silver);
+      line-height: 1.6;
+      margin-bottom: var(--space-xl);
+    }
+
+    .cta__actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+    }
+
+    /* ========================================
+       Stats Section
+       ======================================== */
+    .stats {
+      padding: var(--space-2xl) 0;
+      background: var(--color-white);
+    }
+
+    .stats__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-lg);
+      text-align: center;
+    }
+
+    .stat__number {
+      font-size: 2.5rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-pinterest-red);
+      margin-bottom: var(--space-sm);
+    }
+
+    .stat__label {
+      font-size: var(--font-size-body);
+      color: var(--color-olive-gray);
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      padding: var(--space-2xl) 0 var(--space-xl);
+      background: var(--color-fog);
+      border-top: 1px solid var(--color-sand-gray);
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .footer__brand-name {
+      font-size: 1.25rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-pinterest-red);
+      margin-bottom: var(--space-md);
+    }
+
+    .footer__brand-desc {
+      font-size: var(--font-size-caption-bold);
+      color: var(--color-olive-gray);
+      line-height: 1.6;
+      max-width: 280px;
+    }
+
+    .footer__column-title {
+      font-size: var(--font-size-caption-bold);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-plum-black);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: var(--space-md);
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .footer__link {
+      font-size: var(--font-size-caption-bold);
+      color: var(--color-olive-gray);
+      transition: color 0.2s ease;
+    }
+
+    .footer__link:hover {
+      color: var(--color-pinterest-red);
+    }
+
+    .footer__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-xl);
+      border-top: 1px solid var(--color-sand-gray);
+    }
+
+    .footer__copyright {
+      font-size: var(--font-size-caption);
+      color: var(--color-warm-silver);
+    }
+
+    .footer__bottom-links {
+      display: flex;
+      gap: var(--space-md);
+      list-style: none;
+    }
+
+    .footer__bottom-link {
+      font-size: var(--font-size-caption);
+      color: var(--color-warm-silver);
+      transition: color 0.2s ease;
+    }
+
+    .footer__bottom-link:hover {
+      color: var(--color-plum-black);
+    }
+
+    /* ========================================
+       Responsive Design
+       ======================================== */
+    @media (max-width: 890px) {
+      .hero__title {
+        font-size: 3rem;
+      }
+
+      .features__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .masonry {
+        columns: 3;
+      }
+
+      .stats__grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-xl);
+      }
+
+      .footer__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero__grid-col:nth-child(n+4) {
+        display: none;
+      }
+
+      .nav__links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero {
+        padding: var(--space-xl) 0;
+      }
+
+      .hero__title {
+        font-size: 2.25rem;
+      }
+
+      .hero__actions {
+        flex-direction: column;
+      }
+
+      .hero__grid {
+        gap: var(--space-sm);
+      }
+
+      .hero__grid-col {
+        flex: 0 0 140px;
+      }
+
+      .hero__grid-col:nth-child(n+3) {
+        display: none;
+      }
+
+      .features {
+        padding: var(--space-2xl) 0;
+      }
+
+      .features__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .masonry {
+        columns: 2;
+      }
+
+      .cta__title {
+        font-size: 1.75rem;
+      }
+
+      .cta__actions {
+        flex-direction: column;
+      }
+
+      .stats__grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: center;
+      }
+
+      .nav__search-input {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== Navigation ========== -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">
+        <svg class="nav__logo-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345c-.091.379-.293 1.194-.333 1.361-.052.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/>
+        </svg>
+        <span class="nav__logo-text">Pinterest</span>
+      </a>
+
+      <ul class="nav__links">
+        <li><a href="#" class="nav__link nav__link--active">ホーム</a></li>
+        <li><a href="#" class="nav__link">探す</a></li>
+        <li><a href="#" class="nav__link">作成</a></li>
+      </ul>
+
+      <div class="nav__search">
+        <svg class="nav__search-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 2a8 8 0 105.293 14.293l5.207 5.207 1.414-1.414-5.207-5.207A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+        </svg>
+        <input type="text" class="nav__search-input" placeholder="アイデアを検索する">
+      </div>
+
+      <div class="nav__actions">
+        <button class="nav__action-btn" aria-label="通知">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+        </button>
+        <button class="nav__action-btn" aria-label="メッセージ">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+          </svg>
+        </button>
+        <button class="nav__action-btn" aria-label="プロフィール">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== Hero Section ========== -->
+  <section class="hero">
+    <div class="container">
+      <span class="hero__badge">あなたの次のアイデアがここに</span>
+      <h1 class="hero__title">
+        インスピレーションを<br><span class="hero__title-accent">見つけよう</span>
+      </h1>
+      <p class="hero__subtitle">
+        レシピ、インテリア、ファッション、DIY。何億ものアイデアの中から、あなたにぴったりのものを発見しましょう。
+      </p>
+      <div class="hero__actions">
+        <a href="#" class="btn btn--primary btn--large">無料で始める</a>
+        <a href="#" class="btn btn--secondary btn--large">詳しく見る</a>
+      </div>
+    </div>
+
+    <div class="hero__grid">
+      <div class="hero__grid-col">
+        <div class="hero__pin hero__pin--tall">
+          <div class="hero__pin-color" style="background: linear-gradient(135deg, #f0c27f, #fc5c7d);">インテリア</div>
+        </div>
+        <div class="hero__pin hero__pin--medium">
+          <div class="hero__pin-color" style="background: linear-gradient(135deg, #667eea, #764ba2);">ファッション</div>
+        </div>
+      </div>
+      <div class="hero__grid-col">
+        <div class="hero__pin hero__pin--medium">
+          <div class="hero__pin-color" style="background: linear-gradient(135deg, #f093fb, #f5576c);">レシピ</div>
+        </div>
+        <div class="hero__pin hero__pin--tall">
+          <div class="hero__pin-color" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">旅行</div>
+        </div>
+      </div>
+      <div class="hero__grid-col">
+        <div class="hero__pin hero__pin--tall">
+          <div class="hero__pin-color" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">ガーデニング</div>
+        </div>
+        <div class="hero__pin hero__pin--short">
+          <div class="hero__pin-color" style="background: linear-gradient(135deg, #fa709a, #fee140);">アート</div>
+        </div>
+      </div>
+      <div class="hero__grid-col">
+        <div class="hero__pin hero__pin--short">
+          <div class="hero__pin-color" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">ウェディング</div>
+        </div>
+        <div class="hero__pin hero__pin--tall">
+          <div class="hero__pin-color" style="background: linear-gradient(135deg, #fccb90, #d57eeb);">DIY</div>
+        </div>
+      </div>
+      <div class="hero__grid-col">
+        <div class="hero__pin hero__pin--medium">
+          <div class="hero__pin-color" style="background: linear-gradient(135deg, #e0c3fc, #8ec5fc);">ビューティー</div>
+        </div>
+        <div class="hero__pin hero__pin--medium">
+          <div class="hero__pin-color" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">ネイル</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Features Section ========== -->
+  <section class="features">
+    <div class="container">
+      <div class="features__header">
+        <span class="features__label">機能</span>
+        <h2 class="features__title">アイデアを実現する力</h2>
+        <p class="features__subtitle">
+          Pinterest は単なる画像共有プラットフォームではありません。あなたの暮らしを豊かにするツールです。
+        </p>
+      </div>
+      <div class="features__grid">
+        <div class="feature-card">
+          <div class="feature-card__icon feature-card__icon--red">
+            <svg viewBox="0 0 24 24" fill="#e60023" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">ビジュアル検索</h3>
+          <p class="feature-card__text">
+            写真を撮るだけで、似たアイテムやアイデアを瞬時に発見。AI が画像を解析し、あなたが探しているものを見つけます。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon feature-card__icon--purple">
+            <svg viewBox="0 0 24 24" fill="#6845ab" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-7-2h2V7h-4v2h2z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">ボードで整理</h3>
+          <p class="feature-card__text">
+            お気に入りのピンをテーマ別のボードに保存。プロジェクトの計画や、インスピレーションの整理が簡単にできます。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon feature-card__icon--green">
+            <svg viewBox="0 0 24 24" fill="#103c25" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">共同作業</h3>
+          <p class="feature-card__text">
+            友人や家族をボードに招待して一緒にアイデアを集めましょう。旅行計画やパーティーの準備に最適です。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon feature-card__icon--red">
+            <svg viewBox="0 0 24 24" fill="#e60023" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">簡単シェア</h3>
+          <p class="feature-card__text">
+            見つけたアイデアをワンタップで共有。SNS やメッセージアプリを通じて、大切な人とインスピレーションを分かち合えます。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon feature-card__icon--purple">
+            <svg viewBox="0 0 24 24" fill="#7e238b" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">ピンを作成</h3>
+          <p class="feature-card__text">
+            自分のアイデアや作品を世界中に発信。写真や動画をアップロードして、クリエイターとしての一歩を踏み出しましょう。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon feature-card__icon--green">
+            <svg viewBox="0 0 24 24" fill="#103c25" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">ショッピング</h3>
+          <p class="feature-card__text">
+            気に入ったアイテムをそのまま購入。ピンから直接ショップに移動して、アイデアを現実にしましょう。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Masonry Showcase ========== -->
+  <section class="showcase">
+    <div class="container">
+      <div class="showcase__header">
+        <span class="showcase__label">トレンド</span>
+        <h2 class="showcase__title">今人気のアイデア</h2>
+        <p class="showcase__subtitle">
+          世界中のクリエイターが共有する、最新のトレンドとインスピレーション。
+        </p>
+      </div>
+      <div class="masonry">
+        <div class="pin-card">
+          <div class="pin-card__image" style="height: 280px; background: linear-gradient(135deg, #ffecd2, #fcb69f);"></div>
+          <div class="pin-card__content">
+            <p class="pin-card__title">春のテーブルコーディネート</p>
+            <div class="pin-card__meta">
+              <div class="pin-card__avatar"></div>
+              <span>interior_life</span>
+            </div>
+          </div>
+        </div>
+        <div class="pin-card">
+          <div class="pin-card__image" style="height: 200px; background: linear-gradient(135deg, #a1c4fd, #c2e9fb);"></div>
+          <div class="pin-card__content">
+            <p class="pin-card__title">ミニマルワークスペース</p>
+            <div class="pin-card__meta">
+              <div class="pin-card__avatar"></div>
+              <span>desk_setup</span>
+            </div>
+          </div>
+        </div>
+        <div class="pin-card">
+          <div class="pin-card__image" style="height: 320px; background: linear-gradient(135deg, #d4fc79, #96e6a1);"></div>
+          <div class="pin-card__content">
+            <p class="pin-card__title">ヴィーガンボウルレシピ</p>
+            <div class="pin-card__meta">
+              <div class="pin-card__avatar"></div>
+              <span>healthy_eats</span>
+            </div>
+          </div>
+        </div>
+        <div class="pin-card">
+          <div class="pin-card__image" style="height: 240px; background: linear-gradient(135deg, #f6d365, #fda085);"></div>
+          <div class="pin-card__content">
+            <p class="pin-card__title">手作りキャンドル</p>
+            <div class="pin-card__meta">
+              <div class="pin-card__avatar"></div>
+              <span>diy_crafts</span>
+            </div>
+          </div>
+        </div>
+        <div class="pin-card">
+          <div class="pin-card__image" style="height: 180px; background: linear-gradient(135deg, #fbc2eb, #a6c1ee);"></div>
+          <div class="pin-card__content">
+            <p class="pin-card__title">春ネイルデザイン 2026</p>
+            <div class="pin-card__meta">
+              <div class="pin-card__avatar"></div>
+              <span>nail_art_jp</span>
+            </div>
+          </div>
+        </div>
+        <div class="pin-card">
+          <div class="pin-card__image" style="height: 300px; background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+          <div class="pin-card__content">
+            <p class="pin-card__title">北欧リビングインテリア</p>
+            <div class="pin-card__meta">
+              <div class="pin-card__avatar"></div>
+              <span>scandi_home</span>
+            </div>
+          </div>
+        </div>
+        <div class="pin-card">
+          <div class="pin-card__image" style="height: 220px; background: linear-gradient(135deg, #ff9a9e, #fad0c4);"></div>
+          <div class="pin-card__content">
+            <p class="pin-card__title">桜モチーフのスイーツ</p>
+            <div class="pin-card__meta">
+              <div class="pin-card__avatar"></div>
+              <span>sakura_sweets</span>
+            </div>
+          </div>
+        </div>
+        <div class="pin-card">
+          <div class="pin-card__image" style="height: 260px; background: linear-gradient(135deg, #89f7fe, #66a6ff);"></div>
+          <div class="pin-card__content">
+            <p class="pin-card__title">バスルームリノベーション</p>
+            <div class="pin-card__meta">
+              <div class="pin-card__avatar"></div>
+              <span>reno_ideas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Stats Section ========== -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats__grid">
+        <div class="stat">
+          <div class="stat__number">5 億+</div>
+          <div class="stat__label">月間アクティブユーザー</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number">3000 億+</div>
+          <div class="stat__label">保存されたピン</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number">50 億+</div>
+          <div class="stat__label">ボード数</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number">200+</div>
+          <div class="stat__label">対応する国と地域</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA Section ========== -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta__container">
+        <div class="cta__icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345c-.091.379-.293 1.194-.333 1.361-.052.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/>
+          </svg>
+        </div>
+        <h2 class="cta__title">あなたのアイデアを<br>世界に届けよう</h2>
+        <p class="cta__text">
+          Pinterest に参加して、インスピレーションを見つけ、保存し、共有しましょう。無料でアカウントを作成できます。
+        </p>
+        <div class="cta__actions">
+          <a href="#" class="btn btn--primary btn--large">無料アカウントを作成</a>
+          <a href="#" class="btn btn--white btn--large">ビジネスアカウント</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Footer ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__brand-name">Pinterest</div>
+          <p class="footer__brand-desc">
+            世界中のアイデアを発見し、保存して、あなたの暮らしに取り入れましょう。
+          </p>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__column-title">Pinterest について</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">会社概要</a></li>
+            <li><a href="#" class="footer__link">採用情報</a></li>
+            <li><a href="#" class="footer__link">プレスリリース</a></li>
+            <li><a href="#" class="footer__link">投資家情報</a></li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__column-title">コミュニティ</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Pinterest クリエイター</a></li>
+            <li><a href="#" class="footer__link">コミュニティガイドライン</a></li>
+            <li><a href="#" class="footer__link">安全性</a></li>
+            <li><a href="#" class="footer__link">アクセシビリティ</a></li>
+          </ul>
+        </div>
+        <div class="footer__column">
+          <h4 class="footer__column-title">ビジネス</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Pinterest for Business</a></li>
+            <li><a href="#" class="footer__link">広告</a></li>
+            <li><a href="#" class="footer__link">ショッピング</a></li>
+            <li><a href="#" class="footer__link">パートナー</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">&copy; 2026 Pinterest. All rights reserved.</p>
+        <ul class="footer__bottom-links">
+          <li><a href="#" class="footer__bottom-link">利用規約</a></li>
+          <li><a href="#" class="footer__bottom-link">プライバシーポリシー</a></li>
+          <li><a href="#" class="footer__bottom-link">Cookie ポリシー</a></li>
+          <li><a href="#" class="footer__bottom-link">ヘルプ</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

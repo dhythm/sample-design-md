@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airbnb - どこに泊まろう？</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* Brand */
+      --rausch: #ff385c;
+      --rausch-deep: #e00b41;
+      /* Text */
+      --near-black: #222222;
+      --focused-gray: #3f3f3f;
+      --secondary-gray: #6a6a6a;
+      --disabled-text: rgba(0,0,0,0.24);
+      /* Surface */
+      --white: #ffffff;
+      --light-surface: #f2f2f2;
+      --border-gray: #c1c1c1;
+      /* Premium */
+      --luxe-purple: #460479;
+      --plus-magenta: #92174d;
+      /* Misc */
+      --legal-blue: #428bff;
+      /* Shadows */
+      --shadow-card: rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px;
+      --shadow-hover: rgba(0,0,0,0.08) 0px 4px 12px;
+      /* Typography */
+      --font-primary: 'Inter', Circular, -apple-system, system-ui, Roboto, 'Helvetica Neue', sans-serif;
+      /* Radius */
+      --radius-subtle: 4px;
+      --radius-standard: 8px;
+      --radius-badge: 14px;
+      --radius-card: 20px;
+      --radius-large: 32px;
+      --radius-circle: 50%;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      color: var(--near-black);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ============ NAVIGATION ============ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--light-surface);
+      padding: 0 32px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--rausch);
+      letter-spacing: -0.44px;
+    }
+
+    .nav-logo svg {
+      width: 32px;
+      height: 32px;
+      fill: var(--rausch);
+    }
+
+    .nav-search {
+      display: flex;
+      align-items: center;
+      background: var(--white);
+      border: 1px solid var(--border-gray);
+      border-radius: var(--radius-large);
+      padding: 8px 8px 8px 24px;
+      gap: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-search:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    .nav-search-item {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.43;
+      white-space: nowrap;
+    }
+
+    .nav-search-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-gray);
+    }
+
+    .nav-search-item.placeholder {
+      color: var(--secondary-gray);
+      font-weight: 400;
+    }
+
+    .nav-search-btn {
+      width: 32px;
+      height: 32px;
+      background: var(--rausch);
+      border: none;
+      border-radius: var(--radius-circle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+      flex-shrink: 0;
+    }
+
+    .nav-search-btn:hover { background: var(--rausch-deep); }
+    .nav-search-btn:active { transform: scale(0.92); }
+
+    .nav-search-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--white);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.43;
+      padding: 8px 12px;
+      border-radius: var(--radius-large);
+      transition: background 0.15s ease;
+    }
+
+    .nav-link:hover { background: var(--light-surface); }
+
+    .nav-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-circle);
+      border: 1px solid var(--border-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      cursor: pointer;
+      padding: 6px 10px;
+      gap: 8px;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .nav-avatar:hover { box-shadow: var(--shadow-hover); }
+
+    .nav-avatar svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--near-black);
+    }
+
+    /* ============ HERO ============ */
+    .hero {
+      position: relative;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background:
+        linear-gradient(135deg, rgba(255,56,92,0.12) 0%, rgba(70,4,121,0.08) 50%, rgba(146,23,77,0.06) 100%),
+        var(--white);
+      padding: 80px 32px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      border-radius: var(--radius-circle);
+      background: radial-gradient(circle, rgba(255,56,92,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 720px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,56,92,0.1);
+      color: var(--rausch);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.33;
+      padding: 6px 16px;
+      border-radius: var(--radius-badge);
+      margin-bottom: 24px;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -1.2px;
+      margin-bottom: 16px;
+      color: var(--near-black);
+    }
+
+    .hero h1 span {
+      color: var(--rausch);
+    }
+
+    .hero p {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--secondary-gray);
+      margin-bottom: 32px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--rausch);
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.25;
+      padding: 14px 32px;
+      border: none;
+      border-radius: var(--radius-standard);
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-primary:hover { background: var(--rausch-deep); }
+    .btn-primary:active { transform: scale(0.92); }
+
+    .btn-dark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--near-black);
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.25;
+      padding: 14px 32px;
+      border: none;
+      border-radius: var(--radius-standard);
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-dark:hover { background: var(--focused-gray); }
+    .btn-dark:active { transform: scale(0.92); }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--near-black);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.25;
+      padding: 14px 32px;
+      border: 1px solid var(--near-black);
+      border-radius: var(--radius-standard);
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn-outline:hover { background: var(--light-surface); }
+    .btn-outline:active { transform: scale(0.92); }
+
+    /* ============ CATEGORIES ============ */
+    .categories {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--light-surface);
+      overflow-x: auto;
+    }
+
+    .categories-inner {
+      display: flex;
+      gap: 32px;
+      min-width: max-content;
+    }
+
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 0;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s ease, border-color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .category-item:hover,
+    .category-item.active {
+      opacity: 1;
+      border-bottom-color: var(--near-black);
+    }
+
+    .category-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .category-label {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.33;
+      color: var(--secondary-gray);
+      white-space: nowrap;
+    }
+
+    .category-item:hover .category-label,
+    .category-item.active .category-label {
+      color: var(--near-black);
+    }
+
+    /* ============ LISTINGS ============ */
+    .listings {
+      padding: 32px;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .listings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .listings-header h2 {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.43;
+    }
+
+    .listings-header a {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--near-black);
+      border-bottom: 1px solid var(--near-black);
+    }
+
+    .listings-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .listing-card {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .listing-card:hover { transform: translateY(-2px); }
+
+    .listing-img {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      border-radius: var(--radius-badge);
+      overflow: hidden;
+      background: var(--light-surface);
+      margin-bottom: 12px;
+    }
+
+    .listing-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .listing-heart {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .listing-heart svg {
+      width: 24px;
+      height: 24px;
+      fill: rgba(0,0,0,0.5);
+      stroke: var(--white);
+      stroke-width: 2;
+      transition: fill 0.2s ease;
+    }
+
+    .listing-heart:hover svg { fill: var(--rausch); }
+
+    .listing-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--white);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.33;
+      padding: 4px 8px;
+      border-radius: var(--radius-subtle);
+    }
+
+    .listing-info-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .listing-title {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .listing-desc {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      color: var(--secondary-gray);
+      margin-bottom: 4px;
+    }
+
+    .listing-price {
+      font-size: 14px;
+      line-height: 1.43;
+    }
+
+    .listing-price strong {
+      font-weight: 600;
+    }
+
+    .listing-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .listing-rating svg {
+      width: 12px;
+      height: 12px;
+      fill: var(--near-black);
+    }
+
+    /* ============ FEATURES ============ */
+    .features {
+      padding: 80px 32px;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .features h2 {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.43;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .features > p {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--secondary-gray);
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto 48px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 32px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-standard);
+      background: rgba(255,56,92,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 24px;
+    }
+
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.18px;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      color: var(--secondary-gray);
+    }
+
+    /* ============ CTA ============ */
+    .cta {
+      margin: 32px;
+      border-radius: var(--radius-large);
+      background: var(--near-black);
+      color: var(--white);
+      padding: 80px 48px;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.43;
+      margin-bottom: 16px;
+    }
+
+    .cta p {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.7);
+      max-width: 480px;
+      margin: 0 auto 32px;
+    }
+
+    .cta .btn-primary {
+      background: var(--rausch);
+      font-size: 16px;
+      padding: 16px 40px;
+    }
+
+    .cta .btn-primary:hover { background: var(--rausch-deep); }
+
+    /* ============ HOSTING CTA ============ */
+    .hosting {
+      padding: 80px 32px;
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 64px;
+    }
+
+    .hosting-visual {
+      flex: 1;
+      aspect-ratio: 4 / 3;
+      border-radius: var(--radius-card);
+      background: linear-gradient(135deg, rgba(255,56,92,0.15) 0%, rgba(70,4,121,0.1) 60%, rgba(146,23,77,0.08) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+    }
+
+    .hosting-content {
+      flex: 1;
+    }
+
+    .hosting-content h2 {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.43;
+      margin-bottom: 16px;
+    }
+
+    .hosting-content p {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--secondary-gray);
+      margin-bottom: 24px;
+    }
+
+    /* ============ FOOTER ============ */
+    .footer {
+      background: var(--light-surface);
+      padding: 48px 32px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .footer-col h4 {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.43;
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: 12px;
+    }
+
+    .footer-col a {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      color: var(--secondary-gray);
+      transition: color 0.15s ease;
+    }
+
+    .footer-col a:hover { color: var(--near-black); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-gray);
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-legal {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      color: var(--secondary-gray);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .footer-legal a {
+      color: var(--secondary-gray);
+    }
+
+    .footer-legal a:hover { color: var(--near-black); text-decoration: underline; }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .footer-social a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--near-black);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 1128px) {
+      .listings-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 950px) {
+      .listings-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .hosting { flex-direction: column; gap: 32px; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 744px) {
+      .nav { padding: 0 16px; height: 64px; }
+      .nav-search { display: none; }
+      .nav-link { display: none; }
+      .hero { padding: 48px 16px; min-height: 400px; }
+      .hero h1 { font-size: 32px; letter-spacing: -0.8px; }
+      .hero p { font-size: 16px; }
+      .categories { padding: 16px; }
+      .listings { padding: 16px; }
+      .listings-header h2 { font-size: 22px; }
+      .listings-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .features { padding: 48px 16px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .cta { margin: 16px; padding: 48px 24px; }
+      .hosting { padding: 48px 16px; }
+      .footer { padding: 32px 16px 16px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 550px) {
+      .listings-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: center; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 1C7.72 1 1 7.72 1 16c0 4.95 2.4 9.34 6.1 12.08C8.54 29.3 10.2 30 12 30c1.72 0 3.3-.64 4.5-1.7.26-.22.5-.46.72-.72.12.14.24.26.38.4C18.8 29.08 20.28 30 22 30c1.08 0 2.1-.3 3-.82C28.28 26.56 31 21.62 31 16 31 7.72 24.28 1 16 1zm6 25c-.64 0-1.24-.24-1.7-.66-.14-.12-.26-.26-.38-.42.98-1.34 1.58-3 1.58-4.92 0-2.42-1.16-4.66-3.16-6.34-.5-.42-1.24-.42-1.74 0-2 1.68-3.16 3.92-3.16 6.34 0 1.92.6 3.58 1.58 4.92-.12.16-.24.3-.38.42-.46.42-1.06.66-1.7.66-.9 0-1.76-.38-2.38-.94C7.84 23.3 6 19.88 6 16c0-5.52 4.48-10 10-10s10 4.48 10 10c0 3.88-1.84 7.3-4.62 9.06-.62.56-1.48.94-2.38.94z"/>
+      </svg>
+      airbnb
+    </a>
+
+    <div class="nav-search">
+      <span class="nav-search-item">どこでも</span>
+      <span class="nav-search-divider"></span>
+      <span class="nav-search-item">いつでも</span>
+      <span class="nav-search-divider"></span>
+      <span class="nav-search-item placeholder">ゲストを追加</span>
+      <button class="nav-search-btn" aria-label="検索">
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 0a6 6 0 014.472 10.058l4.235 4.235a1 1 0 01-1.414 1.414l-4.235-4.235A6 6 0 116 0zm0 2a4 4 0 100 8 4 4 0 000-8z"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="nav-right">
+      <a href="#" class="nav-link">Airbnbあなたのお家を</a>
+      <div class="nav-avatar" role="button" aria-label="メニュー">
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 3h12a1 1 0 110 2H2a1 1 0 010-2zm0 4h12a1 1 0 110 2H2a1 1 0 010-2zm0 4h12a1 1 0 110 2H2a1 1 0 010-2z"/>
+        </svg>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">新しい体験</div>
+      <h1>忘れられない旅を、<br><span>Airbnb</span>で見つけよう</h1>
+      <p>世界中のユニークな宿泊施設で、あなただけの特別な体験が待っています。暮らすように旅する新しいスタイル。</p>
+      <div class="hero-actions">
+        <button class="btn-primary">宿泊先を探す</button>
+        <button class="btn-outline">体験を見る</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <div class="categories">
+    <div class="categories-inner">
+      <div class="category-item active">
+        <span class="category-icon">&#127968;</span>
+        <span class="category-label">一軒家</span>
+      </div>
+      <div class="category-item">
+        <span class="category-icon">&#127965;</span>
+        <span class="category-label">絶景</span>
+      </div>
+      <div class="category-item">
+        <span class="category-icon">&#127956;</span>
+        <span class="category-label">湖畔</span>
+      </div>
+      <div class="category-item">
+        <span class="category-icon">&#9968;</span>
+        <span class="category-label">キャビン</span>
+      </div>
+      <div class="category-item">
+        <span class="category-icon">&#127958;</span>
+        <span class="category-label">プール付き</span>
+      </div>
+      <div class="category-item">
+        <span class="category-icon">&#127963;</span>
+        <span class="category-label">古城</span>
+      </div>
+      <div class="category-item">
+        <span class="category-icon">&#127964;</span>
+        <span class="category-label">デザイン</span>
+      </div>
+      <div class="category-item">
+        <span class="category-icon">&#9978;</span>
+        <span class="category-label">温泉</span>
+      </div>
+      <div class="category-item">
+        <span class="category-icon">&#127796;</span>
+        <span class="category-label">トロピカル</span>
+      </div>
+      <div class="category-item">
+        <span class="category-icon">&#127966;</span>
+        <span class="category-label">田園</span>
+      </div>
+      <div class="category-item">
+        <span class="category-icon">&#9973;</span>
+        <span class="category-label">ビーチ</span>
+      </div>
+      <div class="category-item">
+        <span class="category-icon">&#128507;</span>
+        <span class="category-label">島</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Listings -->
+  <section class="listings">
+    <div class="listings-header">
+      <h2>人気の宿泊先</h2>
+      <a href="#">すべて表示</a>
+    </div>
+    <div class="listings-grid">
+
+      <div class="listing-card">
+        <div class="listing-img" style="background: linear-gradient(135deg, #f7e7ea 0%, #fce4ec 100%);">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;">&#127968;</div>
+          <span class="listing-badge">ゲストのお気に入り</span>
+          <div class="listing-heart">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+        </div>
+        <div class="listing-info-row">
+          <div>
+            <div class="listing-title">京都・東山の町家</div>
+            <div class="listing-desc">一軒家貸切 / ベッド3台</div>
+            <div class="listing-price"><strong>¥18,500</strong> / 泊</div>
+          </div>
+          <div class="listing-rating">
+            <svg viewBox="0 0 12 12"><path d="M6 0l1.85 3.75L12 4.35l-3 2.92.71 4.13L6 9.27 2.29 11.4 3 7.27 0 4.35l4.15-.6z"/></svg>
+            4.95
+          </div>
+        </div>
+      </div>
+
+      <div class="listing-card">
+        <div class="listing-img" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;">&#127965;</div>
+          <div class="listing-heart">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+        </div>
+        <div class="listing-info-row">
+          <div>
+            <div class="listing-title">富士山ビューのコテージ</div>
+            <div class="listing-desc">個室 / 山の眺め</div>
+            <div class="listing-price"><strong>¥12,800</strong> / 泊</div>
+          </div>
+          <div class="listing-rating">
+            <svg viewBox="0 0 12 12"><path d="M6 0l1.85 3.75L12 4.35l-3 2.92.71 4.13L6 9.27 2.29 11.4 3 7.27 0 4.35l4.15-.6z"/></svg>
+            4.88
+          </div>
+        </div>
+      </div>
+
+      <div class="listing-card">
+        <div class="listing-img" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;">&#127956;</div>
+          <span class="listing-badge">スーパーホスト</span>
+          <div class="listing-heart">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+        </div>
+        <div class="listing-info-row">
+          <div>
+            <div class="listing-title">湖畔のモダンハウス</div>
+            <div class="listing-desc">一軒家貸切 / 湖の眺め</div>
+            <div class="listing-price"><strong>¥22,000</strong> / 泊</div>
+          </div>
+          <div class="listing-rating">
+            <svg viewBox="0 0 12 12"><path d="M6 0l1.85 3.75L12 4.35l-3 2.92.71 4.13L6 9.27 2.29 11.4 3 7.27 0 4.35l4.15-.6z"/></svg>
+            4.92
+          </div>
+        </div>
+      </div>
+
+      <div class="listing-card">
+        <div class="listing-img" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;">&#127796;</div>
+          <div class="listing-heart">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+        </div>
+        <div class="listing-info-row">
+          <div>
+            <div class="listing-title">沖縄のヴィラ</div>
+            <div class="listing-desc">一軒家貸切 / オーシャンビュー</div>
+            <div class="listing-price"><strong>¥35,000</strong> / 泊</div>
+          </div>
+          <div class="listing-rating">
+            <svg viewBox="0 0 12 12"><path d="M6 0l1.85 3.75L12 4.35l-3 2.92.71 4.13L6 9.27 2.29 11.4 3 7.27 0 4.35l4.15-.6z"/></svg>
+            4.97
+          </div>
+        </div>
+      </div>
+
+      <div class="listing-card">
+        <div class="listing-img" style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;">&#127963;</div>
+          <span class="listing-badge">レア</span>
+          <div class="listing-heart">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+        </div>
+        <div class="listing-info-row">
+          <div>
+            <div class="listing-title">長野の古城リゾート</div>
+            <div class="listing-desc">城 / ユニーク体験</div>
+            <div class="listing-price"><strong>¥45,000</strong> / 泊</div>
+          </div>
+          <div class="listing-rating">
+            <svg viewBox="0 0 12 12"><path d="M6 0l1.85 3.75L12 4.35l-3 2.92.71 4.13L6 9.27 2.29 11.4 3 7.27 0 4.35l4.15-.6z"/></svg>
+            4.99
+          </div>
+        </div>
+      </div>
+
+      <div class="listing-card">
+        <div class="listing-img" style="background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;">&#9978;</div>
+          <span class="listing-badge">ゲストのお気に入り</span>
+          <div class="listing-heart">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+        </div>
+        <div class="listing-info-row">
+          <div>
+            <div class="listing-title">箱根の温泉付き宿</div>
+            <div class="listing-desc">個室 / 温泉・露天風呂</div>
+            <div class="listing-price"><strong>¥28,500</strong> / 泊</div>
+          </div>
+          <div class="listing-rating">
+            <svg viewBox="0 0 12 12"><path d="M6 0l1.85 3.75L12 4.35l-3 2.92.71 4.13L6 9.27 2.29 11.4 3 7.27 0 4.35l4.15-.6z"/></svg>
+            4.96
+          </div>
+        </div>
+      </div>
+
+      <div class="listing-card">
+        <div class="listing-img" style="background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;">&#127964;</div>
+          <div class="listing-heart">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+        </div>
+        <div class="listing-info-row">
+          <div>
+            <div class="listing-title">デザイナーズロフト 渋谷</div>
+            <div class="listing-desc">マンション / モダンインテリア</div>
+            <div class="listing-price"><strong>¥15,200</strong> / 泊</div>
+          </div>
+          <div class="listing-rating">
+            <svg viewBox="0 0 12 12"><path d="M6 0l1.85 3.75L12 4.35l-3 2.92.71 4.13L6 9.27 2.29 11.4 3 7.27 0 4.35l4.15-.6z"/></svg>
+            4.85
+          </div>
+        </div>
+      </div>
+
+      <div class="listing-card">
+        <div class="listing-img" style="background: linear-gradient(135deg, #efebe9 0%, #d7ccc8 100%);">
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;">&#127966;</div>
+          <span class="listing-badge">スーパーホスト</span>
+          <div class="listing-heart">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+        </div>
+        <div class="listing-info-row">
+          <div>
+            <div class="listing-title">北海道の田園コテージ</div>
+            <div class="listing-desc">一軒家貸切 / 自然に囲まれて</div>
+            <div class="listing-price"><strong>¥9,800</strong> / 泊</div>
+          </div>
+          <div class="listing-rating">
+            <svg viewBox="0 0 12 12"><path d="M6 0l1.85 3.75L12 4.35l-3 2.92.71 4.13L6 9.27 2.29 11.4 3 7.27 0 4.35l4.15-.6z"/></svg>
+            4.91
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <h2>Airbnbが選ばれる理由</h2>
+    <p>世界中の旅行者から信頼されるプラットフォーム。暮らすように旅する体験を、安心してお楽しみください。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">&#128269;</div>
+        <h3>柔軟な検索</h3>
+        <p>行き先が決まっていなくても大丈夫。「どこでも検索」で、思いがけない旅先を発見できます。日付やゲスト数を自由に変更。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128274;</div>
+        <h3>安心の予約保証</h3>
+        <p>Airbnbカバーで宿泊を保護。チェックイン時のトラブルにも、24時間体制のサポートチームが迅速に対応します。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#127775;</div>
+        <h3>信頼のレビュー</h3>
+        <p>実際に宿泊したゲストの本音のレビュー。スーパーホストバッジで、卓越したおもてなしを提供するホストがひと目でわかります。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#127758;</div>
+        <h3>ユニークな宿</h3>
+        <p>ツリーハウスから古城まで、ホテルでは味わえない個性的な宿泊施設。220以上の国と地域で、100万件以上のアクティブな物件。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#127915;</div>
+        <h3>体験アクティビティ</h3>
+        <p>地元のホストが案内するアクティビティや文化体験。料理教室からアドベンチャーまで、旅をもっと深く楽しめます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128176;</div>
+        <h3>料金の透明性</h3>
+        <p>税金・サービス料を含む総額表示で、予約前に正確な料金を確認。隠れた追加料金はありません。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hosting CTA -->
+  <section class="hosting">
+    <div class="hosting-visual">&#127969;</div>
+    <div class="hosting-content">
+      <h2>Airbnbホストになろう</h2>
+      <p>お部屋やお家を貸し出して、世界中からのゲストを迎えませんか？ 自分のペースで、副収入を得ながら国際交流を楽しめます。日本のホストの平均年間収入は115万円以上。</p>
+      <button class="btn-dark">ホスティングを始める</button>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>あなたの次の冒険がここに</h2>
+    <p>世界中のユニークな場所で、特別な体験を。今すぐAirbnbで、新しい旅のスタイルを見つけましょう。</p>
+    <button class="btn-primary">旅を探す</button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="#">ヘルプセンター</a></li>
+            <li><a href="#">AirCover</a></li>
+            <li><a href="#">障害のある方へのサポート</a></li>
+            <li><a href="#">キャンセルオプション</a></li>
+            <li><a href="#">近隣のトラブル報告</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>コミュニティ</h4>
+          <ul>
+            <li><a href="#">Airbnb.org: 災害救援の宿泊先</a></li>
+            <li><a href="#">差別との闘い</a></li>
+            <li><a href="#">アクセシビリティ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>ホスティング</h4>
+          <ul>
+            <li><a href="#">Airbnbでホスティング</a></li>
+            <li><a href="#">ホストのためのAirCover</a></li>
+            <li><a href="#">ホスティングのリソース</a></li>
+            <li><a href="#">コミュニティフォーラム</a></li>
+            <li><a href="#">責任あるホスティング</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Airbnb</h4>
+          <ul>
+            <li><a href="#">ニュースルーム</a></li>
+            <li><a href="#">新機能</a></li>
+            <li><a href="#">採用情報</a></li>
+            <li><a href="#">投資家の皆さまへ</a></li>
+            <li><a href="#">ギフトカード</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          <span>&copy; 2026 Airbnb, Inc.</span>
+          <span>&middot;</span>
+          <a href="#">プライバシー</a>
+          <span>&middot;</span>
+          <a href="#">利用規約</a>
+          <span>&middot;</span>
+          <a href="#">サイトマップ</a>
+        </div>
+        <div class="footer-social">
+          <a href="#">日本語 (JP)</a>
+          <a href="#">&yen; JPY</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

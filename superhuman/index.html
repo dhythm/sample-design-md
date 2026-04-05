@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Superhuman - The Fastest Email Experience Ever Made</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;460;500;540;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Design System Tokens ===== */
+    :root {
+      /* Colors */
+      --color-mysteria-purple: #1b1938;
+      --color-lavender-glow: #cbb7fb;
+      --color-charcoal-ink: #292827;
+      --color-amethyst-link: #714cb6;
+      --color-translucent-white: rgba(255, 255, 255, 0.95);
+      --color-misted-white: rgba(255, 255, 255, 0.8);
+      --color-pure-white: #ffffff;
+      --color-warm-cream: #e9e5dd;
+      --color-parchment-border: #dcd7d3;
+      --color-hero-surface-border: rgba(255, 255, 255, 0.2);
+
+      /* Typography */
+      --font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+
+      /* Font Sizes */
+      --text-display-hero: 64px;
+      --text-section-display: 48px;
+      --text-feature-title: 28px;
+      --text-subheading: 26px;
+      --text-card-heading: 22px;
+      --text-body-heading: 20px;
+      --text-emphasis: 18px;
+      --text-body: 16px;
+      --text-caption: 14px;
+      --text-micro: 12px;
+
+      /* Spacing */
+      --space-2: 2px;
+      --space-4: 4px;
+      --space-6: 6px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-20: 20px;
+      --space-24: 24px;
+      --space-28: 28px;
+      --space-32: 32px;
+      --space-36: 36px;
+      --space-40: 40px;
+      --space-48: 48px;
+      --space-56: 56px;
+      --space-80: 80px;
+
+      /* Border Radius */
+      --radius-small: 8px;
+      --radius-large: 16px;
+
+      /* Layout */
+      --max-width: 1200px;
+    }
+
+    /* ===== Reset & Base ===== */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: var(--text-body);
+      font-weight: 460;
+      line-height: 1.50;
+      color: var(--color-charcoal-ink);
+      background-color: var(--color-pure-white);
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: var(--color-amethyst-link);
+      text-decoration: underline;
+      transition: opacity 0.2s ease;
+    }
+
+    a:hover {
+      opacity: 0.8;
+    }
+
+    /* ===== Container ===== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-24);
+    }
+
+    /* ===== Buttons ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-family);
+      font-size: var(--text-body);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: 0;
+      padding: var(--space-12) var(--space-28);
+      border-radius: var(--radius-small);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      text-decoration: none;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-cream {
+      background-color: var(--color-warm-cream);
+      color: var(--color-charcoal-ink);
+    }
+
+    .btn-dark {
+      background-color: var(--color-charcoal-ink);
+      color: var(--color-pure-white);
+    }
+
+    .btn-large {
+      padding: var(--space-16) var(--space-36);
+      font-size: var(--text-emphasis);
+    }
+
+    /* ===== Navigation ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .nav.scrolled {
+      background-color: var(--color-pure-white);
+      box-shadow: 0 1px 0 var(--color-parchment-border);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: var(--space-16) var(--space-24);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: var(--text-body-heading);
+      font-weight: 700;
+      color: var(--color-translucent-white);
+      text-decoration: none;
+      letter-spacing: -0.4px;
+      transition: color 0.3s ease;
+    }
+
+    .nav.scrolled .nav-logo {
+      color: var(--color-charcoal-ink);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-32);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: var(--text-body);
+      font-weight: 460;
+      line-height: 1.2;
+      color: var(--color-misted-white);
+      text-decoration: none;
+      transition: color 0.3s ease, opacity 0.2s ease;
+    }
+
+    .nav.scrolled .nav-links a {
+      color: var(--color-charcoal-ink);
+    }
+
+    .nav-links a:hover {
+      opacity: 0.7;
+    }
+
+    .nav-cta {
+      font-weight: 600 !important;
+    }
+
+    .nav-cta .btn {
+      padding: var(--space-8) var(--space-20);
+      font-size: var(--text-caption);
+    }
+
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-8);
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: var(--color-translucent-white);
+      margin: 5px 0;
+      transition: background-color 0.3s ease;
+    }
+
+    .nav.scrolled .nav-hamburger span {
+      background-color: var(--color-charcoal-ink);
+    }
+
+    /* ===== Hero Section ===== */
+    .hero {
+      background: linear-gradient(180deg, var(--color-mysteria-purple) 0%, #2a2155 40%, #3d2d6b 70%, var(--color-mysteria-purple) 100%);
+      padding: 160px 0 var(--space-80);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(203, 183, 251, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background-color: rgba(203, 183, 251, 0.15);
+      color: var(--color-lavender-glow);
+      font-size: var(--text-micro);
+      font-weight: 700;
+      line-height: 1.5;
+      padding: var(--space-6) var(--space-16);
+      border-radius: var(--radius-small);
+      border: 1px solid rgba(203, 183, 251, 0.25);
+      margin-bottom: var(--space-32);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: var(--text-display-hero);
+      font-weight: 540;
+      line-height: 0.96;
+      letter-spacing: 0;
+      color: var(--color-translucent-white);
+      margin-bottom: var(--space-24);
+    }
+
+    .hero-subtitle {
+      font-size: var(--text-subheading);
+      font-weight: 460;
+      line-height: 1.3;
+      color: var(--color-misted-white);
+      margin-bottom: var(--space-40);
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-16);
+      margin-bottom: var(--space-56);
+    }
+
+    .hero-screenshot {
+      max-width: 960px;
+      margin: 0 auto;
+      border-radius: var(--radius-large);
+      border: 1px solid var(--color-hero-surface-border);
+      overflow: hidden;
+      background: linear-gradient(135deg, #2a2155 0%, #1b1938 100%);
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-screenshot-placeholder {
+      width: 90%;
+      height: 85%;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-small);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-24);
+      gap: var(--space-8);
+    }
+
+    .screenshot-toolbar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      padding-bottom: var(--space-12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .screenshot-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .screenshot-line {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      margin: var(--space-4) 0;
+    }
+
+    .screenshot-line:nth-child(2) { width: 85%; }
+    .screenshot-line:nth-child(3) { width: 70%; }
+    .screenshot-line:nth-child(4) { width: 90%; }
+    .screenshot-line:nth-child(5) { width: 60%; }
+    .screenshot-line:nth-child(6) { width: 75%; }
+    .screenshot-line:nth-child(7) { width: 80%; }
+    .screenshot-line:nth-child(8) { width: 55%; }
+
+    .screenshot-line.highlight {
+      background: rgba(203, 183, 251, 0.15);
+    }
+
+    /* ===== Features Section ===== */
+    .features {
+      padding: var(--space-80) 0;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto var(--space-56);
+    }
+
+    .section-header h2 {
+      font-size: var(--text-section-display);
+      font-weight: 460;
+      line-height: 0.96;
+      letter-spacing: -1.32px;
+      color: var(--color-charcoal-ink);
+      margin-bottom: var(--space-16);
+    }
+
+    .section-header p {
+      font-size: var(--text-emphasis);
+      font-weight: 460;
+      line-height: 1.5;
+      color: var(--color-charcoal-ink);
+      opacity: 0.7;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+    }
+
+    .feature-card {
+      background: var(--color-pure-white);
+      border: 1px solid var(--color-parchment-border);
+      border-radius: var(--radius-large);
+      padding: var(--space-32);
+      transition: transform 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(203, 183, 251, 0.15);
+      border-radius: var(--radius-small);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-20);
+      color: var(--color-lavender-glow);
+      font-size: 24px;
+    }
+
+    .feature-card h3 {
+      font-size: var(--text-card-heading);
+      font-weight: 460;
+      line-height: 1.2;
+      letter-spacing: -0.315px;
+      color: var(--color-charcoal-ink);
+      margin-bottom: var(--space-12);
+    }
+
+    .feature-card p {
+      font-size: var(--text-body);
+      font-weight: 460;
+      line-height: 1.5;
+      color: var(--color-charcoal-ink);
+      opacity: 0.7;
+    }
+
+    /* ===== Product Showcase Section ===== */
+    .showcase {
+      padding: var(--space-80) 0;
+      background-color: #faf9f7;
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-48);
+      align-items: center;
+    }
+
+    .showcase-text h2 {
+      font-size: var(--text-section-display);
+      font-weight: 460;
+      line-height: 0.96;
+      letter-spacing: -1.32px;
+      color: var(--color-charcoal-ink);
+      margin-bottom: var(--space-20);
+    }
+
+    .showcase-text p {
+      font-size: var(--text-emphasis);
+      font-weight: 460;
+      line-height: 1.5;
+      color: var(--color-charcoal-ink);
+      opacity: 0.7;
+      margin-bottom: var(--space-32);
+    }
+
+    .showcase-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-16);
+    }
+
+    .showcase-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-12);
+      font-size: var(--text-body);
+      font-weight: 460;
+      line-height: 1.5;
+    }
+
+    .showcase-features li::before {
+      content: '';
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      background: var(--color-lavender-glow);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .showcase-visual {
+      background: var(--color-pure-white);
+      border: 1px solid var(--color-parchment-border);
+      border-radius: var(--radius-large);
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: var(--space-24);
+    }
+
+    .showcase-mockup {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #f5f3ef 0%, #ece8e1 100%);
+      border-radius: var(--radius-small);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      padding: var(--space-16);
+    }
+
+    .mockup-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      padding: var(--space-12) var(--space-8);
+      border-radius: var(--space-6);
+      transition: background 0.2s;
+    }
+
+    .mockup-row:hover {
+      background: rgba(203, 183, 251, 0.1);
+    }
+
+    .mockup-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-parchment-border);
+      flex-shrink: 0;
+    }
+
+    .mockup-row.unread .mockup-avatar {
+      background: var(--color-lavender-glow);
+    }
+
+    .mockup-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mockup-subject {
+      height: 8px;
+      background: var(--color-charcoal-ink);
+      opacity: 0.2;
+      border-radius: 4px;
+      width: 60%;
+    }
+
+    .mockup-row.unread .mockup-subject {
+      opacity: 0.5;
+    }
+
+    .mockup-preview {
+      height: 6px;
+      background: var(--color-charcoal-ink);
+      opacity: 0.08;
+      border-radius: 3px;
+      width: 85%;
+    }
+
+    .mockup-time {
+      width: 32px;
+      height: 6px;
+      background: var(--color-charcoal-ink);
+      opacity: 0.1;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    /* ===== Stats Section ===== */
+    .stats {
+      padding: var(--space-80) 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-24);
+      text-align: center;
+    }
+
+    .stat-item h3 {
+      font-size: var(--text-section-display);
+      font-weight: 540;
+      line-height: 0.96;
+      color: var(--color-lavender-glow);
+      margin-bottom: var(--space-8);
+    }
+
+    .stat-item p {
+      font-size: var(--text-body);
+      font-weight: 460;
+      line-height: 1.5;
+      color: var(--color-charcoal-ink);
+      opacity: 0.7;
+    }
+
+    /* ===== Testimonials Section ===== */
+    .testimonials {
+      padding: var(--space-80) 0;
+      background: var(--color-mysteria-purple);
+    }
+
+    .testimonials .section-header h2 {
+      color: var(--color-translucent-white);
+    }
+
+    .testimonials .section-header p {
+      color: var(--color-misted-white);
+      opacity: 1;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-24);
+    }
+
+    .testimonial-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--color-hero-surface-border);
+      border-radius: var(--radius-large);
+      padding: var(--space-32);
+    }
+
+    .testimonial-card p {
+      font-size: var(--text-body);
+      font-weight: 460;
+      line-height: 1.5;
+      color: var(--color-misted-white);
+      margin-bottom: var(--space-24);
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+    }
+
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-lavender-glow), #714cb6);
+      flex-shrink: 0;
+    }
+
+    .testimonial-name {
+      font-size: var(--text-caption);
+      font-weight: 600;
+      color: var(--color-translucent-white);
+      line-height: 1.2;
+    }
+
+    .testimonial-role {
+      font-size: var(--text-micro);
+      font-weight: 460;
+      color: var(--color-misted-white);
+      line-height: 1.5;
+    }
+
+    /* ===== CTA Section ===== */
+    .cta {
+      padding: 120px 0;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: var(--text-display-hero);
+      font-weight: 540;
+      line-height: 0.96;
+      letter-spacing: 0;
+      color: var(--color-charcoal-ink);
+      margin-bottom: var(--space-20);
+    }
+
+    .cta p {
+      font-size: var(--text-emphasis);
+      font-weight: 460;
+      line-height: 1.5;
+      color: var(--color-charcoal-ink);
+      opacity: 0.7;
+      max-width: 560px;
+      margin: 0 auto var(--space-40);
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-16);
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      background-color: var(--color-charcoal-ink);
+      padding: var(--space-56) 0 var(--space-32);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-48);
+      margin-bottom: var(--space-48);
+    }
+
+    .footer-brand p {
+      font-size: var(--text-caption);
+      font-weight: 460;
+      line-height: 1.5;
+      color: var(--color-misted-white);
+      margin-top: var(--space-12);
+      max-width: 280px;
+    }
+
+    .footer-logo {
+      font-size: var(--text-body-heading);
+      font-weight: 700;
+      color: var(--color-pure-white);
+      text-decoration: none;
+      letter-spacing: -0.4px;
+    }
+
+    .footer-column h4 {
+      font-size: var(--text-caption);
+      font-weight: 600;
+      line-height: 1.29;
+      color: var(--color-pure-white);
+      margin-bottom: var(--space-16);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-column ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .footer-column a {
+      font-size: var(--text-caption);
+      font-weight: 460;
+      line-height: 1.5;
+      color: var(--color-misted-white);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-column a:hover {
+      color: var(--color-pure-white);
+      opacity: 1;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: var(--space-24);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-bottom p {
+      font-size: var(--text-micro);
+      font-weight: 460;
+      color: var(--color-misted-white);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: var(--space-16);
+    }
+
+    .footer-social a {
+      color: var(--color-misted-white);
+      font-size: var(--text-caption);
+      text-decoration: none;
+    }
+
+    .footer-social a:hover {
+      color: var(--color-lavender-glow);
+      opacity: 1;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1024px) {
+      .hero h1 {
+        font-size: 48px;
+      }
+
+      .hero-subtitle {
+        font-size: var(--text-body-heading);
+      }
+
+      .section-header h2,
+      .showcase-text h2 {
+        font-size: 40px;
+      }
+
+      .cta h2 {
+        font-size: 48px;
+      }
+
+      .features-grid,
+      .testimonials-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-32);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-32);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: block;
+      }
+
+      .hero {
+        padding: 120px 0 var(--space-56);
+        min-height: auto;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .hero-subtitle {
+        font-size: var(--text-body);
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        gap: var(--space-12);
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
+
+      .section-header h2,
+      .showcase-text h2 {
+        font-size: 32px;
+      }
+
+      .features-grid,
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase-visual {
+        order: -1;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-24);
+      }
+
+      .stat-item h3 {
+        font-size: 36px;
+      }
+
+      .cta {
+        padding: var(--space-80) 0;
+      }
+
+      .cta h2 {
+        font-size: 36px;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+
+      .cta-actions .btn {
+        width: 100%;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-24);
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-16);
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Superhuman</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#product">Product</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li class="nav-cta"><a href="#cta" class="btn btn-cream">Get Started</a></li>
+      </ul>
+      <button class="nav-hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">Blazingly Fast Email</div>
+        <h1>The Fastest Email<br>Experience Ever Made</h1>
+        <p class="hero-subtitle">Superhumanは受信トレイをゼロにする最速のメール体験を実現します。あらゆるアクションをキーボードショートカットで瞬時に完了。</p>
+        <div class="hero-actions">
+          <a href="#" class="btn btn-cream btn-large">Get Superhuman</a>
+          <a href="#" class="btn btn-large" style="background: transparent; color: var(--color-misted-white); border: 1px solid var(--color-hero-surface-border);">Watch Demo</a>
+        </div>
+        <div class="hero-screenshot">
+          <div class="hero-screenshot-placeholder">
+            <div class="screenshot-toolbar">
+              <div class="screenshot-dot"></div>
+              <div class="screenshot-dot"></div>
+              <div class="screenshot-dot"></div>
+            </div>
+            <div class="screenshot-line" style="width: 85%;"></div>
+            <div class="screenshot-line highlight" style="width: 70%;"></div>
+            <div class="screenshot-line" style="width: 90%;"></div>
+            <div class="screenshot-line" style="width: 60%;"></div>
+            <div class="screenshot-line highlight" style="width: 75%;"></div>
+            <div class="screenshot-line" style="width: 80%;"></div>
+            <div class="screenshot-line" style="width: 55%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>Your Superhuman Suite</h2>
+        <p>メールに費やす時間を半分に削減。チーム全体の生産性を劇的に向上させます。</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <h3>Split Inbox</h3>
+          <p>受信トレイを自動でカテゴリに分割。重要なメールに集中でき、ノイズを排除します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3>Scheduled Send</h3>
+          <p>最適なタイミングでメールを送信。受信者のタイムゾーンに合わせた配信で開封率を最大化。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <h3>Snippets</h3>
+          <p>よく使うフレーズをスニペットとして保存。数文字のショートカットで瞬時に展開できます。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Read Statuses</h3>
+          <p>メールが開封されたかリアルタイムで把握。フォローアップの最適なタイミングを逃しません。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3>AI Triage</h3>
+          <p>AIがメールの優先度を自動判定。本当に重要なメールだけに集中できる環境を構築します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3>Keyboard First</h3>
+          <p>すべてのアクションをキーボードで完結。マウスに手を伸ばす必要がなく、フローを維持できます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Showcase Section -->
+  <section class="showcase" id="product">
+    <div class="container">
+      <div class="showcase-grid">
+        <div class="showcase-text">
+          <h2>Inbox Zero を毎日達成</h2>
+          <p>Superhumanユーザーはメール処理時間を平均4時間削減。受信トレイゼロを毎日達成しています。</p>
+          <ul class="showcase-features">
+            <li>100msの応答速度で瞬時にアクション</li>
+            <li>AIによる自動分類とスマートフィルター</li>
+            <li>チームコラボレーションをシームレスに統合</li>
+            <li>すべてのメールプロバイダに対応</li>
+          </ul>
+        </div>
+        <div class="showcase-visual">
+          <div class="showcase-mockup">
+            <div class="mockup-row unread">
+              <div class="mockup-avatar"></div>
+              <div class="mockup-text">
+                <div class="mockup-subject"></div>
+                <div class="mockup-preview"></div>
+              </div>
+              <div class="mockup-time"></div>
+            </div>
+            <div class="mockup-row unread">
+              <div class="mockup-avatar"></div>
+              <div class="mockup-text">
+                <div class="mockup-subject"></div>
+                <div class="mockup-preview"></div>
+              </div>
+              <div class="mockup-time"></div>
+            </div>
+            <div class="mockup-row">
+              <div class="mockup-avatar"></div>
+              <div class="mockup-text">
+                <div class="mockup-subject"></div>
+                <div class="mockup-preview"></div>
+              </div>
+              <div class="mockup-time"></div>
+            </div>
+            <div class="mockup-row">
+              <div class="mockup-avatar"></div>
+              <div class="mockup-text">
+                <div class="mockup-subject"></div>
+                <div class="mockup-preview"></div>
+              </div>
+              <div class="mockup-time"></div>
+            </div>
+            <div class="mockup-row">
+              <div class="mockup-avatar"></div>
+              <div class="mockup-text">
+                <div class="mockup-subject"></div>
+                <div class="mockup-preview"></div>
+              </div>
+              <div class="mockup-time"></div>
+            </div>
+            <div class="mockup-row">
+              <div class="mockup-avatar"></div>
+              <div class="mockup-text">
+                <div class="mockup-subject"></div>
+                <div class="mockup-preview"></div>
+              </div>
+              <div class="mockup-time"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3>4hrs</h3>
+          <p>週あたりの時間削減</p>
+        </div>
+        <div class="stat-item">
+          <h3>100ms</h3>
+          <p>すべてのインタラクション</p>
+        </div>
+        <div class="stat-item">
+          <h3>97%</h3>
+          <p>ユーザー満足度</p>
+        </div>
+        <div class="stat-item">
+          <h3>2x</h3>
+          <p>チームの返信速度向上</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <h2>世界中のプロフェッショナルが愛用</h2>
+        <p>Forbes 100のCEOからスタートアップの創業者まで</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <p>"Superhumanに切り替えてから、メールの処理速度が劇的に向上しました。もう他のメールクライアントには戻れません。"</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar"></div>
+            <div>
+              <div class="testimonial-name">田中 太郎</div>
+              <div class="testimonial-role">CEO, TechVentures</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p>"キーボードショートカットの設計が秀逸。一度覚えれば、メール処理が驚くほどスムーズになります。チーム全員に導入しました。"</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar"></div>
+            <div>
+              <div class="testimonial-name">佐藤 花子</div>
+              <div class="testimonial-role">VP of Engineering, CloudScale</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p>"Split InboxとAI Triageの組み合わせが最強。重要なメールだけに集中できるので、意思決定のスピードが上がりました。"</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar"></div>
+            <div>
+              <div class="testimonial-name">鈴木 一郎</div>
+              <div class="testimonial-role">Founder, StartupLab</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta" id="cta">
+    <div class="container">
+      <h2>メール体験を<br>変革しましょう</h2>
+      <p>Superhumanで受信トレイゼロを毎日達成。今すぐ始めて、生産性の新しい基準を体験してください。</p>
+      <div class="cta-actions">
+        <a href="#" class="btn btn-dark btn-large">Get Superhuman Free</a>
+        <a href="#" class="btn btn-cream btn-large">Schedule a Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="footer-logo">Superhuman</a>
+          <p>The fastest email experience ever made. Blazingly fast, visually gorgeous, and packed with AI-powered features.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#">Features</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">For Teams</a></li>
+            <li><a href="#">Enterprise</a></li>
+            <li><a href="#">Download</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Community</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Superhuman. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#">Twitter</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navigation scroll behavior
+    (function() {
+      var nav = document.getElementById('nav');
+      if (!nav) return;
+
+      function handleScroll() {
+        if (window.scrollY > 60) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      }
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+    })();
+  </script>
+</body>
+</html>

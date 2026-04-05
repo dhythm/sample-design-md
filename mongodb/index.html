@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB - あらゆるアプリケーションのためのデベロッパーデータプラットフォーム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       CSS Custom Properties - MongoDB Design System
+       ======================================== */
+    :root {
+      /* Primary Brand */
+      --forest-black: #001e2b;
+      --mongodb-green: #00ed64;
+      --dark-green: #00684a;
+
+      /* Interactive */
+      --action-blue: #006cfa;
+      --hover-blue: #3860be;
+      --teal-active: #1eaedb;
+
+      /* Neutral Scale */
+      --deep-teal: #1c2d38;
+      --teal-gray: #3d4f58;
+      --dark-slate: #21313c;
+      --cool-gray: #5c6c75;
+      --silver-teal: #b8c4c2;
+      --light-input: #e8edeb;
+      --pure-white: #ffffff;
+      --black: #000000;
+
+      /* Shadows */
+      --shadow-forest: rgba(0, 30, 43, 0.12) 0px 26px 44px, rgba(0, 0, 0, 0.13) 0px 7px 13px;
+      --shadow-standard: rgba(0, 0, 0, 0.15) 0px 3px 20px;
+      --shadow-subtle: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+      --shadow-button: rgba(0, 0, 0, 0.06) 0px 1px 6px;
+
+      /* Typography */
+      --font-serif: 'Georgia', 'Times New Roman', Times, serif;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --font-code: 'Source Code Pro', monospace;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 64px;
+      --space-4xl: 80px;
+
+      /* Border Radius */
+      --radius-subtle: 4px;
+      --radius-standard: 8px;
+      --radius-card: 16px;
+      --radius-large: 24px;
+      --radius-image: 30px;
+      --radius-hero: 48px;
+      --radius-pill: 100px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--black);
+      background-color: var(--pure-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: var(--action-blue);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--hover-blue);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* ========================================
+       Utility Classes
+       ======================================== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+
+    .code-label {
+      font-family: var(--font-code);
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      line-height: 1.14;
+    }
+
+    .green-underline {
+      border-bottom: 2px solid var(--mongodb-green);
+      padding-bottom: 2px;
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      background-color: var(--forest-black);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--teal-gray);
+    }
+
+    .nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      color: var(--pure-white);
+      font-weight: 500;
+      font-size: 18px;
+      letter-spacing: 0.16px;
+    }
+
+    .nav-logo svg {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xl);
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--pure-white);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.16px;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--mongodb-green);
+    }
+
+    .nav-cta {
+      background-color: var(--dark-green);
+      color: var(--pure-white) !important;
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--dark-green);
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+      box-shadow: var(--shadow-button);
+    }
+
+    .nav-cta:hover {
+      transform: scale(1.05);
+      color: var(--pure-white) !important;
+      background-color: #007a57;
+    }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: var(--pure-white);
+      border-radius: 2px;
+      transition: transform 0.3s ease;
+    }
+
+    /* ========================================
+       Hero Section (Dark Mode)
+       ======================================== */
+    .hero {
+      background-color: var(--forest-black);
+      padding: 100px 0 120px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -200px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 237, 100, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .hero-label {
+      color: var(--mongodb-green);
+      margin-bottom: var(--space-lg);
+      display: inline-block;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 80px;
+      font-weight: 400;
+      line-height: 1.10;
+      color: var(--pure-white);
+      margin-bottom: var(--space-lg);
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-title .highlight {
+      color: var(--mongodb-green);
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--light-input);
+      max-width: 640px;
+      margin: 0 auto var(--space-2xl);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background-color: var(--dark-green);
+      color: var(--pure-white);
+      padding: 14px 32px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--dark-green);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: var(--shadow-button);
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.05);
+      color: var(--pure-white);
+      box-shadow: var(--shadow-standard);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.95);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background-color: var(--deep-teal);
+      color: var(--silver-teal);
+      padding: 14px 32px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--teal-gray);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--teal-active);
+      color: var(--pure-white);
+      transform: translateX(5px);
+    }
+
+    /* ========================================
+       Features Section (Light Mode)
+       ======================================== */
+    .features {
+      background-color: var(--pure-white);
+      padding: 100px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-3xl);
+    }
+
+    .section-label {
+      color: var(--dark-green);
+      margin-bottom: var(--space-md);
+      display: inline-block;
+    }
+
+    .section-title {
+      font-family: var(--font-body);
+      font-size: 36px;
+      font-weight: 500;
+      line-height: 1.33;
+      color: var(--forest-black);
+      margin-bottom: var(--space-md);
+    }
+
+    .section-subtitle {
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--cool-gray);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+    }
+
+    .feature-card {
+      background-color: var(--pure-white);
+      border: 1px solid var(--silver-teal);
+      border-radius: var(--radius-card);
+      padding: var(--space-xl);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      box-shadow: rgba(0, 30, 43, 0.12) 0px 26px 44px, rgba(0, 0, 0, 0.13) 0px 7px 13px;
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background-color: var(--forest-black);
+      border-radius: var(--radius-standard);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-lg);
+    }
+
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--mongodb-green);
+    }
+
+    .feature-card h3 {
+      font-family: var(--font-body);
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1.33;
+      color: var(--forest-black);
+      margin-bottom: var(--space-sm);
+    }
+
+    .feature-card h3 .green-underline {
+      border-bottom-color: var(--mongodb-green);
+    }
+
+    .feature-card p {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--cool-gray);
+    }
+
+    .feature-card .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: var(--space-md);
+      color: var(--action-blue);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .feature-card .card-link:hover {
+      color: var(--hover-blue);
+    }
+
+    .feature-card .card-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .feature-card .card-link:hover svg {
+      transform: translateX(4px);
+    }
+
+    /* ========================================
+       Showcase Section (Dark Mode)
+       ======================================== */
+    .showcase {
+      background-color: var(--forest-black);
+      padding: 100px 0;
+    }
+
+    .showcase .section-label {
+      color: var(--mongodb-green);
+    }
+
+    .showcase .section-title {
+      color: var(--pure-white);
+    }
+
+    .showcase .section-subtitle {
+      color: var(--cool-gray);
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-xl);
+      margin-top: var(--space-3xl);
+    }
+
+    .showcase-card {
+      background-color: var(--deep-teal);
+      border: 1px solid var(--teal-gray);
+      border-radius: var(--radius-large);
+      padding: var(--space-xl);
+      transition: border-color 0.3s ease;
+    }
+
+    .showcase-card:hover {
+      border-color: var(--mongodb-green);
+    }
+
+    .showcase-card-label {
+      color: var(--mongodb-green);
+      margin-bottom: var(--space-md);
+      display: block;
+    }
+
+    .showcase-card h3 {
+      font-family: var(--font-body);
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--pure-white);
+      line-height: 1.33;
+      margin-bottom: var(--space-sm);
+    }
+
+    .showcase-card p {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--cool-gray);
+      margin-bottom: var(--space-md);
+    }
+
+    .showcase-card .code-snippet {
+      background-color: var(--forest-black);
+      border: 1px solid var(--teal-gray);
+      border-radius: var(--radius-standard);
+      padding: var(--space-md);
+      font-family: var(--font-code);
+      font-size: 14px;
+      color: var(--light-input);
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    .showcase-card .code-snippet .keyword {
+      color: var(--mongodb-green);
+    }
+
+    .showcase-card .code-snippet .string {
+      color: var(--teal-active);
+    }
+
+    .showcase-card .code-snippet .comment {
+      color: var(--cool-gray);
+    }
+
+    /* ========================================
+       Stats Section (Light Mode)
+       ======================================== */
+    .stats {
+      background-color: var(--pure-white);
+      padding: 80px 0;
+      border-top: 1px solid var(--silver-teal);
+      border-bottom: 1px solid var(--silver-teal);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-xl);
+      text-align: center;
+    }
+
+    .stat-item {
+      padding: var(--space-lg);
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-size: 48px;
+      font-weight: 400;
+      color: var(--forest-black);
+      line-height: 1.2;
+      margin-bottom: var(--space-sm);
+    }
+
+    .stat-number .highlight {
+      color: var(--mongodb-green);
+    }
+
+    .stat-label {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--cool-gray);
+      line-height: 1.5;
+    }
+
+    /* ========================================
+       CTA Section (Dark Mode)
+       ======================================== */
+    .cta {
+      background-color: var(--forest-black);
+      padding: 120px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: -150px;
+      left: -150px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0, 237, 100, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      right: -50px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 108, 250, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .cta-label {
+      color: var(--mongodb-green);
+      margin-bottom: var(--space-lg);
+      display: inline-block;
+    }
+
+    .cta-title {
+      font-family: var(--font-serif);
+      font-size: 64px;
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--pure-white);
+      margin-bottom: var(--space-lg);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-title .highlight {
+      color: var(--mongodb-green);
+    }
+
+    .cta-text {
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--light-input);
+      max-width: 560px;
+      margin: 0 auto var(--space-2xl);
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ========================================
+       Footer (Dark Mode)
+       ======================================== */
+    .footer {
+      background-color: var(--forest-black);
+      border-top: 1px solid var(--teal-gray);
+      padding: var(--space-3xl) 0 var(--space-xl);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: var(--space-2xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .footer-brand .nav-logo {
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--cool-gray);
+      max-width: 280px;
+    }
+
+    .footer-column h4 {
+      font-family: var(--font-code);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--mongodb-green);
+      margin-bottom: var(--space-lg);
+    }
+
+    .footer-column ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .footer-column a {
+      color: var(--cool-gray);
+      font-size: 14px;
+      font-weight: 400;
+      transition: color 0.2s ease;
+    }
+
+    .footer-column a:hover {
+      color: var(--pure-white);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--teal-gray);
+      padding-top: var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-bottom p {
+      font-size: 13px;
+      color: var(--cool-gray);
+      font-weight: 300;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: var(--space-md);
+    }
+
+    .footer-social a {
+      color: var(--cool-gray);
+      transition: color 0.2s ease;
+    }
+
+    .footer-social a:hover {
+      color: var(--mongodb-green);
+    }
+
+    .footer-social svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ========================================
+       Responsive Design
+       ======================================== */
+
+    /* Tablet: 768px - 1024px */
+    @media (max-width: 1024px) {
+      .hero-title {
+        font-size: 64px;
+      }
+
+      .cta-title {
+        font-size: 48px;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .nav-links .nav-link-item {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+    }
+
+    /* Mobile: < 768px */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 80px 0;
+      }
+
+      .hero-title {
+        font-size: 48px;
+      }
+
+      .hero-subtitle {
+        font-size: 18px;
+      }
+
+      .cta-title {
+        font-size: 40px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-number {
+        font-size: 36px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: center;
+      }
+
+      .section-title {
+        font-size: 28px;
+      }
+
+      .hero-actions, .cta-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-primary, .btn-secondary {
+        width: 100%;
+        max-width: 320px;
+        justify-content: center;
+      }
+    }
+
+    /* Mobile Small: < 425px */
+    @media (max-width: 425px) {
+      .hero-title {
+        font-size: 36px;
+      }
+
+      .cta-title {
+        font-size: 32px;
+      }
+
+      .container {
+        padding: 0 var(--space-md);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       Navigation
+       ======================================== -->
+  <nav class="nav">
+    <div class="container">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16.5 2C16.5 2 17.8 6.2 17.8 9.2C17.8 12.2 19.5 14.5 19.5 17.5C19.5 20.5 17.2 23.5 16.5 25C15.8 23.5 13.5 20.5 13.5 17.5C13.5 14.5 15.2 12.2 15.2 9.2C15.2 6.2 16.5 2 16.5 2Z" fill="#00ed64"/>
+          <path d="M16.5 25C16.5 25 16.2 27.5 16 30L16.5 30.5L17 30C16.8 27.5 16.5 25 16.5 25Z" fill="#b8c4c2"/>
+        </svg>
+        MongoDB
+      </a>
+      <ul class="nav-links">
+        <li class="nav-link-item"><a href="#features">Products</a></li>
+        <li class="nav-link-item"><a href="#showcase">Solutions</a></li>
+        <li class="nav-link-item"><a href="#stats">Developers</a></li>
+        <li class="nav-link-item"><a href="#">Resources</a></li>
+        <li><a href="#cta" class="nav-cta">Try Free</a></li>
+      </ul>
+      <button class="nav-hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========================================
+       Hero Section
+       ======================================== -->
+  <section class="hero">
+    <div class="container">
+      <span class="code-label hero-label">Developer Data Platform</span>
+      <h1 class="hero-title">
+        Build <span class="highlight">faster</span>,
+        scale further
+      </h1>
+      <p class="hero-subtitle">
+        MongoDB Atlas はマルチクラウドの開発者データプラットフォームです。あらゆるアプリケーションをより速く構築し、よりスマートに運用できます。
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">
+          無料で始める
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#" class="btn-secondary">
+          デモを見る
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="6,3 13,8 6,13" fill="currentColor"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Features Section
+       ======================================== -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="code-label section-label">Core Features</span>
+        <h2 class="section-title">あらゆるワークロードに対応する<br>統合プラットフォーム</h2>
+        <p class="section-subtitle">
+          アプリケーション開発からデータ分析、検索、AIまで。MongoDB Atlas ですべてを実現できます。
+        </p>
+      </div>
+      <div class="features-grid">
+        <!-- Card 1 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3><span class="green-underline">ドキュメント</span>モデル</h3>
+          <p>柔軟なドキュメントデータモデルで、オブジェクトをそのままデータベースに保存。スキーマの変更も簡単に行えます。</p>
+          <a href="#" class="card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Card 2 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3><span class="green-underline">Atlas</span> Search</h3>
+          <p>MongoDB Atlas 上でフルテキスト検索を実現。Apache Lucene を活用した高速な検索エンジンをデータベースに統合。</p>
+          <a href="#" class="card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Card 3 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+              <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+              <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+              <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3>マルチクラウド<span class="green-underline">展開</span></h3>
+          <p>AWS、Google Cloud、Azure の 100 以上のリージョンにデプロイ。マルチリージョン、マルチクラウドに対応。</p>
+          <a href="#" class="card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Card 4 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>集約<span class="green-underline">パイプライン</span></h3>
+          <p>強力な集約フレームワークでデータを変換・分析。リアルタイム分析やレポーティングをデータベース内で直接実行。</p>
+          <a href="#" class="card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Card 5 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>エンタープライズ<span class="green-underline">セキュリティ</span></h3>
+          <p>暗号化、認証、監査ログ、ネットワーク分離。SOC 2、HIPAA、PCI DSS などのコンプライアンス基準に準拠。</p>
+          <a href="#" class="card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <!-- Card 6 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Vector <span class="green-underline">Search</span></h3>
+          <p>ベクトル埋め込みを使用したセマンティック検索。AIアプリケーションや類似度検索をMongoDB上で直接構築。</p>
+          <a href="#" class="card-link">
+            詳しく見る
+            <svg viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Showcase Section (Dark)
+       ======================================== -->
+  <section class="showcase" id="showcase">
+    <div class="container">
+      <div class="section-header">
+        <span class="code-label section-label">Built for Developers</span>
+        <h2 class="section-title">開発者のために設計された<br>直感的なAPI</h2>
+        <p class="section-subtitle">
+          お好みの言語とフレームワークで、すぐにアプリケーション開発を始められます。
+        </p>
+      </div>
+      <div class="showcase-grid">
+        <!-- Showcase 1 -->
+        <div class="showcase-card">
+          <span class="code-label showcase-card-label">Queries</span>
+          <h3>柔軟なクエリ</h3>
+          <p>豊富なクエリ言語で、ネストされたドキュメントや配列もシンプルに操作できます。</p>
+          <div class="code-snippet">
+            <span class="comment">// ユーザーを検索</span><br>
+            <span class="keyword">db</span>.users.<span class="keyword">find</span>({<br>
+            &nbsp;&nbsp;age: { <span class="keyword">$gte</span>: <span class="string">18</span> },<br>
+            &nbsp;&nbsp;status: <span class="string">"active"</span><br>
+            }).<span class="keyword">sort</span>({ name: <span class="string">1</span> })
+          </div>
+        </div>
+        <!-- Showcase 2 -->
+        <div class="showcase-card">
+          <span class="code-label showcase-card-label">Aggregation</span>
+          <h3>データパイプライン</h3>
+          <p>集約パイプラインで複雑なデータ変換と分析をデータベース内で直接実行。</p>
+          <div class="code-snippet">
+            <span class="comment">// 売上集計</span><br>
+            <span class="keyword">db</span>.orders.<span class="keyword">aggregate</span>([<br>
+            &nbsp;&nbsp;{ <span class="keyword">$match</span>: { year: <span class="string">2026</span> } },<br>
+            &nbsp;&nbsp;{ <span class="keyword">$group</span>: {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;_id: <span class="string">"$region"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;total: { <span class="keyword">$sum</span>: <span class="string">"$amount"</span> }<br>
+            &nbsp;&nbsp;}}
+            <br>])
+          </div>
+        </div>
+        <!-- Showcase 3 -->
+        <div class="showcase-card">
+          <span class="code-label showcase-card-label">Change Streams</span>
+          <h3>リアルタイム同期</h3>
+          <p>Change Streams でデータの変更をリアルタイムに監視し、イベント駆動型アーキテクチャを構築。</p>
+          <div class="code-snippet">
+            <span class="comment">// 変更を監視</span><br>
+            <span class="keyword">const</span> stream =<br>
+            &nbsp;&nbsp;<span class="keyword">db</span>.inventory.<span class="keyword">watch</span>();<br><br>
+            stream.<span class="keyword">on</span>(<span class="string">"change"</span>, (change) => {<br>
+            &nbsp;&nbsp;console.<span class="keyword">log</span>(change);<br>
+            });
+          </div>
+        </div>
+        <!-- Showcase 4 -->
+        <div class="showcase-card">
+          <span class="code-label showcase-card-label">Atlas Search</span>
+          <h3>全文検索</h3>
+          <p>Apache Lucene ベースの検索をネイティブに統合。ファセット、オートコンプリート、ファジー検索を実現。</p>
+          <div class="code-snippet">
+            <span class="comment">// テキスト検索</span><br>
+            <span class="keyword">db</span>.products.<span class="keyword">aggregate</span>([<br>
+            &nbsp;&nbsp;{ <span class="keyword">$search</span>: {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;text: {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;query: <span class="string">"MongoDB Atlas"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path: <span class="string">"description"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+            &nbsp;&nbsp;}}<br>])
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Stats Section
+       ======================================== -->
+  <section class="stats" id="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">46,000<span class="highlight">+</span></div>
+          <div class="stat-label">顧客企業</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">100<span class="highlight">+</span></div>
+          <div class="stat-label">クラウドリージョン</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">7M<span class="highlight">+</span></div>
+          <div class="stat-label">登録開発者</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">99.995<span class="highlight">%</span></div>
+          <div class="stat-label">稼働率 SLA</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       CTA Section
+       ======================================== -->
+  <section class="cta" id="cta">
+    <div class="container">
+      <span class="code-label cta-label">Get Started</span>
+      <h2 class="cta-title">
+        今すぐ<span class="highlight">MongoDB Atlas</span>を始めよう
+      </h2>
+      <p class="cta-text">
+        クレジットカード不要で、無料クラスターを作成できます。数分でアプリケーション開発をスタート。
+      </p>
+      <div class="cta-actions">
+        <a href="#" class="btn-primary">
+          無料で始める
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#" class="btn-secondary">
+          営業に問い合わせ
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Footer
+       ======================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">
+            <svg viewBox="0 0 32 32" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16.5 2C16.5 2 17.8 6.2 17.8 9.2C17.8 12.2 19.5 14.5 19.5 17.5C19.5 20.5 17.2 23.5 16.5 25C15.8 23.5 13.5 20.5 13.5 17.5C13.5 14.5 15.2 12.2 15.2 9.2C15.2 6.2 16.5 2 16.5 2Z" fill="#00ed64"/>
+              <path d="M16.5 25C16.5 25 16.2 27.5 16 30L16.5 30.5L17 30C16.8 27.5 16.5 25 16.5 25Z" fill="#b8c4c2"/>
+            </svg>
+            MongoDB
+          </a>
+          <p>MongoDB は、世界で最も人気のあるモダンデータベースプラットフォームです。開発者が愛するデータベースを提供しています。</p>
+        </div>
+        <div class="footer-column">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="#">Atlas Database</a></li>
+            <li><a href="#">Atlas Search</a></li>
+            <li><a href="#">Atlas Vector Search</a></li>
+            <li><a href="#">Atlas Charts</a></li>
+            <li><a href="#">Atlas App Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Developers</h4>
+          <ul>
+            <li><a href="#">ドキュメント</a></li>
+            <li><a href="#">MongoDB University</a></li>
+            <li><a href="#">コミュニティ</a></li>
+            <li><a href="#">Developer Center</a></li>
+            <li><a href="#">MongoDB Shell</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">会社概要</a></li>
+            <li><a href="#">採用情報</a></li>
+            <li><a href="#">パートナー</a></li>
+            <li><a href="#">お問い合わせ</a></li>
+            <li><a href="#">ブログ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 MongoDB, Inc. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+          </a>
+          <a href="#" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

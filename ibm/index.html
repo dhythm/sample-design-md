@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBM - テクノロジーとコンサルティング</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       IBM Carbon Design System - CSS Custom Properties
+       ======================================== */
+    :root {
+      /* Primary */
+      --blue-60: #0f62fe;
+      --blue-70: #0043ce;
+      --blue-80: #002d9c;
+      --blue-10: #edf5ff;
+      --blue-40: #78a9ff;
+
+      /* Neutral Scale */
+      --gray-100: #161616;
+      --gray-90: #262626;
+      --gray-80: #393939;
+      --gray-70: #525252;
+      --gray-60: #6f6f6f;
+      --gray-50: #8d8d8d;
+      --gray-30: #c6c6c6;
+      --gray-20: #e0e0e0;
+      --gray-10: #f4f4f4;
+      --gray-10-hover: #e8e8e8;
+      --white: #ffffff;
+
+      /* Status */
+      --red-60: #da1e28;
+      --green-50: #24a148;
+      --yellow-30: #f1c21b;
+
+      /* Typography */
+      --font-primary: 'IBM Plex Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+
+      /* Spacing */
+      --spacing-03: 8px;
+      --spacing-04: 12px;
+      --spacing-05: 16px;
+      --spacing-06: 24px;
+      --spacing-07: 32px;
+      --spacing-08: 40px;
+      --spacing-09: 48px;
+      --spacing-10: 64px;
+      --spacing-11: 80px;
+      --spacing-12: 96px;
+      --spacing-13: 160px;
+
+      /* Layout */
+      --max-width: 1584px;
+      --nav-height: 48px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      font-weight: 400;
+      color: var(--gray-100);
+      background-color: var(--white);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: var(--blue-60);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--blue-60);
+      outline-offset: -2px;
+      box-shadow: inset 0 0 0 1px var(--white);
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background-color: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--spacing-05);
+      z-index: 1000;
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-03);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      text-decoration: none;
+    }
+
+    .nav__logo:hover {
+      text-decoration: none;
+    }
+
+    .nav__logo svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      height: 100%;
+    }
+
+    .nav__links li {
+      height: 100%;
+    }
+
+    .nav__links a {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 var(--spacing-05);
+      color: var(--gray-30);
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      text-decoration: none;
+      transition: background-color 0.15s, color 0.15s;
+    }
+
+    .nav__links a:hover {
+      background-color: var(--gray-80);
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav__cta {
+      background-color: var(--blue-60);
+      color: var(--white) !important;
+      font-weight: 600;
+    }
+
+    .nav__cta:hover {
+      background-color: var(--blue-70) !important;
+    }
+
+    .nav__mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--white);
+      cursor: pointer;
+      width: 48px;
+      height: 48px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      margin-top: var(--nav-height);
+      background-color: var(--gray-100);
+      color: var(--white);
+      padding: var(--spacing-13) var(--spacing-07) var(--spacing-12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 0%, rgba(15, 98, 254, 0.08) 100%);
+      pointer-events: none;
+    }
+
+    .hero__inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero__eyebrow {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      color: var(--blue-40);
+      margin-bottom: var(--spacing-05);
+      text-transform: uppercase;
+    }
+
+    .hero__title {
+      font-size: 60px;
+      font-weight: 300;
+      line-height: 1.17;
+      letter-spacing: 0px;
+      max-width: 800px;
+      margin-bottom: var(--spacing-06);
+    }
+
+    .hero__description {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--gray-30);
+      max-width: 640px;
+      margin-bottom: var(--spacing-09);
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 1px;
+    }
+
+    /* ========================================
+       Buttons
+       ======================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 48px;
+      padding: 14px 63px 14px 15px;
+      font-family: var(--font-primary);
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.16px;
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.15s;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      text-decoration: none;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--blue-60);
+      outline-offset: -2px;
+      box-shadow: inset 0 0 0 1px var(--white);
+    }
+
+    .btn--primary {
+      background-color: var(--blue-60);
+      color: var(--white);
+    }
+
+    .btn--primary:hover {
+      background-color: var(--blue-70);
+    }
+
+    .btn--secondary {
+      background-color: var(--gray-80);
+      color: var(--white);
+    }
+
+    .btn--secondary:hover {
+      background-color: var(--gray-70);
+    }
+
+    .btn--tertiary {
+      background-color: transparent;
+      color: var(--blue-60);
+      border: 1px solid var(--blue-60);
+    }
+
+    .btn--tertiary:hover {
+      background-color: var(--blue-60);
+      color: var(--white);
+    }
+
+    .btn--ghost {
+      background-color: transparent;
+      color: var(--blue-60);
+      padding: 14px 15px;
+    }
+
+    .btn--ghost:hover {
+      background-color: var(--gray-10);
+    }
+
+    .btn__icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ========================================
+       Features Section
+       ======================================== */
+    .features {
+      background-color: var(--white);
+      padding: var(--spacing-12) var(--spacing-07);
+    }
+
+    .features__inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .features__eyebrow {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      color: var(--gray-100);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-05);
+    }
+
+    .features__title {
+      font-size: 42px;
+      font-weight: 300;
+      line-height: 1.19;
+      color: var(--gray-100);
+      max-width: 640px;
+      margin-bottom: var(--spacing-10);
+    }
+
+    .features__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background-color: var(--gray-20);
+    }
+
+    .feature-card {
+      background-color: var(--gray-10);
+      padding: var(--spacing-05);
+      display: flex;
+      flex-direction: column;
+      min-height: 280px;
+      transition: background-color 0.15s;
+    }
+
+    .feature-card:hover {
+      background-color: var(--gray-10-hover);
+    }
+
+    .feature-card__icon {
+      width: 32px;
+      height: 32px;
+      margin-bottom: var(--spacing-11);
+      color: var(--blue-60);
+    }
+
+    .feature-card__title {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: var(--spacing-03);
+    }
+
+    .feature-card__description {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.29;
+      letter-spacing: 0.16px;
+      color: var(--gray-70);
+      margin-bottom: var(--spacing-06);
+      flex-grow: 1;
+    }
+
+    .feature-card__link {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.16px;
+      color: var(--blue-60);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-03);
+    }
+
+    .feature-card__link svg {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.15s;
+    }
+
+    .feature-card:hover .feature-card__link svg {
+      transform: translateX(4px);
+    }
+
+    /* ========================================
+       Solutions Section
+       ======================================== */
+    .solutions {
+      background-color: var(--gray-10);
+      padding: var(--spacing-12) var(--spacing-07);
+    }
+
+    .solutions__inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-07);
+      align-items: center;
+    }
+
+    .solutions__content {
+      max-width: 560px;
+    }
+
+    .solutions__eyebrow {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      color: var(--gray-100);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-05);
+    }
+
+    .solutions__title {
+      font-size: 42px;
+      font-weight: 300;
+      line-height: 1.19;
+      margin-bottom: var(--spacing-06);
+    }
+
+    .solutions__description {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--gray-70);
+      margin-bottom: var(--spacing-07);
+    }
+
+    .solutions__visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+    }
+
+    .solutions__stat {
+      background-color: var(--white);
+      padding: var(--spacing-06);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .solutions__stat-value {
+      font-size: 48px;
+      font-weight: 300;
+      line-height: 1.17;
+      color: var(--blue-60);
+      margin-bottom: var(--spacing-03);
+    }
+
+    .solutions__stat-label {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.16px;
+      line-height: 1.29;
+      color: var(--gray-70);
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta {
+      background-color: var(--gray-100);
+      color: var(--white);
+      padding: var(--spacing-12) var(--spacing-07);
+    }
+
+    .cta__inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-10);
+      align-items: center;
+    }
+
+    .cta__title {
+      font-size: 48px;
+      font-weight: 300;
+      line-height: 1.17;
+    }
+
+    .cta__content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-06);
+    }
+
+    .cta__description {
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--gray-30);
+    }
+
+    .cta__actions {
+      display: flex;
+      gap: 1px;
+    }
+
+    /* ========================================
+       Clients Section
+       ======================================== */
+    .clients {
+      background-color: var(--white);
+      padding: var(--spacing-11) var(--spacing-07);
+      border-top: 1px solid var(--gray-20);
+    }
+
+    .clients__inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .clients__title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      text-transform: uppercase;
+      color: var(--gray-60);
+      margin-bottom: var(--spacing-09);
+    }
+
+    .clients__logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: var(--spacing-10);
+      flex-wrap: wrap;
+    }
+
+    .clients__logo {
+      font-family: var(--font-primary);
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--gray-50);
+      letter-spacing: 0.5px;
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      background-color: var(--gray-100);
+      color: var(--gray-30);
+      padding: var(--spacing-10) var(--spacing-07) var(--spacing-07);
+    }
+
+    .footer__inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-07);
+      margin-bottom: var(--spacing-10);
+    }
+
+    .footer__column-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16px;
+      color: var(--white);
+      margin-bottom: var(--spacing-05);
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-04);
+    }
+
+    .footer__links a {
+      font-size: 14px;
+      letter-spacing: 0.16px;
+      color: var(--gray-30);
+      text-decoration: none;
+    }
+
+    .footer__links a:hover {
+      color: var(--white);
+      text-decoration: underline;
+    }
+
+    .footer__bottom {
+      border-top: 1px solid var(--gray-80);
+      padding-top: var(--spacing-07);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--spacing-05);
+    }
+
+    .footer__legal {
+      display: flex;
+      gap: var(--spacing-05);
+      flex-wrap: wrap;
+    }
+
+    .footer__legal a {
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      color: var(--gray-30);
+    }
+
+    .footer__legal a:hover {
+      color: var(--white);
+    }
+
+    .footer__copyright {
+      font-size: 12px;
+      letter-spacing: 0.32px;
+      color: var(--gray-50);
+    }
+
+    /* ========================================
+       Responsive Design
+       ======================================== */
+
+    /* Medium (md): 672px */
+    @media (max-width: 1056px) {
+      .hero__title {
+        font-size: 42px;
+        line-height: 1.19;
+      }
+
+      .hero__description {
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .features__title {
+        font-size: 32px;
+        line-height: 1.25;
+      }
+
+      .features__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .solutions__inner {
+        grid-template-columns: 1fr;
+      }
+
+      .solutions__title {
+        font-size: 32px;
+        line-height: 1.25;
+      }
+
+      .cta__inner {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-07);
+      }
+
+      .cta__title {
+        font-size: 32px;
+        line-height: 1.25;
+      }
+
+      .footer__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Small (sm): 320px */
+    @media (max-width: 672px) {
+      .hero {
+        padding: var(--spacing-12) var(--spacing-05) var(--spacing-11);
+      }
+
+      .hero__title {
+        font-size: 32px;
+        line-height: 1.25;
+      }
+
+      .hero__actions {
+        flex-direction: column;
+      }
+
+      .hero__actions .btn {
+        width: 100%;
+      }
+
+      .features {
+        padding: var(--spacing-11) var(--spacing-05);
+      }
+
+      .features__title {
+        font-size: 24px;
+        line-height: 1.33;
+      }
+
+      .features__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card {
+        min-height: auto;
+      }
+
+      .solutions {
+        padding: var(--spacing-11) var(--spacing-05);
+      }
+
+      .solutions__title {
+        font-size: 24px;
+        line-height: 1.33;
+      }
+
+      .solutions__visual {
+        grid-template-columns: 1fr;
+      }
+
+      .cta {
+        padding: var(--spacing-11) var(--spacing-05);
+      }
+
+      .cta__title {
+        font-size: 24px;
+        line-height: 1.33;
+      }
+
+      .cta__actions {
+        flex-direction: column;
+      }
+
+      .cta__actions .btn {
+        width: 100%;
+      }
+
+      .clients__logos {
+        gap: var(--spacing-07);
+      }
+
+      .clients__logo {
+        font-size: 18px;
+      }
+
+      .footer {
+        padding: var(--spacing-09) var(--spacing-05) var(--spacing-07);
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-06);
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav__links {
+        display: none;
+      }
+
+      .nav__mobile-toggle {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+    <a href="#" class="nav__logo" aria-label="IBM ホーム">
+      <svg viewBox="0 0 64 26" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M0 0h23v2H0zm0 4h23v2H0zM0 8h10v2H0zm13 0h10v2H13zM0 12h10v2H0zm13 0h10v2H13zM0 16h10v2H0zm13 0h10v2H13zM0 20h23v2H0zm0 4h23v2H0z"/>
+        <path d="M27 0h12.5c4.4 0 8 3.1 8 7v0c0 1.9-.8 3.7-2.1 5 2.4 1.4 4 4 4 6.9v0.1c0 4.4-3.6 7-8 7H27v-2h12.5c3.3 0 5.9-2.2 5.9-5v-0.1c0-2.8-2.3-4.9-5.6-4.9H27v-2h12.5c2.9 0 5.6-1.7 5.6-5v0c0-2.8-2.6-5-5.9-5H27V0zm0 4h10.5c2.5 0 4.5 1.3 4.5 3.5 0 1.9-1.7 3.5-4.2 3.5H27V9h10c1.4 0 2.4-.7 2.4-1.5S38.4 6 37 6h-10V4zm0 12h11.8c2.5 0 4.2 1.3 4.2 3.5 0 1.9-1.6 3.5-4.2 3.5H27v-2h11.5c1.4 0 2.5-.7 2.5-1.5s-1.1-1.5-2.5-1.5H27v-2z"/>
+        <path d="M54 0h10v2H54zm0 4h10v2H54zM54 8h6.5l3 2H54zm0 4h10.6l3 2H54zM54 16h10v2H54zm0 4h10v2H54zm0 4h10v2H54zM64 0l-3 2h3zm0 4l-6 4h6zm0 8l-6 4h6zm0 8l-3 2h3z"/>
+      </svg>
+    </a>
+
+    <ul class="nav__links">
+      <li><a href="#solutions">ソリューション</a></li>
+      <li><a href="#products">製品</a></li>
+      <li><a href="#consulting">コンサルティング</a></li>
+      <li><a href="#research">リサーチ</a></li>
+      <li><a href="#about">IBM について</a></li>
+      <li><a href="#contact" class="nav__cta">お問い合わせ</a></li>
+    </ul>
+
+    <button class="nav__mobile-toggle" aria-label="メニューを開く" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+        <rect y="3" width="20" height="2"/>
+        <rect y="9" width="20" height="2"/>
+        <rect y="15" width="20" height="2"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero__inner">
+      <p class="hero__eyebrow">IBM watsonx</p>
+      <h1 class="hero__title">ビジネスのための<br>AIを、もっと身近に。</h1>
+      <p class="hero__description">エンタープライズグレードのAIとデータプラットフォームで、ビジネス全体にAIを展開。信頼性、透明性、ガバナンスを備えたAIソリューションを構築できます。</p>
+      <div class="hero__actions">
+        <a href="#" class="btn btn--primary">
+          無料で始める
+          <svg class="btn__icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M11.8 2.8L10.8 3.8 16.2 9.3 1 9.3 1 10.7 16.2 10.7 10.8 16.2 11.8 17.2 19 10z"/>
+          </svg>
+        </a>
+        <a href="#" class="btn btn--secondary">
+          デモを見る
+          <svg class="btn__icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M11.8 2.8L10.8 3.8 16.2 9.3 1 9.3 1 10.7 16.2 10.7 10.8 16.2 11.8 17.2 19 10z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="products">
+    <div class="features__inner">
+      <p class="features__eyebrow">IBM の主要プラットフォーム</p>
+      <h2 class="features__title">あらゆるビジネスニーズに対応するテクノロジー</h2>
+      <div class="features__grid">
+
+        <div class="feature-card">
+          <svg class="feature-card__icon" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+            <path d="M26 16c0-1.2-.5-2.3-1.3-3.1l1.4-1.4C27.3 12.7 28 14.3 28 16s-.7 3.3-1.9 4.5l-1.4-1.4c.8-.8 1.3-1.9 1.3-3.1zM20 16c0-.5-.2-1-.6-1.4l1.4-1.4c.8.8 1.2 1.8 1.2 2.8s-.4 2-1.2 2.8l-1.4-1.4c.4-.4.6-.9.6-1.4z"/>
+            <path d="M16 2A14 14 0 002 16a14 14 0 0014 14 14 14 0 0014-14A14 14 0 0016 2zm0 26A12 12 0 014 16 12 12 0 0116 4a12 12 0 0112 12 12 12 0 01-12 12z"/>
+            <circle cx="12" cy="16" r="2"/>
+          </svg>
+          <h3 class="feature-card__title">watsonx.ai</h3>
+          <p class="feature-card__description">次世代のファウンデーションモデルと生成AIを活用し、ビジネス向けAIアプリケーションを迅速に構築・展開します。</p>
+          <a href="#" class="feature-card__link">
+            詳しくはこちら
+            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M11.8 2.8L10.8 3.8 16.2 9.3 1 9.3 1 10.7 16.2 10.7 10.8 16.2 11.8 17.2 19 10z"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-card__icon" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+            <path d="M28 6H4a2 2 0 00-2 2v16a2 2 0 002 2h24a2 2 0 002-2V8a2 2 0 00-2-2zM4 24V8h24v16z"/>
+            <path d="M7 10h18v2H7zm0 4h18v2H7zm0 4h10v2H7z"/>
+          </svg>
+          <h3 class="feature-card__title">watsonx.data</h3>
+          <p class="feature-card__description">すべてのデータを、場所を問わずAIワークロード向けに最適化。オープンなレイクハウスアーキテクチャで、コストを最大50%削減します。</p>
+          <a href="#" class="feature-card__link">
+            詳しくはこちら
+            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M11.8 2.8L10.8 3.8 16.2 9.3 1 9.3 1 10.7 16.2 10.7 10.8 16.2 11.8 17.2 19 10z"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-card__icon" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+            <path d="M16 2a14 14 0 100 28 14 14 0 000-28zm0 26a12 12 0 1112-12 12 12 0 01-12 12z"/>
+            <path d="M16 10a2 2 0 102 2 2 2 0 00-2-2zm0 12a2 2 0 10-2-2 2 2 0 002 2zm6-6a2 2 0 10-2 2 2 2 0 002-2zm-12 0a2 2 0 102-2 2 2 0 00-2 2z"/>
+          </svg>
+          <h3 class="feature-card__title">watsonx.governance</h3>
+          <p class="feature-card__description">AIモデルのライフサイクル全体を管理。リスク、コンプライアンス、倫理的なAI運用を一元的にガバナンスします。</p>
+          <a href="#" class="feature-card__link">
+            詳しくはこちら
+            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M11.8 2.8L10.8 3.8 16.2 9.3 1 9.3 1 10.7 16.2 10.7 10.8 16.2 11.8 17.2 19 10z"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-card__icon" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+            <path d="M28 12H20V4a2 2 0 00-2-2H4A2 2 0 002 4V28a2 2 0 002 2H28a2 2 0 002-2V14A2 2 0 0028 12zM4 4H18V28H4zM28 28H20V14h8z"/>
+          </svg>
+          <h3 class="feature-card__title">Red Hat OpenShift</h3>
+          <p class="feature-card__description">ハイブリッドクラウド環境全体で一貫したアプリケーション開発と運用を実現するエンタープライズKubernetesプラットフォーム。</p>
+          <a href="#" class="feature-card__link">
+            詳しくはこちら
+            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M11.8 2.8L10.8 3.8 16.2 9.3 1 9.3 1 10.7 16.2 10.7 10.8 16.2 11.8 17.2 19 10z"/>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Solutions Section -->
+  <section class="solutions" id="solutions">
+    <div class="solutions__inner">
+      <div class="solutions__content">
+        <p class="solutions__eyebrow">実績</p>
+        <h2 class="solutions__title">世界中の企業がIBMを信頼しています</h2>
+        <p class="solutions__description">Fortune 500企業の95%以上がIBM Cloudを利用しています。金融、医療、製造、小売など、あらゆる業界でデジタルトランスフォーメーションを推進する信頼のパートナーです。</p>
+        <a href="#" class="btn btn--tertiary">
+          お客様事例を見る
+          <svg class="btn__icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M11.8 2.8L10.8 3.8 16.2 9.3 1 9.3 1 10.7 16.2 10.7 10.8 16.2 11.8 17.2 19 10z"/>
+          </svg>
+        </a>
+      </div>
+      <div class="solutions__visual">
+        <div class="solutions__stat">
+          <span class="solutions__stat-value">95%</span>
+          <span class="solutions__stat-label">Fortune 500企業が IBM Cloud を利用</span>
+        </div>
+        <div class="solutions__stat">
+          <span class="solutions__stat-value">175+</span>
+          <span class="solutions__stat-label">対応する国と地域</span>
+        </div>
+        <div class="solutions__stat">
+          <span class="solutions__stat-value">40K+</span>
+          <span class="solutions__stat-label">ビジネスパートナー</span>
+        </div>
+        <div class="solutions__stat">
+          <span class="solutions__stat-value">3,000+</span>
+          <span class="solutions__stat-label">発行特許数 (2023年)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Client Logos -->
+  <section class="clients">
+    <div class="clients__inner">
+      <p class="clients__title">信頼されるパートナー</p>
+      <div class="clients__logos">
+        <span class="clients__logo">Toyota</span>
+        <span class="clients__logo">Mizuho</span>
+        <span class="clients__logo">NTT Data</span>
+        <span class="clients__logo">Sony</span>
+        <span class="clients__logo">Panasonic</span>
+        <span class="clients__logo">SoftBank</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta" id="contact">
+    <div class="cta__inner">
+      <h2 class="cta__title">次のステップへ<br>進みましょう</h2>
+      <div class="cta__content">
+        <p class="cta__description">IBMの専門家がお客様のビジネス課題をヒアリングし、最適なソリューションをご提案します。まずはお気軽にご相談ください。</p>
+        <div class="cta__actions">
+          <a href="#" class="btn btn--primary">
+            お問い合わせ
+            <svg class="btn__icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M11.8 2.8L10.8 3.8 16.2 9.3 1 9.3 1 10.7 16.2 10.7 10.8 16.2 11.8 17.2 19 10z"/>
+            </svg>
+          </a>
+          <a href="#" class="btn btn--secondary">
+            資料ダウンロード
+            <svg class="btn__icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M11.8 2.8L10.8 3.8 16.2 9.3 1 9.3 1 10.7 16.2 10.7 10.8 16.2 11.8 17.2 19 10z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__grid">
+        <div>
+          <h4 class="footer__column-title">製品</h4>
+          <ul class="footer__links">
+            <li><a href="#">watsonx</a></li>
+            <li><a href="#">IBM Cloud</a></li>
+            <li><a href="#">Red Hat</a></li>
+            <li><a href="#">セキュリティ</a></li>
+            <li><a href="#">オートメーション</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__column-title">サービス</h4>
+          <ul class="footer__links">
+            <li><a href="#">コンサルティング</a></li>
+            <li><a href="#">テクノロジーサポート</a></li>
+            <li><a href="#">ファイナンシング</a></li>
+            <li><a href="#">トレーニング</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__column-title">リソース</h4>
+          <ul class="footer__links">
+            <li><a href="#">ブログ</a></li>
+            <li><a href="#">ドキュメント</a></li>
+            <li><a href="#">開発者コミュニティ</a></li>
+            <li><a href="#">IBM Research</a></li>
+            <li><a href="#">パートナー</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__column-title">IBM について</h4>
+          <ul class="footer__links">
+            <li><a href="#">会社概要</a></li>
+            <li><a href="#">採用情報</a></li>
+            <li><a href="#">ニュースルーム</a></li>
+            <li><a href="#">投資家情報</a></li>
+            <li><a href="#">サステナビリティ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <div class="footer__legal">
+          <a href="#">プライバシー</a>
+          <a href="#">利用規約</a>
+          <a href="#">アクセシビリティ</a>
+          <a href="#">Cookie 設定</a>
+        </div>
+        <p class="footer__copyright">&copy; 2026 IBM Corporation. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanity - コンテンツを、あらゆる場所へ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;425;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       Design Tokens (from DESIGN.md)
+       ======================================== */
+    :root {
+      /* Colors - Primary Brand */
+      --color-black: #0b0b0b;
+      --color-pure-black: #000000;
+      --color-red: #f36458;
+
+      /* Colors - Interactive & Accent */
+      --color-blue: #0052ef;
+      --color-light-blue: #55beff;
+      --color-lighter-blue: #afe3ff;
+      --color-green: #19d600;
+
+      /* Colors - Surface & Background */
+      --color-surface-1: #0b0b0b;
+      --color-surface-2: #212121;
+      --color-surface-3: #353535;
+      --color-light-gray: #ededed;
+      --color-white: #ffffff;
+
+      /* Colors - Text */
+      --color-text-primary: #ffffff;
+      --color-text-secondary: #b9b9b9;
+      --color-text-tertiary: #797979;
+      --color-text-dark: #212121;
+
+      /* Colors - Semantic */
+      --color-error: #dd0000;
+      --color-success: #37cd84;
+      --color-focus: #0052ef;
+
+      /* Colors - Borders */
+      --border-dark: #0b0b0b;
+      --border-subtle: #212121;
+      --border-medium: #353535;
+
+      /* Typography - Font Families */
+      --font-display: 'Inter', 'Space Grotesk', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+
+      /* Spacing */
+      --space-1: 1px;
+      --space-2: 2px;
+      --space-3: 4px;
+      --space-4: 6px;
+      --space-5: 8px;
+      --space-6: 12px;
+      --space-7: 16px;
+      --space-8: 24px;
+      --space-9: 32px;
+      --space-10: 48px;
+      --space-11: 64px;
+      --space-12: 96px;
+
+      /* Border Radius */
+      --radius-xs: 3px;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 12px;
+      --radius-pill: 99999px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-text-primary);
+      background-color: var(--color-black);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ========================================
+       Utility
+       ======================================== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-8);
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: rgba(11, 11, 11, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-8);
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      color: var(--color-text-primary);
+    }
+
+    .nav__logo-mark {
+      width: 28px;
+      height: 28px;
+      background-color: var(--color-red);
+      border-radius: var(--radius-sm);
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-9);
+      list-style: none;
+    }
+
+    .nav__link {
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -0.15px;
+      color: var(--color-text-secondary);
+      transition: color 0.2s ease;
+    }
+
+    .nav__link:hover {
+      color: var(--color-blue);
+    }
+
+    .nav__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-7);
+    }
+
+    .nav__hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-5);
+    }
+
+    .nav__hamburger span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background-color: var(--color-text-primary);
+      border-radius: 1px;
+    }
+
+    /* ========================================
+       Buttons
+       ======================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-5);
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.15px;
+      line-height: 1.00;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn--primary {
+      background-color: var(--color-red);
+      color: var(--color-white);
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+    }
+
+    .btn--primary:hover {
+      background-color: var(--color-blue);
+    }
+
+    .btn--secondary {
+      background-color: var(--color-surface-1);
+      color: var(--color-text-secondary);
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn--secondary:hover {
+      background-color: var(--color-blue);
+      color: var(--color-white);
+      border-color: var(--color-blue);
+    }
+
+    .btn--outline {
+      background-color: var(--color-white);
+      color: var(--color-black);
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-black);
+    }
+
+    .btn--outline:hover {
+      background-color: var(--color-blue);
+      color: var(--color-white);
+      border-color: var(--color-blue);
+    }
+
+    .btn--large {
+      font-size: 16px;
+      padding: 16px 32px;
+    }
+
+    .btn--ghost {
+      background-color: var(--color-surface-2);
+      color: var(--color-text-secondary);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn--ghost:hover {
+      background-color: var(--color-blue);
+      color: var(--color-white);
+      border-color: var(--color-blue);
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      padding-top: 160px;
+      padding-bottom: var(--space-12);
+      text-align: center;
+    }
+
+    .hero__label {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-5);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.13px;
+      color: var(--color-text-tertiary);
+      background-color: var(--color-surface-2);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-pill);
+      padding: 6px 16px;
+      margin-bottom: var(--space-9);
+    }
+
+    .hero__label-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--color-green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero__title {
+      font-size: 112px;
+      font-weight: 400;
+      line-height: 1.00;
+      letter-spacing: -4.48px;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-9);
+    }
+
+    .hero__title em {
+      font-style: normal;
+      color: var(--color-red);
+    }
+
+    .hero__subtitle {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.50;
+      letter-spacing: -0.2px;
+      color: var(--color-text-secondary);
+      max-width: 640px;
+      margin: 0 auto var(--space-10) auto;
+    }
+
+    .hero__actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-7);
+      margin-bottom: var(--space-11);
+    }
+
+    .hero__stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-11);
+    }
+
+    .hero__stat {
+      text-align: center;
+    }
+
+    .hero__stat-value {
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -1.68px;
+      color: var(--color-text-primary);
+    }
+
+    .hero__stat-label {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.13px;
+      color: var(--color-text-tertiary);
+      margin-top: var(--space-5);
+    }
+
+    /* ========================================
+       Logos / Social Proof
+       ======================================== */
+    .logos {
+      padding: var(--space-11) 0;
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .logos__title {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.13px;
+      color: var(--color-text-tertiary);
+      text-align: center;
+      text-transform: uppercase;
+      margin-bottom: var(--space-9);
+    }
+
+    .logos__grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-11);
+      flex-wrap: wrap;
+    }
+
+    .logos__item {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      color: var(--color-text-tertiary);
+      opacity: 0.5;
+      transition: opacity 0.2s ease;
+    }
+
+    .logos__item:hover {
+      opacity: 1;
+    }
+
+    /* ========================================
+       Features Section
+       ======================================== */
+    .features {
+      padding: var(--space-12) 0;
+    }
+
+    .features__header {
+      text-align: center;
+      margin-bottom: var(--space-11);
+    }
+
+    .features__label {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.13px;
+      color: var(--color-red);
+      margin-bottom: var(--space-7);
+    }
+
+    .features__title {
+      font-size: 72px;
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -2.88px;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-8);
+    }
+
+    .features__subtitle {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.50;
+      letter-spacing: -0.18px;
+      color: var(--color-text-secondary);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .features__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-8);
+    }
+
+    /* ========================================
+       Card Component
+       ======================================== */
+    .card {
+      background-color: var(--color-surface-2);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: var(--space-9);
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: var(--color-text-tertiary);
+    }
+
+    .card__icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--color-surface-1);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-8);
+      font-size: 24px;
+    }
+
+    .card__title {
+      font-size: 24px;
+      font-weight: 425;
+      line-height: 1.24;
+      letter-spacing: -0.24px;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-6);
+    }
+
+    .card__description {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.50;
+      letter-spacing: -0.15px;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-8);
+    }
+
+    .card__link {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.15px;
+      color: var(--color-red);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-5);
+      transition: color 0.2s ease;
+    }
+
+    .card__link:hover {
+      color: var(--color-blue);
+    }
+
+    .card__link-arrow {
+      transition: transform 0.2s ease;
+    }
+
+    .card__link:hover .card__link-arrow {
+      transform: translateX(4px);
+    }
+
+    /* ========================================
+       Showcase Section
+       ======================================== */
+    .showcase {
+      padding: var(--space-12) 0;
+    }
+
+    .showcase__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-8);
+    }
+
+    .showcase__card {
+      background-color: var(--color-surface-2);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      padding: var(--space-10);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 360px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+
+    .showcase__card:hover {
+      border-color: var(--color-text-tertiary);
+    }
+
+    .showcase__card--wide {
+      grid-column: span 2;
+    }
+
+    .showcase__card-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-bottom: var(--space-7);
+    }
+
+    .showcase__card-title {
+      font-size: 38px;
+      font-weight: 400;
+      line-height: 1.10;
+      letter-spacing: -1.14px;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-7);
+    }
+
+    .showcase__card-desc {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-text-secondary);
+      max-width: 480px;
+    }
+
+    .showcase__visual {
+      display: flex;
+      gap: var(--space-5);
+      margin-top: var(--space-9);
+    }
+
+    .showcase__tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: -0.12px;
+      color: var(--color-text-secondary);
+      background-color: var(--color-surface-1);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xs);
+      padding: 4px 10px;
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta {
+      padding: var(--space-12) 0;
+    }
+
+    .cta__inner {
+      background-color: var(--color-surface-2);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-lg);
+      padding: var(--space-12) var(--space-11);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta__inner::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(243, 100, 88, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta__title {
+      font-size: 72px;
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -2.88px;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-8);
+      position: relative;
+    }
+
+    .cta__description {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.50;
+      letter-spacing: -0.18px;
+      color: var(--color-text-secondary);
+      max-width: 520px;
+      margin: 0 auto var(--space-10) auto;
+      position: relative;
+    }
+
+    .cta__actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-7);
+      position: relative;
+    }
+
+    .cta__note {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: -0.13px;
+      color: var(--color-text-tertiary);
+      margin-top: var(--space-8);
+      position: relative;
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      padding: var(--space-11) 0 var(--space-9) 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: var(--space-11);
+      margin-bottom: var(--space-11);
+    }
+
+    .footer__brand {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-7);
+    }
+
+    .footer__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      color: var(--color-text-primary);
+    }
+
+    .footer__logo-mark {
+      width: 24px;
+      height: 24px;
+      background-color: var(--color-red);
+      border-radius: var(--radius-xs);
+    }
+
+    .footer__tagline {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.50;
+      letter-spacing: -0.15px;
+      color: var(--color-text-tertiary);
+      max-width: 280px;
+    }
+
+    .footer__column-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.13px;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-bottom: var(--space-8);
+    }
+
+    .footer__links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      list-style: none;
+    }
+
+    .footer__link {
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -0.15px;
+      color: var(--color-text-secondary);
+      transition: color 0.2s ease;
+    }
+
+    .footer__link:hover {
+      color: var(--color-blue);
+    }
+
+    .footer__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-9);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .footer__copyright {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: -0.13px;
+      color: var(--color-text-tertiary);
+    }
+
+    .footer__social {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .footer__social-link {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.13px;
+      color: var(--color-text-tertiary);
+      transition: color 0.2s ease;
+    }
+
+    .footer__social-link:hover {
+      color: var(--color-blue);
+    }
+
+    /* ========================================
+       Responsive Design
+       ======================================== */
+    @media (max-width: 1024px) {
+      .hero__title {
+        font-size: 80px;
+        letter-spacing: -3.2px;
+      }
+
+      .features__title,
+      .cta__title {
+        font-size: 56px;
+        letter-spacing: -2.24px;
+      }
+
+      .features__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .showcase__card-title {
+        font-size: 32px;
+        letter-spacing: -0.96px;
+      }
+
+      .footer__grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-9);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav__links {
+        display: none;
+      }
+
+      .nav__hamburger {
+        display: flex;
+      }
+
+      .hero {
+        padding-top: 120px;
+        padding-bottom: var(--space-11);
+      }
+
+      .hero__title {
+        font-size: 52px;
+        letter-spacing: -2.08px;
+      }
+
+      .hero__subtitle {
+        font-size: 18px;
+      }
+
+      .hero__stats {
+        gap: var(--space-9);
+      }
+
+      .hero__stat-value {
+        font-size: 36px;
+        letter-spacing: -1.08px;
+      }
+
+      .hero__actions {
+        flex-direction: column;
+      }
+
+      .features__title,
+      .cta__title {
+        font-size: 42px;
+        letter-spacing: -1.68px;
+      }
+
+      .features__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase__card--wide {
+        grid-column: span 1;
+      }
+
+      .showcase__card-title {
+        font-size: 28px;
+        letter-spacing: -0.84px;
+      }
+
+      .cta__inner {
+        padding: var(--space-11) var(--space-8);
+      }
+
+      .cta__actions {
+        flex-direction: column;
+      }
+
+      .logos__grid {
+        gap: var(--space-9);
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-9);
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        gap: var(--space-7);
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero__title {
+        font-size: 38px;
+        letter-spacing: -1.52px;
+      }
+
+      .hero__stats {
+        flex-direction: column;
+        gap: var(--space-8);
+      }
+
+      .features__title,
+      .cta__title {
+        font-size: 32px;
+        letter-spacing: -1.28px;
+      }
+
+      .showcase__card {
+        padding: var(--space-9);
+        min-height: 280px;
+      }
+
+      .logos__grid {
+        flex-direction: column;
+        gap: var(--space-8);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======== Navigation ======== -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">
+        <div class="nav__logo-mark"></div>
+        Sanity
+      </a>
+      <ul class="nav__links">
+        <li><a href="#features" class="nav__link">プロダクト</a></li>
+        <li><a href="#showcase" class="nav__link">ソリューション</a></li>
+        <li><a href="#" class="nav__link">ドキュメント</a></li>
+        <li><a href="#" class="nav__link">料金プラン</a></li>
+        <li><a href="#" class="nav__link">ブログ</a></li>
+      </ul>
+      <div class="nav__actions">
+        <a href="#" class="btn btn--secondary">ログイン</a>
+        <a href="#" class="btn btn--primary">無料で始める</a>
+        <button class="nav__hamburger" aria-label="メニュー">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ======== Hero Section ======== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__label">
+        <span class="hero__label-dot"></span>
+        <span>Sanity Studio v3.x リリース</span>
+      </div>
+      <h1 class="hero__title">コンテンツを<br><em>あらゆる場所</em>へ</h1>
+      <p class="hero__subtitle">
+        構造化コンテンツのためのプラットフォーム。チームが連携し、リアルタイムでコンテンツを構築・管理・配信できます。
+      </p>
+      <div class="hero__actions">
+        <a href="#" class="btn btn--primary btn--large">無料で始める</a>
+        <a href="#" class="btn btn--secondary btn--large">デモを見る &rarr;</a>
+      </div>
+      <div class="hero__stats">
+        <div class="hero__stat">
+          <div class="hero__stat-value">250K+</div>
+          <div class="hero__stat-label mono">開発者</div>
+        </div>
+        <div class="hero__stat">
+          <div class="hero__stat-value">99.99%</div>
+          <div class="hero__stat-label mono">稼働率</div>
+        </div>
+        <div class="hero__stat">
+          <div class="hero__stat-value">50ms</div>
+          <div class="hero__stat-label mono">平均レスポンス</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Logos Section ======== -->
+  <section class="logos">
+    <div class="container">
+      <p class="logos__title">世界をリードする企業に信頼されています</p>
+      <div class="logos__grid">
+        <span class="logos__item">Shopify</span>
+        <span class="logos__item">Figma</span>
+        <span class="logos__item">Cloudflare</span>
+        <span class="logos__item">Netlify</span>
+        <span class="logos__item">Vercel</span>
+        <span class="logos__item">Linear</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Features Section ======== -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features__header">
+        <p class="features__label mono">// features</p>
+        <h2 class="features__title">開発者のための<br>コンテンツ基盤</h2>
+        <p class="features__subtitle">
+          柔軟なスキーマ、リアルタイムAPI、カスタマイズ可能なスタジオ。あらゆるフレームワークと統合できます。
+        </p>
+      </div>
+      <div class="features__grid">
+        <div class="card">
+          <div class="card__icon">&#9881;</div>
+          <h3 class="card__title">Sanity Studio</h3>
+          <p class="card__description">
+            Reactベースのオープンソースエディタ。完全にカスタマイズ可能で、チームのワークフローに合わせて拡張できます。
+          </p>
+          <a href="#" class="card__link">
+            詳しく見る <span class="card__link-arrow">&rarr;</span>
+          </a>
+        </div>
+        <div class="card">
+          <div class="card__icon">&#9889;</div>
+          <h3 class="card__title">GROQ クエリ言語</h3>
+          <p class="card__description">
+            直感的で強力なクエリ言語。GraphQLより柔軟で、JSONデータに対して複雑なクエリをシンプルに記述できます。
+          </p>
+          <a href="#" class="card__link">
+            詳しく見る <span class="card__link-arrow">&rarr;</span>
+          </a>
+        </div>
+        <div class="card">
+          <div class="card__icon">&#9729;</div>
+          <h3 class="card__title">Content Lake</h3>
+          <p class="card__description">
+            クラウドホスティングされたデータストア。リアルタイム同期、バージョン管理、CDN配信をすべて標準搭載。
+          </p>
+          <a href="#" class="card__link">
+            詳しく見る <span class="card__link-arrow">&rarr;</span>
+          </a>
+        </div>
+        <div class="card">
+          <div class="card__icon">&#128279;</div>
+          <h3 class="card__title">構造化コンテンツ</h3>
+          <p class="card__description">
+            ページではなくデータとしてコンテンツを管理。一度作成すれば、Web、アプリ、IoTなどあらゆるチャネルに配信。
+          </p>
+          <a href="#" class="card__link">
+            詳しく見る <span class="card__link-arrow">&rarr;</span>
+          </a>
+        </div>
+        <div class="card">
+          <div class="card__icon">&#128101;</div>
+          <h3 class="card__title">リアルタイム共同編集</h3>
+          <p class="card__description">
+            Google Docsのようなリアルタイム共同編集。チームメンバーの変更が即座に反映され、コンフリクトを自動解決。
+          </p>
+          <a href="#" class="card__link">
+            詳しく見る <span class="card__link-arrow">&rarr;</span>
+          </a>
+        </div>
+        <div class="card">
+          <div class="card__icon">&#128272;</div>
+          <h3 class="card__title">エンタープライズ対応</h3>
+          <p class="card__description">
+            SSO/SAML認証、ロールベースのアクセス制御、監査ログ、SLAサポート。大規模チームの運用要件に対応。
+          </p>
+          <a href="#" class="card__link">
+            詳しく見る <span class="card__link-arrow">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Showcase Section ======== -->
+  <section class="showcase" id="showcase">
+    <div class="container">
+      <div class="showcase__grid">
+        <div class="showcase__card">
+          <div>
+            <p class="showcase__card-label mono">フレームワーク統合</p>
+            <h3 class="showcase__card-title">あらゆるスタックに対応</h3>
+            <p class="showcase__card-desc">
+              Next.js、Remix、Astro、Svelte、Vue。お好みのフレームワークとシームレスに統合できます。
+            </p>
+          </div>
+          <div class="showcase__visual">
+            <span class="showcase__tag">Next.js</span>
+            <span class="showcase__tag">Remix</span>
+            <span class="showcase__tag">Astro</span>
+            <span class="showcase__tag">Svelte</span>
+            <span class="showcase__tag">Vue</span>
+          </div>
+        </div>
+        <div class="showcase__card">
+          <div>
+            <p class="showcase__card-label mono">ビジュアル編集</p>
+            <h3 class="showcase__card-title">見たまま編集</h3>
+            <p class="showcase__card-desc">
+              プレビューを見ながらリアルタイムにコンテンツを編集。コードを書かずにページを構築できます。
+            </p>
+          </div>
+          <div class="showcase__visual">
+            <span class="showcase__tag">Live Preview</span>
+            <span class="showcase__tag">Portable Text</span>
+            <span class="showcase__tag">Image Pipeline</span>
+          </div>
+        </div>
+        <div class="showcase__card showcase__card--wide">
+          <div>
+            <p class="showcase__card-label mono">AI 対応</p>
+            <h3 class="showcase__card-title">構造化データが AI ワークフローを加速する</h3>
+            <p class="showcase__card-desc">
+              構造化されたコンテンツは、LLMとの統合に最適です。Sanityのコンテンツをナレッジベースとして活用し、パーソナライズされた体験を大規模に提供できます。
+            </p>
+          </div>
+          <div class="showcase__visual">
+            <span class="showcase__tag">RAG</span>
+            <span class="showcase__tag">Embeddings</span>
+            <span class="showcase__tag">AI Assist</span>
+            <span class="showcase__tag">Semantic Search</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== CTA Section ======== -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta__inner">
+        <h2 class="cta__title">今すぐ<br>構築を始めよう</h2>
+        <p class="cta__description">
+          無料プランで始めて、プロジェクトの成長に合わせてスケール。クレジットカード不要で即座に利用開始できます。
+        </p>
+        <div class="cta__actions">
+          <a href="#" class="btn btn--primary btn--large">無料で始める</a>
+          <a href="#" class="btn btn--ghost btn--large">営業に問い合わせ</a>
+        </div>
+        <p class="cta__note">無料プラン: 3ユーザー ・ 500Kリクエスト/月 ・ 20GBストレージ</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Footer ======== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <div class="footer__logo-mark"></div>
+            Sanity
+          </div>
+          <p class="footer__tagline">
+            構造化コンテンツのためのプラットフォーム。チームの創造性を解放します。
+          </p>
+        </div>
+        <div>
+          <h4 class="footer__column-title">プロダクト</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Sanity Studio</a></li>
+            <li><a href="#" class="footer__link">Content Lake</a></li>
+            <li><a href="#" class="footer__link">GROQ</a></li>
+            <li><a href="#" class="footer__link">料金プラン</a></li>
+            <li><a href="#" class="footer__link">エンタープライズ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__column-title">開発者向け</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">ドキュメント</a></li>
+            <li><a href="#" class="footer__link">APIリファレンス</a></li>
+            <li><a href="#" class="footer__link">プラグイン</a></li>
+            <li><a href="#" class="footer__link">テンプレート</a></li>
+            <li><a href="#" class="footer__link">コミュニティ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__column-title">会社情報</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Sanityについて</a></li>
+            <li><a href="#" class="footer__link">ブログ</a></li>
+            <li><a href="#" class="footer__link">採用情報</a></li>
+            <li><a href="#" class="footer__link">プライバシー</a></li>
+            <li><a href="#" class="footer__link">利用規約</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">&copy; 2026 Sanity. All rights reserved.</p>
+        <div class="footer__social">
+          <a href="#" class="footer__social-link">GitHub</a>
+          <a href="#" class="footer__social-link">X (Twitter)</a>
+          <a href="#" class="footer__social-link">Discord</a>
+          <a href="#" class="footer__social-link">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpaceX - 宇宙への挑戦</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       SpaceX Design System - CSS Custom Properties
+       ======================================== */
+    :root {
+      /* Colors */
+      --space-black: #000000;
+      --spectral-white: #f0f0fa;
+      --ghost-surface: rgba(240, 240, 250, 0.1);
+      --ghost-border: rgba(240, 240, 250, 0.35);
+      --dark-overlay: rgba(0, 0, 0, 0.5);
+
+      /* Typography */
+      --font-primary: 'Exo 2', Arial, Verdana, sans-serif;
+      --font-size-hero: 48px;
+      --font-size-body: 16px;
+      --font-size-nav: 13px;
+      --font-size-caption: 12px;
+      --font-size-micro: 10px;
+      --font-weight-bold: 700;
+      --font-weight-regular: 400;
+      --letter-spacing-hero: 0.96px;
+      --letter-spacing-nav: 1.17px;
+      --letter-spacing-micro: 1px;
+
+      /* Spacing */
+      --spacing-xs: 5px;
+      --spacing-sm: 12px;
+      --spacing-md: 18px;
+      --spacing-lg: 24px;
+      --spacing-xl: 30px;
+
+      /* Components */
+      --button-radius: 32px;
+      --button-padding: 18px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      font-weight: var(--font-weight-regular);
+      font-size: var(--font-size-body);
+      color: var(--spectral-white);
+      background-color: var(--space-black);
+      text-transform: uppercase;
+      letter-spacing: var(--letter-spacing-micro);
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--spectral-white);
+      text-decoration: none;
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: var(--spacing-md) var(--spacing-xl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+    }
+
+    .nav-logo {
+      font-family: var(--font-primary);
+      font-weight: var(--font-weight-bold);
+      font-size: 22px;
+      letter-spacing: 6px;
+      color: var(--spectral-white);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: var(--spacing-lg);
+    }
+
+    .nav-links a {
+      font-size: var(--font-size-nav);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: var(--letter-spacing-nav);
+      line-height: 0.94;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.7;
+    }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 5px;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: var(--spectral-white);
+      transition: transform 0.3s ease;
+    }
+
+    /* ========================================
+       Sections - Cinematic Full Viewport
+       ======================================== */
+    .section {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .section-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .section-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--dark-overlay);
+    }
+
+    .section-content {
+      position: relative;
+      z-index: 1;
+      padding: 80px var(--spacing-xl) var(--spacing-xl);
+      max-width: 800px;
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      align-items: flex-end;
+      padding-bottom: 120px;
+    }
+
+    .hero .section-bg {
+      background-image: url('https://images.unsplash.com/photo-1517976487492-5750f3195933?w=1920&q=80');
+    }
+
+    .hero .section-content {
+      padding-bottom: 0;
+    }
+
+    .hero-title {
+      font-size: var(--font-size-hero);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: var(--letter-spacing-hero);
+      line-height: 1.0;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .hero-subtitle {
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-regular);
+      letter-spacing: normal;
+      line-height: 1.7;
+      margin-bottom: var(--spacing-xl);
+      max-width: 540px;
+      text-transform: none;
+    }
+
+    /* ========================================
+       Ghost Button
+       ======================================== */
+    .ghost-btn {
+      display: inline-block;
+      background: var(--ghost-surface);
+      border: 1px solid var(--ghost-border);
+      border-radius: var(--button-radius);
+      padding: 14px var(--button-padding);
+      padding-left: 28px;
+      padding-right: 28px;
+      color: var(--spectral-white);
+      font-family: var(--font-primary);
+      font-size: var(--font-size-nav);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: var(--letter-spacing-nav);
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .ghost-btn:hover {
+      background: rgba(240, 240, 250, 0.2);
+      border-color: rgba(240, 240, 250, 0.6);
+      color: #ffffff;
+    }
+
+    /* ========================================
+       Missions Section
+       ======================================== */
+    .missions .section-bg {
+      background-image: url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1920&q=80');
+    }
+
+    .section-label {
+      font-size: var(--font-size-micro);
+      font-weight: var(--font-weight-regular);
+      letter-spacing: var(--letter-spacing-nav);
+      line-height: 0.94;
+      margin-bottom: var(--spacing-sm);
+      opacity: 0.7;
+    }
+
+    .section-title {
+      font-size: 36px;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: var(--letter-spacing-hero);
+      line-height: 1.1;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .section-body {
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-regular);
+      letter-spacing: normal;
+      line-height: 1.6;
+      max-width: 480px;
+      text-transform: none;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    /* ========================================
+       Features / Vehicles Section
+       ======================================== */
+    .vehicles {
+      align-items: stretch;
+    }
+
+    .vehicles .section-bg {
+      background-image: url('https://images.unsplash.com/photo-1457364559154-aa2644600ebb?w=1920&q=80');
+    }
+
+    .vehicles-grid {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      min-height: 100vh;
+    }
+
+    .vehicle-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: var(--spacing-xl);
+      border-right: 1px solid var(--ghost-border);
+      transition: background 0.4s ease;
+      cursor: pointer;
+    }
+
+    .vehicle-card:last-child {
+      border-right: none;
+    }
+
+    .vehicle-card:hover {
+      background: var(--ghost-surface);
+    }
+
+    .vehicle-card-label {
+      font-size: var(--font-size-micro);
+      letter-spacing: var(--letter-spacing-nav);
+      opacity: 0.5;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .vehicle-card-title {
+      font-size: 28px;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: var(--letter-spacing-hero);
+      line-height: 1.1;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .vehicle-card-stat {
+      font-size: var(--font-size-caption);
+      letter-spacing: normal;
+      line-height: 1.5;
+      opacity: 0.7;
+      text-transform: none;
+    }
+
+    .vehicle-card-arrow {
+      margin-top: var(--spacing-md);
+      font-size: var(--font-size-body);
+      opacity: 0.5;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .vehicle-card:hover .vehicle-card-arrow {
+      opacity: 1;
+      transform: translateX(5px);
+    }
+
+    /* ========================================
+       Stats Section
+       ======================================== */
+    .stats .section-bg {
+      background-image: url('https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=1920&q=80');
+    }
+
+    .stats-grid {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      padding: 0 var(--spacing-xl);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: var(--spacing-xl) var(--spacing-md);
+    }
+
+    .stat-number {
+      font-size: 56px;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: var(--letter-spacing-hero);
+      line-height: 1.0;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .stat-label {
+      font-size: var(--font-size-caption);
+      letter-spacing: var(--letter-spacing-nav);
+      opacity: 0.6;
+      line-height: 1.4;
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta .section-bg {
+      background-image: url('https://images.unsplash.com/photo-1516849841032-87cbac4d88f7?w=1920&q=80');
+    }
+
+    .cta {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .cta .section-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-title {
+      font-size: 42px;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: var(--letter-spacing-hero);
+      line-height: 1.1;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .cta-body {
+      font-size: var(--font-size-body);
+      letter-spacing: normal;
+      line-height: 1.7;
+      text-transform: none;
+      margin-bottom: var(--spacing-xl);
+      max-width: 500px;
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      position: relative;
+      background: var(--space-black);
+      padding: var(--spacing-xl);
+      border-top: 1px solid var(--ghost-border);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: var(--spacing-xl);
+    }
+
+    .footer-brand {
+      font-weight: var(--font-weight-bold);
+      font-size: 18px;
+      letter-spacing: 4px;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .footer-copy {
+      font-size: var(--font-size-micro);
+      letter-spacing: var(--letter-spacing-micro);
+      opacity: 0.5;
+      text-transform: none;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: var(--spacing-xl);
+    }
+
+    .footer-column {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+
+    .footer-column-title {
+      font-size: var(--font-size-nav);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: var(--letter-spacing-nav);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .footer-column a {
+      font-size: var(--font-size-caption);
+      letter-spacing: normal;
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+      text-transform: none;
+    }
+
+    .footer-column a:hover {
+      opacity: 1;
+    }
+
+    /* ========================================
+       Responsive Design
+       ======================================== */
+
+    /* Tablet & Below: < 960px */
+    @media (max-width: 960px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+
+      .hero-title {
+        font-size: 36px;
+      }
+
+      .section-title {
+        font-size: 28px;
+      }
+
+      .vehicles-grid {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .vehicle-card {
+        min-height: 50vh;
+        border-right: none;
+        border-bottom: 1px solid var(--ghost-border);
+      }
+
+      .vehicle-card:last-child {
+        border-bottom: none;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stat-number {
+        font-size: 40px;
+      }
+
+      .cta-title {
+        font-size: 32px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-links {
+        flex-wrap: wrap;
+        gap: var(--spacing-lg);
+      }
+    }
+
+    /* Mobile: < 600px */
+    @media (max-width: 600px) {
+      .nav {
+        padding: var(--spacing-sm) var(--spacing-md);
+      }
+
+      .hero-title {
+        font-size: 28px;
+      }
+
+      .hero {
+        padding-bottom: 60px;
+      }
+
+      .section-content {
+        padding: 60px var(--spacing-md) var(--spacing-md);
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        padding: 0 var(--spacing-md);
+      }
+
+      .stat-number {
+        font-size: 32px;
+      }
+
+      .cta-title {
+        font-size: 26px;
+      }
+
+      .footer-links {
+        flex-direction: column;
+      }
+
+      .ghost-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">SpaceX</div>
+    <ul class="nav-links">
+      <li><a href="#missions">Missions</a></li>
+      <li><a href="#vehicles">Vehicles</a></li>
+      <li><a href="#stats">Achievements</a></li>
+      <li><a href="#cta">Join Us</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="section hero">
+    <div class="section-bg"></div>
+    <div class="section-overlay"></div>
+    <div class="section-content">
+      <h1 class="hero-title">Making Humanity<br>Multiplanetary</h1>
+      <p class="hero-subtitle">
+        SpaceXは宇宙輸送コストの革命的な削減と火星への人類移住を実現するために設計・製造・打上げを行っています。
+      </p>
+      <a href="#missions" class="ghost-btn">Learn More</a>
+    </div>
+  </section>
+
+  <!-- Missions Section -->
+  <section id="missions" class="section missions">
+    <div class="section-bg"></div>
+    <div class="section-overlay"></div>
+    <div class="section-content">
+      <p class="section-label">Recent Missions</p>
+      <h2 class="section-title">再使用可能なロケットで<br>宇宙へのアクセスを変革</h2>
+      <p class="section-body">
+        Falcon 9は世界初の軌道級再使用ロケットです。再使用性により、宇宙飛行で最もコストのかかるパーツを再利用し、宇宙へのアクセスコストを大幅に削減することが可能になりました。
+      </p>
+      <a href="#vehicles" class="ghost-btn">View Vehicles</a>
+    </div>
+  </section>
+
+  <!-- Vehicles Section -->
+  <section id="vehicles" class="section vehicles">
+    <div class="section-bg"></div>
+    <div class="section-overlay"></div>
+    <div class="vehicles-grid">
+      <div class="vehicle-card">
+        <p class="vehicle-card-label">Launch Vehicle</p>
+        <h3 class="vehicle-card-title">Falcon 9</h3>
+        <p class="vehicle-card-stat">低軌道へ22,800kgのペイロード投入能力。<br>世界で最も実績のあるロケット。</p>
+        <div class="vehicle-card-arrow">&rarr;</div>
+      </div>
+      <div class="vehicle-card">
+        <p class="vehicle-card-label">Heavy Lift</p>
+        <h3 class="vehicle-card-title">Falcon Heavy</h3>
+        <p class="vehicle-card-stat">現在運用中の最も強力なロケット。<br>低軌道へ63,800kgのペイロード投入能力。</p>
+        <div class="vehicle-card-arrow">&rarr;</div>
+      </div>
+      <div class="vehicle-card">
+        <p class="vehicle-card-label">Next Generation</p>
+        <h3 class="vehicle-card-title">Starship</h3>
+        <p class="vehicle-card-stat">完全再使用型の超大型ロケット。<br>月・火星への有人飛行を実現。</p>
+        <div class="vehicle-card-arrow">&rarr;</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section id="stats" class="section stats">
+    <div class="section-bg"></div>
+    <div class="section-overlay"></div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">400+</div>
+        <div class="stat-label">Total Launches</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">350+</div>
+        <div class="stat-label">Landings</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">330+</div>
+        <div class="stat-label">Reflights</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">7000+</div>
+        <div class="stat-label">Starlink Satellites</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section id="cta" class="section cta">
+    <div class="section-bg"></div>
+    <div class="section-overlay"></div>
+    <div class="section-content">
+      <h2 class="cta-title">Build the Future<br>of Space Travel</h2>
+      <p class="cta-body">
+        SpaceXは、情熱を持ったエンジニア、デザイナー、技術者を常に探しています。人類の未来を一緒に創りましょう。
+      </p>
+      <a href="#" class="ghost-btn">Careers at SpaceX</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">SpaceX</div>
+        <p class="footer-copy">&copy; 2026 Space Exploration Technologies Corp.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-column">
+          <span class="footer-column-title">Vehicles</span>
+          <a href="#">Falcon 9</a>
+          <a href="#">Falcon Heavy</a>
+          <a href="#">Starship</a>
+          <a href="#">Dragon</a>
+        </div>
+        <div class="footer-column">
+          <span class="footer-column-title">Company</span>
+          <a href="#">Mission</a>
+          <a href="#">Launches</a>
+          <a href="#">Careers</a>
+          <a href="#">Updates</a>
+        </div>
+        <div class="footer-column">
+          <span class="footer-column-title">Legal</span>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Supplier Code</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

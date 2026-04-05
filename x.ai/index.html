@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>xAI - 宇宙を理解するためのAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       xAI Design System - CSS Custom Properties
+       ======================================== */
+    :root {
+      /* Colors */
+      --color-bg: #1f2228;
+      --color-text-primary: #ffffff;
+      --color-text-secondary: rgba(255, 255, 255, 0.7);
+      --color-text-muted: rgba(255, 255, 255, 0.5);
+      --color-text-disabled: rgba(255, 255, 255, 0.3);
+      --color-border-default: rgba(255, 255, 255, 0.1);
+      --color-border-strong: rgba(255, 255, 255, 0.2);
+      --color-surface-subtle: rgba(255, 255, 255, 0.03);
+      --color-surface-hover: rgba(255, 255, 255, 0.08);
+      --color-surface-elevated: rgba(255, 255, 255, 0.05);
+      --color-focus-ring: rgba(59, 130, 246, 0.5);
+
+      /* Typography */
+      --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, 'Roboto Mono', Menlo, Monaco, 'Liberation Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
+      --font-sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 24px;
+      --space-lg: 48px;
+      --space-xl: 96px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--color-text-primary);
+      background-color: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: var(--color-text-primary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--color-text-muted);
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--color-focus-ring);
+      outline-offset: 2px;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ========================================
+       Utility
+       ======================================== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+
+    /* ========================================
+       Buttons
+       ======================================== */
+    .btn {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      border-radius: 0;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease, opacity 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--color-focus-ring);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background-color: var(--color-text-primary);
+      color: var(--color-bg);
+    }
+
+    .btn-primary:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+      color: var(--color-bg);
+    }
+
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border-strong);
+    }
+
+    .btn-ghost:hover {
+      background-color: var(--color-surface-elevated);
+      color: var(--color-text-primary);
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: var(--color-bg);
+      border-bottom: 1px solid var(--color-border-default);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-brand {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--color-text-primary);
+      text-decoration: none;
+    }
+
+    .nav-brand:hover {
+      color: var(--color-text-primary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-text-primary);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text-muted);
+    }
+
+    .nav-cta {
+      margin-left: var(--space-sm);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-sm);
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: var(--color-text-primary);
+      margin: 5px 0;
+      transition: transform 0.2s ease;
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--space-xl) var(--space-md);
+      padding-top: calc(var(--space-xl) + 64px);
+    }
+
+    .hero-headline {
+      font-family: var(--font-mono);
+      font-size: clamp(64px, 15vw, 240px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-lg);
+      letter-spacing: -2px;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin: 0 auto var(--space-lg);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ========================================
+       Section Base
+       ======================================== */
+    .section {
+      padding: var(--space-xl) 0;
+    }
+
+    .section-border {
+      border-top: 1px solid var(--color-border-default);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-xl);
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border-strong);
+      padding: var(--space-xs) var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .section-title {
+      font-family: var(--font-sans);
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-md);
+    }
+
+    .section-desc {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* ========================================
+       Features Grid
+       ======================================== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+    }
+
+    .feature-card {
+      background-color: var(--color-surface-subtle);
+      border: 1px solid var(--color-border-default);
+      border-radius: 0;
+      padding: var(--space-lg) var(--space-md);
+      transition: border-color 0.2s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--color-border-strong);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: var(--space-md);
+      color: var(--color-text-primary);
+    }
+
+    .feature-card h3 {
+      font-family: var(--font-sans);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .feature-card p {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ========================================
+       Stats Section
+       ======================================== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-md);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: var(--space-lg) var(--space-md);
+      border: 1px solid var(--color-border-default);
+    }
+
+    .stat-number {
+      font-family: var(--font-mono);
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .stat-label {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ========================================
+       Products Section
+       ======================================== */
+    .products-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .product-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg);
+      align-items: center;
+      padding: var(--space-lg);
+      border: 1px solid var(--color-border-default);
+      transition: border-color 0.2s ease;
+    }
+
+    .product-row:hover {
+      border-color: var(--color-border-strong);
+    }
+
+    .product-content h3 {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .product-content p {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      margin-bottom: var(--space-md);
+    }
+
+    .product-visual {
+      background-color: var(--color-surface-subtle);
+      border: 1px solid var(--color-border-default);
+      aspect-ratio: 16 / 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-visual-text {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 300;
+      color: var(--color-text-disabled);
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta-section {
+      padding: var(--space-xl) 0;
+      text-align: center;
+    }
+
+    .cta-headline {
+      font-family: var(--font-mono);
+      font-size: clamp(36px, 8vw, 96px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-md);
+    }
+
+    .cta-desc {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      color: var(--color-text-secondary);
+      max-width: 500px;
+      margin: 0 auto var(--space-lg);
+      line-height: 1.6;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      border-top: 1px solid var(--color-border-default);
+      padding: var(--space-lg) 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-lg);
+    }
+
+    .footer-brand {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer-tagline {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--color-text-muted);
+    }
+
+    .footer-columns {
+      display: flex;
+      gap: var(--space-xl);
+    }
+
+    .footer-column h4 {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-md);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer-column a {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
+
+    .footer-column a:hover {
+      color: var(--color-text-muted);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--color-border-default);
+    }
+
+    .footer-copyright {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-text-disabled);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: var(--space-md);
+    }
+
+    .footer-legal a {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-text-disabled);
+    }
+
+    /* ========================================
+       Responsive
+       ======================================== */
+    @media (max-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .product-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+
+      .hero {
+        padding-top: calc(var(--space-lg) + 64px);
+        min-height: 80vh;
+      }
+
+      .hero-headline {
+        letter-spacing: -1px;
+      }
+
+      .section {
+        padding: var(--space-lg) 0;
+      }
+
+      .section-header {
+        margin-bottom: var(--space-lg);
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+      }
+
+      .footer-columns {
+        flex-direction: column;
+        gap: var(--space-lg);
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-sm);
+        text-align: center;
+      }
+
+      .footer-legal {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-actions {
+        flex-direction: column;
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .cta-actions .btn {
+        width: 100%;
+        max-width: 320px;
+        text-align: center;
+      }
+
+      .product-row {
+        padding: var(--space-md);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       Navigation
+       ======================================== -->
+  <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+    <div class="container nav-inner">
+      <a href="#" class="nav-brand">xAI</a>
+      <ul class="nav-links">
+        <li><a href="#products">プロダクト</a></li>
+        <li><a href="#research">リサーチ</a></li>
+        <li><a href="#api">API</a></li>
+        <li><a href="#careers">採用情報</a></li>
+        <li class="nav-cta">
+          <a href="#try-grok" class="btn btn-primary">TRY GROK</a>
+        </li>
+      </ul>
+      <button class="nav-toggle" aria-label="メニュー" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========================================
+       Hero
+       ======================================== -->
+  <section class="hero" id="hero">
+    <h1 class="hero-headline">Grok</h1>
+    <p class="hero-subtitle">
+      宇宙を理解するためのAI。xAIは、人類の科学的発見を加速させる汎用人工知能を構築しています。
+    </p>
+    <div class="hero-actions">
+      <a href="#try-grok" class="btn btn-primary">TRY GROK</a>
+      <a href="#api" class="btn btn-ghost">VIEW API DOCS</a>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Features
+       ======================================== -->
+  <section class="section section-border" id="research">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Capabilities</span>
+        <h2 class="section-title">最先端の推論能力</h2>
+        <p class="section-desc">
+          Grokは高度な推論、コード生成、数学的問題解決において最先端のパフォーマンスを実現します。
+        </p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+          </svg>
+          <h3>高度な推論</h3>
+          <p>複雑な問題を段階的に分析し、論理的で正確な回答を導き出す推論エンジンを搭載。</p>
+        </div>
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+          </svg>
+          <h3>コード生成</h3>
+          <p>あらゆるプログラミング言語に対応。高品質なコードの生成、レビュー、デバッグを支援。</p>
+        </div>
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+          </svg>
+          <h3>データ分析</h3>
+          <p>大規模データセットの解析、可視化、インサイト抽出を自然言語で実行可能。</p>
+        </div>
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+          </svg>
+          <h3>リアルタイム知識</h3>
+          <p>Xプラットフォームとウェブからのリアルタイム情報にアクセスし、最新の知識を提供。</p>
+        </div>
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5a1.5 1.5 0 001.5-1.5V4.5a1.5 1.5 0 00-1.5-1.5H3.75a1.5 1.5 0 00-1.5 1.5v15a1.5 1.5 0 001.5 1.5zm14.25-11.25h.008v.008h-.008V9.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+          <h3>画像理解</h3>
+          <p>画像の分析、説明、質問応答が可能。視覚的情報を深く理解するマルチモーダルAI。</p>
+        </div>
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          <h3>安全性</h3>
+          <p>責任あるAI開発を最優先に。堅牢な安全性メカニズムとアライメント研究を推進。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Stats
+       ======================================== -->
+  <section class="section section-border">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">100K+</div>
+          <div class="stat-label">GPUクラスタ</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">300M+</div>
+          <div class="stat-label">ユーザー数</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">1T+</div>
+          <div class="stat-label">パラメータ</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">API稼働率</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Products
+       ======================================== -->
+  <section class="section section-border" id="products">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Products</span>
+        <h2 class="section-title">プロダクト</h2>
+        <p class="section-desc">
+          研究からプロダクションまで、xAIのテクノロジーを活用できるプラットフォーム。
+        </p>
+      </div>
+      <div class="products-list">
+        <div class="product-row">
+          <div class="product-content">
+            <h3>Grok</h3>
+            <p>
+              Xプラットフォームに統合された対話型AI。ウィットに富んだ回答と深い知識で、あらゆる質問に対応します。リアルタイム情報へのアクセスにより、常に最新の回答を提供。
+            </p>
+            <a href="#" class="btn btn-ghost">LEARN MORE</a>
+          </div>
+          <div class="product-visual">
+            <span class="product-visual-text">Grok</span>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-content">
+            <h3>API</h3>
+            <p>
+              開発者向けのGrok API。高性能な言語モデルをあなたのアプリケーションに統合。シンプルなREST APIで、エンタープライズグレードのAI機能を実装できます。
+            </p>
+            <a href="#" class="btn btn-ghost">VIEW API DOCS</a>
+          </div>
+          <div class="product-visual">
+            <span class="product-visual-text">&gt;_API</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       CTA
+       ======================================== -->
+  <section class="section section-border cta-section" id="try-grok">
+    <div class="container">
+      <h2 class="cta-headline">Build with Grok</h2>
+      <p class="cta-desc">
+        xAIの最先端モデルを使って、次世代のアプリケーションを構築しましょう。
+      </p>
+      <div class="cta-actions">
+        <a href="#" class="btn btn-primary">GET STARTED</a>
+        <a href="#" class="btn btn-ghost">READ DOCUMENTATION</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Footer
+       ======================================== -->
+  <footer class="footer" id="api">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">xAI</div>
+          <p class="footer-tagline">宇宙を理解するためのAI</p>
+        </div>
+        <div class="footer-columns">
+          <div class="footer-column">
+            <h4>Products</h4>
+            <ul>
+              <li><a href="#">Grok</a></li>
+              <li><a href="#">API</a></li>
+              <li><a href="#">Enterprise</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h4>Research</h4>
+            <ul>
+              <li><a href="#">論文</a></li>
+              <li><a href="#">ブログ</a></li>
+              <li><a href="#">オープンソース</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#" id="careers">採用情報</a></li>
+              <li><a href="#">ニュース</a></li>
+              <li><a href="#">お問い合わせ</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copyright">&copy; 2026 xAI Corp. All rights reserved.</span>
+        <div class="footer-legal">
+          <a href="#">プライバシーポリシー</a>
+          <a href="#">利用規約</a>
+          <a href="#">セキュリティ</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

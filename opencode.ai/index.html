@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenCode - AI-Powered Terminal Coding Platform</title>
+  <meta name="description" content="OpenCode is the AI coding platform built for developers who live in the terminal. Write, debug, and ship code faster with AI that understands your workflow.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ======================
+       Design Tokens
+       ====================== */
+    :root {
+      /* Primary Colors */
+      --color-dark: #201d1d;
+      --color-light: #fdfcfc;
+      --color-mid-gray: #9a9898;
+
+      /* Secondary Colors */
+      --color-dark-surface: #302c2c;
+      --color-border-gray: #646262;
+      --color-light-surface: #f1eeee;
+
+      /* Accent Colors */
+      --color-accent-blue: #007aff;
+      --color-accent-blue-hover: #0056b3;
+      --color-accent-blue-active: #004085;
+
+      /* Semantic Colors */
+      --color-danger: #ff3b30;
+      --color-danger-hover: #d70015;
+      --color-success: #30d158;
+      --color-warning: #ff9f0a;
+
+      /* Text Colors */
+      --color-text-muted: #6e6e73;
+      --color-text-secondary: #424245;
+
+      /* Border Colors */
+      --color-border-warm: rgba(15, 0, 0, 0.12);
+      --color-border-tab: #9a9898;
+      --color-border-outline: #646262;
+
+      /* Input */
+      --color-input-bg: #f8f7f7;
+
+      /* Typography */
+      --font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+      --font-size-h1: 38px;
+      --font-size-body: 16px;
+      --font-size-caption: 14px;
+      --font-weight-bold: 700;
+      --font-weight-medium: 500;
+      --font-weight-regular: 400;
+      --line-height-default: 1.50;
+      --line-height-tight: 1.00;
+      --line-height-relaxed: 2.00;
+
+      /* Spacing */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-7: 32px;
+      --space-8: 40px;
+      --space-9: 48px;
+      --space-10: 64px;
+      --space-11: 80px;
+      --space-12: 96px;
+
+      /* Border Radius */
+      --radius-default: 4px;
+      --radius-input: 6px;
+    }
+
+    /* ======================
+       Reset & Base
+       ====================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--line-height-default);
+      color: var(--color-light);
+      background-color: var(--color-dark);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 120ms;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ======================
+       Layout
+       ====================== */
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    .section {
+      padding: var(--space-12) 0;
+    }
+
+    /* ======================
+       Navigation
+       ====================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background-color: var(--color-dark);
+      border-bottom: 1px solid var(--color-border-warm);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav__brand {
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-light);
+      letter-spacing: -0.02em;
+    }
+
+    .nav__links {
+      display: flex;
+      gap: var(--space-6);
+      list-style: none;
+    }
+
+    .nav__link {
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-light);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+    }
+
+    .nav__link:hover {
+      color: var(--color-accent-blue);
+    }
+
+    .nav__link--muted {
+      color: var(--color-mid-gray);
+      text-decoration: none;
+    }
+
+    .nav__link--muted:hover {
+      color: var(--color-light);
+    }
+
+    .nav__hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-2);
+    }
+
+    .nav__hamburger span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background-color: var(--color-light);
+      margin: 4px 0;
+      transition: transform 120ms;
+    }
+
+    /* ======================
+       Hero Section
+       ====================== */
+    .hero {
+      padding-top: 160px;
+      padding-bottom: var(--space-12);
+    }
+
+    .hero__terminal {
+      background-color: var(--color-dark-surface);
+      border: 1px solid var(--color-border-outline);
+      border-radius: var(--radius-default);
+      overflow: hidden;
+      margin-bottom: var(--space-9);
+    }
+
+    .hero__terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--color-border-warm);
+    }
+
+    .hero__terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .hero__terminal-dot--red { background-color: var(--color-danger); }
+    .hero__terminal-dot--yellow { background-color: var(--color-warning); }
+    .hero__terminal-dot--green { background-color: var(--color-success); }
+
+    .hero__terminal-title {
+      font-size: var(--font-size-caption);
+      color: var(--color-mid-gray);
+      margin-left: var(--space-2);
+    }
+
+    .hero__terminal-body {
+      padding: var(--space-6);
+      font-size: var(--font-size-body);
+      line-height: var(--line-height-default);
+    }
+
+    .hero__terminal-line {
+      margin-bottom: var(--space-2);
+    }
+
+    .hero__terminal-prompt {
+      color: var(--color-success);
+    }
+
+    .hero__terminal-command {
+      color: var(--color-light);
+    }
+
+    .hero__terminal-output {
+      color: var(--color-mid-gray);
+    }
+
+    .hero__terminal-accent {
+      color: var(--color-accent-blue);
+    }
+
+    .hero__terminal-warning {
+      color: var(--color-warning);
+    }
+
+    .hero__ascii {
+      color: var(--color-accent-blue);
+      font-size: 11px;
+      line-height: 1.2;
+      margin-bottom: var(--space-6);
+      white-space: pre;
+    }
+
+    .hero__heading {
+      font-size: var(--font-size-h1);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-default);
+      color: var(--color-light);
+      margin-bottom: var(--space-6);
+    }
+
+    .hero__subheading {
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-regular);
+      color: var(--color-mid-gray);
+      margin-bottom: var(--space-8);
+      max-width: 640px;
+    }
+
+    .hero__cta {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    /* ======================
+       Buttons
+       ====================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--line-height-relaxed);
+      padding: var(--space-1) var(--space-5);
+      border-radius: var(--radius-default);
+      border: none;
+      cursor: pointer;
+      transition: background-color 120ms, border-color 120ms;
+    }
+
+    .btn--primary {
+      background-color: var(--color-light);
+      color: var(--color-dark);
+    }
+
+    .btn--primary:hover {
+      background-color: var(--color-light-surface);
+    }
+
+    .btn--primary:active {
+      background-color: var(--color-mid-gray);
+    }
+
+    .btn--secondary {
+      background-color: transparent;
+      color: var(--color-light);
+      border: 1px solid var(--color-border-outline);
+    }
+
+    .btn--secondary:hover {
+      border-color: var(--color-light);
+    }
+
+    .btn--secondary:active {
+      background-color: var(--color-dark-surface);
+    }
+
+    .btn--dark {
+      background-color: var(--color-dark);
+      color: var(--color-light);
+    }
+
+    .btn--dark:hover {
+      background-color: var(--color-dark-surface);
+    }
+
+    /* ======================
+       Features Section
+       ====================== */
+    .features {
+      border-top: 1px solid var(--color-border-warm);
+    }
+
+    .features__heading {
+      font-size: var(--font-size-h1);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-default);
+      margin-bottom: var(--space-4);
+    }
+
+    .features__subheading {
+      font-size: var(--font-size-body);
+      color: var(--color-mid-gray);
+      margin-bottom: var(--space-10);
+    }
+
+    .features__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-7);
+    }
+
+    .feature-card {
+      background-color: var(--color-dark-surface);
+      border: 1px solid var(--color-border-outline);
+      border-radius: var(--radius-default);
+      padding: var(--space-7);
+    }
+
+    .feature-card__icon {
+      font-size: 24px;
+      margin-bottom: var(--space-4);
+      color: var(--color-accent-blue);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .feature-card__title {
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--space-2);
+      color: var(--color-light);
+    }
+
+    .feature-card__description {
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-regular);
+      color: var(--color-mid-gray);
+    }
+
+    /* ======================
+       How It Works
+       ====================== */
+    .how-it-works {
+      border-top: 1px solid var(--color-border-warm);
+    }
+
+    .how-it-works__heading {
+      font-size: var(--font-size-h1);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-default);
+      margin-bottom: var(--space-10);
+    }
+
+    .steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-9);
+    }
+
+    .step {
+      display: flex;
+      gap: var(--space-6);
+      align-items: flex-start;
+    }
+
+    .step__number {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-border-outline);
+      border-radius: var(--radius-default);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-body);
+      color: var(--color-accent-blue);
+    }
+
+    .step__content {
+      flex: 1;
+    }
+
+    .step__title {
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--space-2);
+    }
+
+    .step__description {
+      color: var(--color-mid-gray);
+    }
+
+    .step__code {
+      margin-top: var(--space-3);
+      background-color: var(--color-dark-surface);
+      border: 1px solid var(--color-border-warm);
+      border-radius: var(--radius-default);
+      padding: var(--space-4);
+      font-size: var(--font-size-caption);
+      color: var(--color-mid-gray);
+    }
+
+    .step__code .accent {
+      color: var(--color-accent-blue);
+    }
+
+    .step__code .success {
+      color: var(--color-success);
+    }
+
+    /* ======================
+       CTA Section
+       ====================== */
+    .cta-section {
+      border-top: 1px solid var(--color-border-warm);
+      text-align: center;
+    }
+
+    .cta-section__heading {
+      font-size: var(--font-size-h1);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-default);
+      margin-bottom: var(--space-4);
+    }
+
+    .cta-section__description {
+      font-size: var(--font-size-body);
+      color: var(--color-mid-gray);
+      margin-bottom: var(--space-8);
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-section__form {
+      display: flex;
+      gap: var(--space-3);
+      justify-content: center;
+      max-width: 520px;
+      margin: 0 auto var(--space-4);
+    }
+
+    .cta-section__input {
+      flex: 1;
+      font-family: var(--font-family);
+      font-size: var(--font-size-body);
+      padding: var(--space-5);
+      background-color: var(--color-input-bg);
+      color: var(--color-dark);
+      border: 1px solid var(--color-border-warm);
+      border-radius: var(--radius-input);
+      outline: none;
+      transition: border-color 120ms;
+    }
+
+    .cta-section__input::placeholder {
+      color: var(--color-text-muted);
+    }
+
+    .cta-section__input:focus {
+      border-color: var(--color-accent-blue);
+    }
+
+    .cta-section__note {
+      font-size: var(--font-size-caption);
+      color: var(--color-text-muted);
+      line-height: var(--line-height-relaxed);
+    }
+
+    /* ======================
+       Footer
+       ====================== */
+    .footer {
+      border-top: 1px solid var(--color-border-warm);
+      padding: var(--space-10) 0 var(--space-8);
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-8);
+      margin-bottom: var(--space-10);
+    }
+
+    .footer__brand-name {
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-body);
+      margin-bottom: var(--space-3);
+    }
+
+    .footer__brand-description {
+      font-size: var(--font-size-caption);
+      color: var(--color-mid-gray);
+      max-width: 280px;
+    }
+
+    .footer__column-title {
+      font-size: var(--font-size-caption);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-light);
+      margin-bottom: var(--space-4);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .footer__link {
+      font-size: var(--font-size-caption);
+      color: var(--color-mid-gray);
+    }
+
+    .footer__link:hover {
+      color: var(--color-light);
+    }
+
+    .footer__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--space-7);
+      border-top: 1px solid var(--color-border-warm);
+    }
+
+    .footer__copyright {
+      font-size: var(--font-size-caption);
+      color: var(--color-text-muted);
+    }
+
+    .footer__bottom-links {
+      display: flex;
+      gap: var(--space-6);
+      list-style: none;
+    }
+
+    .footer__bottom-link {
+      font-size: var(--font-size-caption);
+      color: var(--color-text-muted);
+    }
+
+    .footer__bottom-link:hover {
+      color: var(--color-light);
+    }
+
+    /* ======================
+       Responsive
+       ====================== */
+    @media (max-width: 1024px) {
+      .hero__heading,
+      .features__heading,
+      .how-it-works__heading,
+      .cta-section__heading {
+        font-size: 28px;
+      }
+
+      .section {
+        padding: var(--space-10) 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding-top: 120px;
+      }
+
+      .hero__heading,
+      .features__heading,
+      .how-it-works__heading,
+      .cta-section__heading {
+        font-size: 24px;
+      }
+
+      .section {
+        padding: var(--space-9) 0;
+      }
+
+      .nav__links {
+        display: none;
+      }
+
+      .nav__hamburger {
+        display: block;
+      }
+
+      .features__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .step {
+        flex-direction: column;
+      }
+
+      .cta-section__form {
+        flex-direction: column;
+      }
+
+      .footer__grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-7);
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        gap: var(--space-4);
+        text-align: center;
+      }
+
+      .footer__bottom-links {
+        justify-content: center;
+      }
+
+      .hero__ascii {
+        font-size: 7px;
+        overflow-x: auto;
+      }
+
+      .hero__terminal-body {
+        padding: var(--space-4);
+        font-size: var(--font-size-caption);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="#" class="nav__brand">opencode</a>
+      <ul class="nav__links">
+        <li><a href="#features" class="nav__link--muted">Features</a></li>
+        <li><a href="#how-it-works" class="nav__link--muted">How It Works</a></li>
+        <li><a href="https://github.com/nichochar/opencode" class="nav__link--muted">GitHub</a></li>
+        <li><a href="#early-access" class="nav__link">Early Access</a></li>
+      </ul>
+      <button class="nav__hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__terminal">
+        <div class="hero__terminal-bar">
+          <span class="hero__terminal-dot hero__terminal-dot--red"></span>
+          <span class="hero__terminal-dot hero__terminal-dot--yellow"></span>
+          <span class="hero__terminal-dot hero__terminal-dot--green"></span>
+          <span class="hero__terminal-title">opencode -- zsh</span>
+        </div>
+        <div class="hero__terminal-body">
+<pre class="hero__ascii">
+  ___  ____  _____ _   _  ____ ___  ____  _____
+ / _ \|  _ \| ____| \ | |/ ___/ _ \|  _ \| ____|
+| | | | |_) |  _| |  \| | |  | | | | | | |  _|
+| |_| |  __/| |___| |\  | |__| |_| | |_| | |___
+ \___/|_|   |_____|_| \_|\____\___/|____/|_____|
+</pre>
+          <div class="hero__terminal-line">
+            <span class="hero__terminal-prompt">$</span>
+            <span class="hero__terminal-command"> opencode init</span>
+          </div>
+          <div class="hero__terminal-line">
+            <span class="hero__terminal-output">Initializing opencode in current directory...</span>
+          </div>
+          <div class="hero__terminal-line">
+            <span class="hero__terminal-accent">  Detected: TypeScript project (Next.js)</span>
+          </div>
+          <div class="hero__terminal-line">
+            <span class="hero__terminal-accent">  Indexed: 847 files, 52 components</span>
+          </div>
+          <div class="hero__terminal-line">
+            <span class="hero__terminal-output">  Ready. Type your request or press </span>
+            <span class="hero__terminal-warning">Tab</span>
+            <span class="hero__terminal-output"> for suggestions.</span>
+          </div>
+          <div class="hero__terminal-line" style="margin-top: var(--space-4);">
+            <span class="hero__terminal-prompt">$</span>
+            <span class="hero__terminal-command"> add dark mode support to the settings page</span>
+          </div>
+          <div class="hero__terminal-line">
+            <span class="hero__terminal-accent">  Planning... 3 files to modify</span>
+          </div>
+          <div class="hero__terminal-line">
+            <span class="hero__terminal-accent">  Writing changes...</span>
+          </div>
+          <div class="hero__terminal-line">
+            <span style="color: var(--color-success);">  Done. 3 files updated, tests passing.</span>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="hero__heading">AIコーディングはターミナルで完結する</h1>
+      <p class="hero__subheading">
+        OpenCodeは、ターミナルネイティブのAIコーディングプラットフォームです。
+        コードベースを理解し、あなたのワークフローに溶け込むAIアシスタントで、
+        開発速度を劇的に向上させます。
+      </p>
+      <div class="hero__cta">
+        <a href="#early-access" class="btn btn--primary">Early Accessに登録</a>
+        <a href="https://github.com/nichochar/opencode" class="btn btn--secondary">GitHubで見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="section features">
+    <div class="container">
+      <h2 class="features__heading">ターミナルを離れずに、すべてを</h2>
+      <p class="features__subheading">
+        OpenCodeは開発者のために設計されたAIコーディングツールです。
+        エディタを切り替える必要はありません。
+      </p>
+      <div class="features__grid">
+        <div class="feature-card">
+          <div class="feature-card__icon">&gt;_</div>
+          <h3 class="feature-card__title">ターミナルネイティブ</h3>
+          <p class="feature-card__description">
+            GUIは不要。ターミナルで起動し、ターミナルで完結する。
+            あなたのシェル環境にシームレスに統合されます。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">{}</div>
+          <h3 class="feature-card__title">コードベース理解</h3>
+          <p class="feature-card__description">
+            プロジェクト全体をインデックス化し、ファイル間の依存関係や
+            アーキテクチャを深く理解した上でコードを生成します。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">AI</div>
+          <h3 class="feature-card__title">マルチモデル対応</h3>
+          <p class="feature-card__description">
+            Claude、GPT-4、Geminiなど主要なLLMプロバイダーに対応。
+            タスクに応じて最適なモデルを選択できます。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">//</div>
+          <h3 class="feature-card__title">自動テスト実行</h3>
+          <p class="feature-card__description">
+            コード変更後に自動でテストを実行し、結果をフィードバック。
+            壊れたテストはAIが修正案を提示します。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">$&gt;</div>
+          <h3 class="feature-card__title">Git統合</h3>
+          <p class="feature-card__description">
+            変更差分の確認、コミットメッセージの生成、PRの作成まで
+            ターミナル内でワンストップで完結します。
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">~~</div>
+          <h3 class="feature-card__title">オープンソース</h3>
+          <p class="feature-card__description">
+            完全にオープンソース。コードを監査し、自分のニーズに合わせて
+            カスタマイズし、コミュニティに貢献できます。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="section how-it-works">
+    <div class="container">
+      <h2 class="how-it-works__heading">3ステップで始める</h2>
+      <ol class="steps">
+        <li class="step">
+          <div class="step__number">1</div>
+          <div class="step__content">
+            <h3 class="step__title">インストール</h3>
+            <p class="step__description">
+              npmまたはHomebrewでワンコマンドインストール。
+              セットアップは30秒で完了します。
+            </p>
+            <div class="step__code">
+              <span class="success">$</span> <span class="accent">npm</span> install -g opencode
+            </div>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step__number">2</div>
+          <div class="step__content">
+            <h3 class="step__title">プロジェクトを初期化</h3>
+            <p class="step__description">
+              プロジェクトのルートディレクトリで初期化コマンドを実行。
+              コードベースが自動的にインデックスされます。
+            </p>
+            <div class="step__code">
+              <span class="success">$</span> <span class="accent">cd</span> your-project && <span class="accent">opencode</span> init
+            </div>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step__number">3</div>
+          <div class="step__content">
+            <h3 class="step__title">自然言語でコーディング</h3>
+            <p class="step__description">
+              やりたいことを日本語や英語で入力するだけ。
+              AIがコードを理解し、最適な変更を提案・実行します。
+            </p>
+            <div class="step__code">
+              <span class="success">$</span> <span class="accent">opencode</span> "認証ミドルウェアにレート制限を追加して"
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section id="early-access" class="section cta-section">
+    <div class="container">
+      <h2 class="cta-section__heading">Early Accessに参加する</h2>
+      <p class="cta-section__description">
+        OpenCodeは現在アクティブに開発中です。Early Accessに登録して、
+        最新のアップデートと優先アクセスを受け取りましょう。
+      </p>
+      <form class="cta-section__form" onsubmit="return false;">
+        <input
+          type="email"
+          class="cta-section__input"
+          placeholder="you@example.com"
+          aria-label="Email address"
+        >
+        <button type="submit" class="btn btn--dark">登録する</button>
+      </form>
+      <p class="cta-section__note">スパムは送りません。いつでも登録解除できます。</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand-name">opencode</div>
+          <p class="footer__brand-description">
+            ターミナルネイティブのAIコーディングプラットフォーム。
+            開発者による開発者のためのオープンソースツール。
+          </p>
+        </div>
+        <div>
+          <h4 class="footer__column-title">Product</h4>
+          <ul class="footer__links">
+            <li><a href="#features" class="footer__link">Features</a></li>
+            <li><a href="#how-it-works" class="footer__link">How It Works</a></li>
+            <li><a href="#early-access" class="footer__link">Early Access</a></li>
+            <li><a href="#" class="footer__link">Changelog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__column-title">Developers</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Documentation</a></li>
+            <li><a href="#" class="footer__link">API Reference</a></li>
+            <li><a href="https://github.com/nichochar/opencode" class="footer__link">GitHub</a></li>
+            <li><a href="#" class="footer__link">Contributing</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__column-title">Community</h4>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Discord</a></li>
+            <li><a href="#" class="footer__link">Twitter / X</a></li>
+            <li><a href="#" class="footer__link">Blog</a></li>
+            <li><a href="#" class="footer__link">Status</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">&copy; 2026 OpenCode. All rights reserved.</p>
+        <ul class="footer__bottom-links">
+          <li><a href="#" class="footer__bottom-link">Privacy Policy</a></li>
+          <li><a href="#" class="footer__bottom-link">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

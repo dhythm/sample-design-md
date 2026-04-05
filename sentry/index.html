@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentry - コードが壊れる。すぐに直す。</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       Design System: CSS Custom Properties
+       ======================================== */
+    :root {
+      /* Primary Brand */
+      --color-bg-primary: #1f1633;
+      --color-bg-deeper: #150f23;
+      --color-border-purple: #362d59;
+
+      /* Accent Colors */
+      --color-sentry-purple: #6a5fc1;
+      --color-muted-purple: #79628c;
+      --color-deep-violet: #422082;
+      --color-lime-green: #c2ef4e;
+      --color-coral: #ffb287;
+      --color-pink: #fa7faa;
+
+      /* Text Colors */
+      --color-text-primary: #ffffff;
+      --color-text-secondary: #e5e7eb;
+      --color-code-yellow: #dcdcaa;
+
+      /* Surface & Overlay */
+      --color-glass-white: rgba(255, 255, 255, 0.18);
+      --color-glass-dark: rgba(54, 22, 107, 0.14);
+      --color-input-border: #cfcfdb;
+      --color-button-border: #584674;
+
+      /* Shadows */
+      --shadow-ambient: rgba(22, 15, 36, 0.9) 0px 4px 4px 9px;
+      --shadow-button-hover: rgba(0, 0, 0, 0.18) 0px 0.5rem 1.5rem;
+      --shadow-card: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px;
+      --shadow-inset-button: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px inset;
+
+      /* Typography */
+      --font-display: 'Rubik', -apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --font-ui: 'Rubik', -apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --font-mono: Monaco, Menlo, 'Ubuntu Mono', monospace;
+
+      /* Layout */
+      --max-width: 1152px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-ui);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-text-primary);
+      background-color: var(--color-bg-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ========================================
+       Container
+       ======================================== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 0 4rem;
+      }
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(31, 22, 51, 0.85);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border-bottom: 1px solid var(--color-border-purple);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+
+    .nav__logo-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .nav__links {
+      display: none;
+      list-style: none;
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media (min-width: 768px) {
+      .nav__links {
+        display: flex;
+      }
+    }
+
+    .nav__links a {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.40;
+      color: var(--color-text-primary);
+      transition: color 0.2s ease;
+    }
+
+    .nav__links a:hover {
+      color: var(--color-sentry-purple);
+    }
+
+    .nav__cta {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav__cta {
+        display: inline-flex;
+      }
+    }
+
+    .nav__mobile-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--color-text-primary);
+    }
+
+    @media (min-width: 768px) {
+      .nav__mobile-toggle {
+        display: none;
+      }
+    }
+
+    /* ========================================
+       Buttons
+       ======================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.14;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn--primary {
+      background: var(--color-muted-purple);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-button-border);
+      border-radius: 13px;
+      padding: 12px 24px;
+      box-shadow: var(--shadow-inset-button);
+    }
+
+    .btn--primary:hover {
+      box-shadow: var(--shadow-button-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn--white {
+      background: var(--color-text-primary);
+      color: var(--color-bg-primary);
+      border-radius: 8px;
+      padding: 12px 24px;
+    }
+
+    .btn--white:hover {
+      background: var(--color-sentry-purple);
+      color: var(--color-text-primary);
+    }
+
+    .btn--glass {
+      background: var(--color-glass-white);
+      color: var(--color-text-primary);
+      border-radius: 12px;
+      padding: 12px 24px;
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
+    }
+
+    .btn--glass:hover {
+      background: var(--color-glass-dark);
+    }
+
+    .btn--lime {
+      background: var(--color-lime-green);
+      color: var(--color-bg-primary);
+      border-radius: 8px;
+      padding: 14px 32px;
+      font-size: 15px;
+    }
+
+    .btn--lime:hover {
+      box-shadow: var(--shadow-button-hover);
+      transform: translateY(-1px);
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      position: relative;
+      background: var(--color-bg-primary);
+      padding: 160px 0 100px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(106, 95, 193, 0.15) 0%, rgba(66, 32, 130, 0.08) 40%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero__content {
+      position: relative;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero__label {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+      color: var(--color-lime-green);
+      margin-bottom: 24px;
+    }
+
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: 88px;
+      font-weight: 700;
+      line-height: 1.20;
+      color: var(--color-text-primary);
+      margin-bottom: 24px;
+    }
+
+    .hero__subtitle {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-text-secondary);
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero__stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 64px;
+      flex-wrap: wrap;
+    }
+
+    .hero__stat {
+      text-align: center;
+    }
+
+    .hero__stat-value {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      line-height: 1.20;
+    }
+
+    .hero__stat-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding: 120px 0 64px;
+      }
+
+      .hero__title {
+        font-size: 48px;
+      }
+
+      .hero__subtitle {
+        font-size: 16px;
+      }
+
+      .hero__stats {
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero__title {
+        font-size: 36px;
+      }
+
+      .hero__actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero__actions .btn {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
+
+    /* ========================================
+       Trusted By Section
+       ======================================== */
+    .trusted {
+      background: var(--color-bg-deeper);
+      padding: 48px 0;
+      border-top: 1px solid var(--color-border-purple);
+      border-bottom: 1px solid var(--color-border-purple);
+    }
+
+    .trusted__label {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 2.00;
+      text-transform: uppercase;
+      letter-spacing: 0.25px;
+      color: var(--color-text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .trusted__logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      opacity: 0.6;
+    }
+
+    .trusted__logo {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+
+    /* ========================================
+       Features Section
+       ======================================== */
+    .features {
+      background: var(--color-bg-primary);
+      padding: 80px 0;
+    }
+
+    .features__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .features__label {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      color: var(--color-lime-green);
+      margin-bottom: 16px;
+    }
+
+    .features__title {
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 1.20;
+      color: var(--color-text-primary);
+      margin-bottom: 16px;
+    }
+
+    .features__subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 640px) {
+      .features__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 992px) {
+      .features__grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* ========================================
+       Feature Card
+       ======================================== */
+    .card {
+      background: rgba(54, 45, 89, 0.4);
+      border: 1px solid var(--color-border-purple);
+      border-radius: 12px;
+      padding: 32px;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-card);
+      border-color: var(--color-muted-purple);
+      transform: translateY(-4px);
+    }
+
+    .card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: var(--color-deep-violet);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .card__title {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--color-text-primary);
+      margin-bottom: 12px;
+    }
+
+    .card__description {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-text-secondary);
+    }
+
+    .card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      color: var(--color-sentry-purple);
+      transition: color 0.2s ease;
+    }
+
+    .card__link:hover {
+      color: var(--color-lime-green);
+    }
+
+    /* ========================================
+       Showcase Section
+       ======================================== */
+    .showcase {
+      background: var(--color-bg-deeper);
+      padding: 80px 0;
+    }
+
+    .showcase__inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    @media (min-width: 768px) {
+      .showcase__inner {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .showcase__content {
+      max-width: 500px;
+    }
+
+    .showcase__label {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      color: var(--color-lime-green);
+      margin-bottom: 16px;
+    }
+
+    .showcase__title {
+      font-size: 27px;
+      font-weight: 500;
+      line-height: 1.25;
+      color: var(--color-text-primary);
+      margin-bottom: 16px;
+    }
+
+    .showcase__text {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .showcase__visual {
+      background: rgba(54, 45, 89, 0.3);
+      border: 1px solid var(--color-border-purple);
+      border-radius: 12px;
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.60;
+      overflow-x: auto;
+    }
+
+    .showcase__code {
+      color: var(--color-text-secondary);
+    }
+
+    .showcase__code .keyword {
+      color: var(--color-pink);
+    }
+
+    .showcase__code .func {
+      color: var(--color-code-yellow);
+    }
+
+    .showcase__code .string {
+      color: var(--color-coral);
+    }
+
+    .showcase__code .comment {
+      color: var(--color-muted-purple);
+    }
+
+    /* ========================================
+       Integrations Section
+       ======================================== */
+    .integrations {
+      background: var(--color-bg-primary);
+      padding: 80px 0;
+    }
+
+    .integrations__header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .integrations__label {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      color: var(--color-lime-green);
+      margin-bottom: 16px;
+    }
+
+    .integrations__title {
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 1.20;
+      color: var(--color-text-primary);
+      margin-bottom: 16px;
+    }
+
+    .integrations__subtitle {
+      font-size: 16px;
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .integrations__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 640px) {
+      .integrations__grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .integrations__grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .integration-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(54, 45, 89, 0.3);
+      border: 1px solid var(--color-border-purple);
+      border-radius: 10px;
+      padding: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .integration-badge:hover {
+      border-color: var(--color-muted-purple);
+      background: rgba(54, 45, 89, 0.5);
+    }
+
+    .integration-badge__icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background: var(--color-border-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .integration-badge__name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta {
+      background: var(--color-bg-deeper);
+      padding: 100px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      bottom: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(106, 95, 193, 0.12) 0%, rgba(66, 32, 130, 0.06) 40%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta__content {
+      position: relative;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta__title {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.20;
+      color: var(--color-text-primary);
+      margin-bottom: 16px;
+    }
+
+    .cta__text {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--color-text-secondary);
+      margin-bottom: 40px;
+    }
+
+    .cta__actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta__note {
+      margin-top: 24px;
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
+
+    .cta__note span {
+      color: var(--color-lime-green);
+      font-weight: 600;
+    }
+
+    @media (max-width: 576px) {
+      .cta__title {
+        font-size: 32px;
+      }
+
+      .cta__actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .cta__actions .btn {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      background: var(--color-bg-deeper);
+      border-top: 1px solid var(--color-border-purple);
+      padding: 64px 0 32px;
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    @media (min-width: 640px) {
+      .footer__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .footer__grid {
+        grid-template-columns: 2fr repeat(3, 1fr);
+      }
+    }
+
+    .footer__brand {
+      max-width: 280px;
+    }
+
+    .footer__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .footer__description {
+      font-size: 14px;
+      line-height: 1.60;
+      color: var(--color-text-secondary);
+    }
+
+    .footer__column-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.25px;
+      color: var(--color-text-primary);
+      margin-bottom: 16px;
+    }
+
+    .footer__links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer__links a {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      transition: color 0.2s ease;
+    }
+
+    .footer__links a:hover {
+      color: var(--color-sentry-purple);
+    }
+
+    .footer__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      border-top: 1px solid var(--color-border-purple);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer__copyright {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
+
+    .footer__legal {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer__legal a {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      transition: color 0.2s ease;
+    }
+
+    .footer__legal a:hover {
+      color: var(--color-sentry-purple);
+    }
+
+    /* ========================================
+       Utility
+       ======================================== */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======== Navigation ======== -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo">
+        <svg class="nav__logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18.4 4.8c-0.8-1.4-2.8-1.4-3.6 0L8.6 16.2c2.2 0 4 1.2 5 3H6.2l-3.4 5.8h8.8c0 0 0.2-4.6 4.4-7.2l3.4-5.8c-1.2-1.8-3.2-3-5.4-3h0l4.4-4z" fill="#ffffff"/>
+          <path d="M25.8 25h-3.4c0-2-1-3.8-2.6-4.8l1.8-3c2.6 1.6 4.2 4.4 4.2 7.8z" fill="#ffffff"/>
+        </svg>
+        Sentry
+      </a>
+
+      <ul class="nav__links">
+        <li><a href="#">Product</a></li>
+        <li><a href="#">Docs</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Changelog</a></li>
+      </ul>
+
+      <a href="#" class="btn btn--primary nav__cta">Start Free</a>
+
+      <button class="nav__mobile-toggle" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ======== Hero ======== -->
+  <section class="hero">
+    <div class="container hero__content">
+      <span class="hero__label">Application Monitoring Platform</span>
+      <h1 class="hero__title">Code breaks.<br>Fix it faster.</h1>
+      <p class="hero__subtitle">
+        Sentry はアプリケーションのエラー監視、パフォーマンス追跡、セッションリプレイを提供する開発者向けプラットフォームです。問題が発生した瞬間にキャッチし、迅速に解決できます。
+      </p>
+      <div class="hero__actions">
+        <a href="#" class="btn btn--lime">Start Free</a>
+        <a href="#" class="btn btn--glass">Get a Demo</a>
+      </div>
+      <div class="hero__stats">
+        <div class="hero__stat">
+          <div class="hero__stat-value">100K+</div>
+          <div class="hero__stat-label">Organizations</div>
+        </div>
+        <div class="hero__stat">
+          <div class="hero__stat-value">4M+</div>
+          <div class="hero__stat-label">Developers</div>
+        </div>
+        <div class="hero__stat">
+          <div class="hero__stat-value">7B+</div>
+          <div class="hero__stat-label">Events / Day</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Trusted By ======== -->
+  <section class="trusted">
+    <div class="container">
+      <p class="trusted__label">世界中のトップ企業に採用されています</p>
+      <div class="trusted__logos">
+        <span class="trusted__logo">Disney</span>
+        <span class="trusted__logo">GitHub</span>
+        <span class="trusted__logo">Cloudflare</span>
+        <span class="trusted__logo">Stripe</span>
+        <span class="trusted__logo">Atlassian</span>
+        <span class="trusted__logo">Microsoft</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Features ======== -->
+  <section class="features">
+    <div class="container">
+      <div class="features__header">
+        <p class="features__label">Core Features</p>
+        <h2 class="features__title">エラーの原因を瞬時に特定</h2>
+        <p class="features__subtitle">
+          コードの問題をリアルタイムで検知し、スタックトレース、ブレッドクラム、コンテキスト情報で迅速なデバッグを実現します。
+        </p>
+      </div>
+
+      <div class="features__grid">
+        <div class="card">
+          <div class="card__icon">&#x1F41B;</div>
+          <h3 class="card__title">Error Monitoring</h3>
+          <p class="card__description">
+            スタックトレース、ブレッドクラム、タグ付きコンテキストで、エラーの根本原因を素早く特定します。重複するエラーは自動的にグループ化されます。
+          </p>
+          <a href="#" class="card__link">Learn more &rarr;</a>
+        </div>
+
+        <div class="card">
+          <div class="card__icon">&#x26A1;</div>
+          <h3 class="card__title">Performance Monitoring</h3>
+          <p class="card__description">
+            トランザクション追跡で遅延の原因を特定。P50 / P95 / P99 のレイテンシ分布を可視化し、パフォーマンスのボトルネックを解消します。
+          </p>
+          <a href="#" class="card__link">Learn more &rarr;</a>
+        </div>
+
+        <div class="card">
+          <div class="card__icon">&#x1F3AC;</div>
+          <h3 class="card__title">Session Replay</h3>
+          <p class="card__description">
+            ユーザーの操作をビデオのように再生。エラー発生時にユーザーが何をしていたかを正確に把握し、再現手順の推測を排除します。
+          </p>
+          <a href="#" class="card__link">Learn more &rarr;</a>
+        </div>
+
+        <div class="card">
+          <div class="card__icon">&#x1F4CA;</div>
+          <h3 class="card__title">Release Tracking</h3>
+          <p class="card__description">
+            各リリースのエラー率、クラッシュフリーセッション率を追跡。デプロイが品質に与える影響をリアルタイムで把握できます。
+          </p>
+          <a href="#" class="card__link">Learn more &rarr;</a>
+        </div>
+
+        <div class="card">
+          <div class="card__icon">&#x1F514;</div>
+          <h3 class="card__title">Alerts & Notifications</h3>
+          <p class="card__description">
+            カスタマイズ可能なアラートルールで、重要な問題を見逃さない。Slack、PagerDuty、メールなど、あらゆるチャネルに通知を送信します。
+          </p>
+          <a href="#" class="card__link">Learn more &rarr;</a>
+        </div>
+
+        <div class="card">
+          <div class="card__icon">&#x1F50D;</div>
+          <h3 class="card__title">Distributed Tracing</h3>
+          <p class="card__description">
+            マイクロサービス間のリクエストフローを可視化。サービス間の依存関係を把握し、パフォーマンスのボトルネックを特定します。
+          </p>
+          <a href="#" class="card__link">Learn more &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Showcase ======== -->
+  <section class="showcase">
+    <div class="container">
+      <div class="showcase__inner">
+        <div class="showcase__content">
+          <p class="showcase__label">Developer Experience</p>
+          <h2 class="showcase__title">数行のコードですぐに始められる</h2>
+          <p class="showcase__text">
+            お使いのフレームワークに対応した SDK をインストールし、DSN を設定するだけ。自動的にエラーをキャプチャし、ソースマップを使ったスタックトレースで問題箇所を正確に表示します。
+          </p>
+          <a href="#" class="btn btn--primary">View Documentation</a>
+        </div>
+        <div class="showcase__visual">
+          <pre class="showcase__code"><span class="comment">// Sentry SDK の初期化</span>
+<span class="keyword">import</span> * <span class="keyword">as</span> Sentry <span class="keyword">from</span> <span class="string">"@sentry/react"</span>;
+
+<span class="func">Sentry.init</span>({
+  <span class="func">dsn</span>: <span class="string">"https://examplePublicKey"</span>
+      + <span class="string">"@o0.ingest.sentry.io/0"</span>,
+  <span class="func">tracesSampleRate</span>: <span class="coral">1.0</span>,
+  <span class="func">replaysSessionSampleRate</span>: <span class="coral">0.1</span>,
+});
+
+<span class="comment">// エラーは自動的にキャプチャされます</span>
+<span class="keyword">function</span> <span class="func">processPayment</span>(order) {
+  <span class="keyword">try</span> {
+    <span class="keyword">return</span> <span class="func">chargeCard</span>(order);
+  } <span class="keyword">catch</span> (err) {
+    <span class="func">Sentry.captureException</span>(err);
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Integrations ======== -->
+  <section class="integrations">
+    <div class="container">
+      <div class="integrations__header">
+        <p class="integrations__label">Integrations</p>
+        <h2 class="integrations__title">100以上のプラットフォームに対応</h2>
+        <p class="integrations__subtitle">
+          お使いの言語、フレームワーク、ツールチェーンにシームレスに統合します。
+        </p>
+      </div>
+
+      <div class="integrations__grid">
+        <div class="integration-badge">
+          <div class="integration-badge__icon">JS</div>
+          <span class="integration-badge__name">JavaScript</span>
+        </div>
+        <div class="integration-badge">
+          <div class="integration-badge__icon">PY</div>
+          <span class="integration-badge__name">Python</span>
+        </div>
+        <div class="integration-badge">
+          <div class="integration-badge__icon">RE</div>
+          <span class="integration-badge__name">React</span>
+        </div>
+        <div class="integration-badge">
+          <div class="integration-badge__icon">NG</div>
+          <span class="integration-badge__name">Angular</span>
+        </div>
+        <div class="integration-badge">
+          <div class="integration-badge__icon">VU</div>
+          <span class="integration-badge__name">Vue</span>
+        </div>
+        <div class="integration-badge">
+          <div class="integration-badge__icon">NX</div>
+          <span class="integration-badge__name">Next.js</span>
+        </div>
+        <div class="integration-badge">
+          <div class="integration-badge__icon">GO</div>
+          <span class="integration-badge__name">Go</span>
+        </div>
+        <div class="integration-badge">
+          <div class="integration-badge__icon">RB</div>
+          <span class="integration-badge__name">Ruby</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== CTA ======== -->
+  <section class="cta">
+    <div class="container cta__content">
+      <h2 class="cta__title">エラーを見逃す前に、今すぐ始めよう</h2>
+      <p class="cta__text">
+        無料プランで毎月 5,000 エラー、10,000 パフォーマンストランザクション、500 セッションリプレイを利用可能。クレジットカード不要で開始できます。
+      </p>
+      <div class="cta__actions">
+        <a href="#" class="btn btn--lime">Start Free</a>
+        <a href="#" class="btn btn--glass">Request Demo</a>
+      </div>
+      <p class="cta__note"><span>Free</span> - クレジットカード不要</p>
+    </div>
+  </section>
+
+  <!-- ======== Footer ======== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.4 4.8c-0.8-1.4-2.8-1.4-3.6 0L8.6 16.2c2.2 0 4 1.2 5 3H6.2l-3.4 5.8h8.8c0 0 0.2-4.6 4.4-7.2l3.4-5.8c-1.2-1.8-3.2-3-5.4-3h0l4.4-4z" fill="#ffffff"/>
+              <path d="M25.8 25h-3.4c0-2-1-3.8-2.6-4.8l1.8-3c2.6 1.6 4.2 4.4 4.2 7.8z" fill="#ffffff"/>
+            </svg>
+            Sentry
+          </div>
+          <p class="footer__description">
+            Sentry はアプリケーションモニタリングプラットフォームです。エラーの発見から修正まで、開発チームが必要とする全ての情報を提供します。
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer__column-title">Product</h4>
+          <ul class="footer__links">
+            <li><a href="#">Error Monitoring</a></li>
+            <li><a href="#">Performance</a></li>
+            <li><a href="#">Session Replay</a></li>
+            <li><a href="#">Cron Monitoring</a></li>
+            <li><a href="#">Code Coverage</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer__column-title">Resources</h4>
+          <ul class="footer__links">
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Changelog</a></li>
+            <li><a href="#">Status</a></li>
+            <li><a href="#">Open Source</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer__column-title">Company</h4>
+          <ul class="footer__links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Security</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Partners</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copyright">&copy; 2024 Sentry. All rights reserved.</p>
+        <div class="footer__legal">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
