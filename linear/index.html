@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linear - Build better software</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-marketing: #08090a;
+      --bg-panel: #0f1011;
+      --bg-surface: #191a1b;
+      --bg-secondary: #28282c;
+      --text-primary: #f7f8f8;
+      --text-secondary: #d0d6e0;
+      --text-tertiary: #8a8f98;
+      --text-quaternary: #62666d;
+      --brand: #5e6ad2;
+      --accent: #7170ff;
+      --accent-hover: #828fff;
+      --border-primary: #23252a;
+      --border-secondary: #34343a;
+      --border-subtle: rgba(255,255,255,0.05);
+      --border-standard: rgba(255,255,255,0.08);
+      --font: 'Inter', 'SF Pro Display', -apple-system, system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SF Mono, Menlo, monospace;
+    }
+
+    body {
+      font-family: var(--font);
+      font-feature-settings: "cv01", "ss03";
+      color: var(--text-primary);
+      background: var(--bg-marketing);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0 32px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 510;
+      color: var(--text-primary);
+    }
+    .nav-logo svg { width: 20px; height: 20px; }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 510;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-cta { display: flex; gap: 8px; }
+    .btn-brand {
+      background: var(--brand);
+      color: var(--text-primary);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 510;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-brand:hover { background: var(--accent-hover); }
+    .btn-ghost {
+      background: rgba(255,255,255,0.02);
+      color: var(--text-secondary);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 510;
+      border: 1px solid rgb(36, 40, 44);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.05); }
+
+    /* Hero */
+    .hero {
+      padding: 160px 32px 120px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 4px 12px 4px 6px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-primary);
+      font-size: 12px;
+      font-weight: 510;
+      margin-bottom: 32px;
+    }
+    .hero-pill .dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+    }
+    .hero h1 {
+      font-size: 72px;
+      font-weight: 510;
+      line-height: 1.0;
+      letter-spacing: -1.584px;
+      margin-bottom: 24px;
+    }
+    .hero h1 .accent { color: var(--accent); }
+    .hero p {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text-tertiary);
+      max-width: 540px;
+      margin: 0 auto 40px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    /* Features */
+    .features {
+      padding: 120px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .features h2 {
+      font-size: 48px;
+      font-weight: 510;
+      letter-spacing: -1.056px;
+      line-height: 1.0;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .features > p {
+      font-size: 18px;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+      text-align: center;
+      max-width: 540px;
+      margin: 0 auto 80px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .feature-card {
+      padding: 28px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-standard);
+      border-radius: 12px;
+      transition: background 0.15s;
+    }
+    .feature-card:hover { background: rgba(255,255,255,0.04); }
+    .feature-card .icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-standard);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 18px;
+    }
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 590;
+      letter-spacing: -0.24px;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text-tertiary);
+      letter-spacing: -0.165px;
+    }
+
+    /* Integration Section */
+    .integrations {
+      padding: 120px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .integrations h2 {
+      font-size: 48px;
+      font-weight: 510;
+      letter-spacing: -1.056px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .integrations > p {
+      font-size: 18px;
+      color: var(--text-tertiary);
+      text-align: center;
+      line-height: 1.6;
+      max-width: 540px;
+      margin: 0 auto 64px;
+    }
+    .integration-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .integration-card {
+      padding: 32px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-standard);
+      border-radius: 12px;
+    }
+    .integration-card .label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-quaternary);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .integration-card h3 {
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: -0.288px;
+      margin-bottom: 12px;
+    }
+    .integration-card p {
+      font-size: 15px;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+      letter-spacing: -0.165px;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 120px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .testimonials h2 {
+      font-size: 48px;
+      font-weight: 510;
+      letter-spacing: -1.056px;
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .testimonial-card {
+      padding: 28px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+    }
+    .testimonial-card blockquote {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      letter-spacing: -0.165px;
+      margin-bottom: 20px;
+    }
+    .testimonial-card .author {
+      font-size: 13px;
+      font-weight: 510;
+      color: var(--text-tertiary);
+    }
+    .testimonial-card .role {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-quaternary);
+    }
+
+    /* CTA */
+    .cta-section {
+      padding: 160px 32px;
+      text-align: center;
+    }
+    .cta-section h2 {
+      font-size: 64px;
+      font-weight: 510;
+      letter-spacing: -1.408px;
+      line-height: 1.0;
+      margin-bottom: 24px;
+    }
+    .cta-section p {
+      font-size: 18px;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 64px 32px 32px;
+      border-top: 1px solid var(--border-subtle);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 510;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-quaternary);
+      text-decoration: none;
+      margin-bottom: 10px;
+      transition: color 0.15s;
+    }
+    .footer-col a:hover { color: var(--text-secondary); }
+    .footer-bottom {
+      font-size: 12px;
+      color: var(--text-quaternary);
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 48px; letter-spacing: -1.056px; }
+      .features-grid, .testimonial-grid { grid-template-columns: 1fr; }
+      .integration-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .hero { padding: 100px 16px 80px; }
+      .features, .integrations, .testimonials { padding: 80px 16px; }
+      .cta-section h2 { font-size: 48px; letter-spacing: -1.056px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M18 68L50 18L82 68H18Z" stroke="#5e6ad2" stroke-width="6" fill="none"/>
+      </svg>
+      Linear
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">Features</a></li>
+      <li><a href="#">Method</a></li>
+      <li><a href="#">Integrations</a></li>
+      <li><a href="#">Customers</a></li>
+      <li><a href="#">Changelog</a></li>
+      <li><a href="#">Pricing</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#" class="btn-ghost">Log in</a>
+      <a href="#" class="btn-brand">Sign up</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-pill">
+      <span class="dot"></span>
+      Linear 2026 — 新機能リリース
+    </div>
+    <h1>Build <span class="accent">better</span><br>software.</h1>
+    <p>Linear は、モダンなソフトウェアチームのためのプロジェクト管理ツールです。課題の追跡からプロジェクト計画まで、開発ワークフローを加速します。</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-brand">Start building →</a>
+      <a href="#" class="btn-ghost">See how it works</a>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <h2>開発者のために設計</h2>
+    <p>高速でキーボードファーストなインターフェースで、チームの生産性を最大化します。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon">⚡</div>
+        <h3>50ms 以下のレスポンス</h3>
+        <p>すべてのインタラクションを50ms以下に最適化。ローカルデータ同期とオプティミスティック更新で、ネイティブアプリのような体験を実現。</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">⌨️</div>
+        <h3>キーボードファースト</h3>
+        <p>すべての操作にキーボードショートカットを用意。Command+K パレットでどこからでもアクション可能。マウスなしで完結するワークフロー。</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🔄</div>
+        <h3>サイクル管理</h3>
+        <p>スプリントをシンプルに再定義。自動スケジューリングとバーンダウンチャートで、チームのリズムを可視化します。</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🗺️</div>
+        <h3>プロジェクトロードマップ</h3>
+        <p>複数チームにまたがるプロジェクトを一元管理。タイムラインビューで依存関係を把握し、デッドラインを守ります。</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🤖</div>
+        <h3>AI 自動化</h3>
+        <p>課題の自動分類、重複検出、優先度推定をAIが担当。チームはクリエイティブな問題解決に集中できます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📊</div>
+        <h3>インサイト & 分析</h3>
+        <p>チームの速度、サイクルタイム、スループットをリアルタイムで分析。データ駆動のプロセス改善を実現します。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integrations -->
+  <section class="integrations">
+    <h2>あらゆるツールと連携</h2>
+    <p>GitHub、Slack、Figma など、チームが使うツールとシームレスに統合。</p>
+    <div class="integration-grid">
+      <div class="integration-card">
+        <div class="label">source control</div>
+        <h3>GitHub & GitLab</h3>
+        <p>プルリクエストと課題を自動リンク。コードレビューの進捗がリアルタイムで課題に反映されます。ブランチ作成からマージまでを追跡。</p>
+      </div>
+      <div class="integration-card">
+        <div class="label">communication</div>
+        <h3>Slack</h3>
+        <p>Slackのメッセージから直接課題を作成。ステータス更新やメンション通知をチャンネルにストリーミング。コンテキストを切り替えずに対応。</p>
+      </div>
+      <div class="integration-card">
+        <div class="label">design</div>
+        <h3>Figma</h3>
+        <p>Figmaのデザインを課題にリンク。プレビューが自動更新され、デザインの最新状態を常に把握。デザインと実装のギャップを解消。</p>
+      </div>
+      <div class="integration-card">
+        <div class="label">api</div>
+        <h3>GraphQL API</h3>
+        <p>完全なGraphQL APIとWebhookで、あらゆるカスタムワークフローを構築。SDK、CLI、公開スキーマで開発者体験を最大化します。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <h2>チームの声</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <blockquote>「Linear に移行してからチームの速度が2倍になりました。直感的なUIとキーボードショートカットが、開発者の日常を変えてくれます。」</blockquote>
+        <div class="author">田中 太郎</div>
+        <div class="role">CTO, TechStartup Inc.</div>
+      </div>
+      <div class="testimonial-card">
+        <blockquote>「Jira から Linear に乗り換えて最初に感じたのは速さです。すべてがインスタントに反応する体験は、一度味わうと戻れません。」</blockquote>
+        <div class="author">Sarah Chen</div>
+        <div class="role">Engineering Manager, DevCorp</div>
+      </div>
+      <div class="testimonial-card">
+        <blockquote>「サイクルとロードマップ機能のおかげで、プランニングミーティングが半分の時間で済むようになりました。チーム全員が状況を把握できています。」</blockquote>
+        <div class="author">鈴木 花子</div>
+        <div class="role">Product Manager, ScaleUp Labs</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Build better.<br>Ship faster.</h2>
+    <p>無料プランで今すぐチームのワークフローを改善しましょう。</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-brand">Start building →</a>
+      <a href="#" class="btn-ghost">Schedule a demo</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#">Features</a>
+        <a href="#">Integrations</a>
+        <a href="#">Pricing</a>
+        <a href="#">Changelog</a>
+        <a href="#">Roadmap</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Careers</a>
+        <a href="#">Customers</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Documentation</a>
+        <a href="#">API Reference</a>
+        <a href="#">Community</a>
+        <a href="#">Status</a>
+        <a href="#">Security</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="#">Twitter</a>
+        <a href="#">GitHub</a>
+        <a href="#">Discord</a>
+        <a href="#">YouTube</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Linear. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>

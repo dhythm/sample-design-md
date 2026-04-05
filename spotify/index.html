@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify - Music for everyone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #121212;
+      --surface: #181818;
+      --surface-2: #1f1f1f;
+      --surface-3: #252525;
+      --white: #ffffff;
+      --silver: #b3b3b3;
+      --near-white: #cbcbcb;
+      --green: #1ed760;
+      --green-dark: #1db954;
+      --red: #f3727f;
+      --orange: #ffa42b;
+      --blue: #539df5;
+      --border: #4d4d4d;
+      --border-light: #7c7c7c;
+      --font: 'Nunito Sans', Helvetica Neue, helvetica, arial, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      color: var(--white);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .nav-logo .spotify-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-links a.muted { color: var(--silver); font-weight: 400; }
+    .nav-cta { display: flex; gap: 12px; align-items: center; }
+    .btn-pill-green {
+      background: var(--green);
+      color: #000000;
+      padding: 12px 32px;
+      border-radius: 500px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.14px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s, background 0.15s;
+    }
+    .btn-pill-green:hover { transform: scale(1.04); background: #1fdf64; }
+    .btn-pill-dark {
+      background: var(--surface-2);
+      color: var(--white);
+      padding: 12px 32px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.14px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-pill-dark:hover { background: var(--surface-3); }
+    .btn-pill-outlined {
+      background: transparent;
+      color: var(--white);
+      padding: 10px 24px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 700;
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-pill-outlined:hover { border-color: var(--white); }
+    .btn-pill-uppercase {
+      background: var(--white);
+      color: #000000;
+      padding: 12px 32px;
+      border-radius: 500px;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-pill-uppercase:hover { transform: scale(1.04); }
+    .nav-signin {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--silver);
+      text-decoration: none;
+    }
+    .nav-signin:hover { color: var(--white); }
+
+    /* Hero */
+    .hero {
+      padding: 120px 32px 80px;
+      text-align: center;
+      background: linear-gradient(180deg, #1a3a2a 0%, var(--bg) 100%);
+    }
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+    .hero h1 .green { color: var(--green); }
+    .hero p {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--silver);
+      line-height: 1.5;
+      max-width: 540px;
+      margin: 0 auto 40px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Browse Section */
+    .browse {
+      padding: 80px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .browse h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 32px;
+    }
+    .browse-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+    .browse-card {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 16px;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .browse-card:hover { background: var(--surface-3); }
+    .browse-card .artwork {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+    .browse-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .browse-card p {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--silver);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .artwork-1 { background: linear-gradient(135deg, #e8115b, #ba1659); }
+    .artwork-2 { background: linear-gradient(135deg, #1e3264, #4b8df8); }
+    .artwork-3 { background: linear-gradient(135deg, #8c67ab, #e056a0); }
+    .artwork-4 { background: linear-gradient(135deg, #e13300, #f59b23); }
+    .artwork-5 { background: linear-gradient(135deg, #148a08, #1ed760); }
+
+    /* Features */
+    .features {
+      padding: 80px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .features h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .feature-item {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+    }
+    .feature-item .icon {
+      width: 56px;
+      height: 56px;
+      background: var(--surface-2);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+    .feature-item h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .feature-item p {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--silver);
+      line-height: 1.5;
+    }
+
+    /* Plans */
+    .plans {
+      padding: 80px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .plans h2 {
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .plans > p {
+      font-size: 16px;
+      color: var(--silver);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .plan-card {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+    }
+    .plan-card.featured {
+      border: 1px solid var(--green-dark);
+    }
+    .plan-card .plan-badge {
+      display: inline-block;
+      background: var(--green);
+      color: #000;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: capitalize;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+    .plan-card h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .plan-card .price {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .plan-card .price span {
+      color: var(--silver);
+      font-weight: 400;
+    }
+    .plan-card ul {
+      list-style: none;
+      margin-bottom: 24px;
+      flex: 1;
+    }
+    .plan-card ul li {
+      font-size: 14px;
+      color: var(--silver);
+      padding: 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .plan-card ul li::before {
+      content: "✓";
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    /* Now Playing Bar */
+    .now-playing {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      background: var(--surface);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 200;
+    }
+    .now-playing .track-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 200px;
+    }
+    .now-playing .track-art {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #5e6ad2, #e056a0);
+      border-radius: 4px;
+    }
+    .now-playing .track-name {
+      font-size: 14px;
+      font-weight: 400;
+    }
+    .now-playing .track-artist {
+      font-size: 12px;
+      color: var(--silver);
+    }
+    .now-playing .controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .play-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      border: none;
+      color: #000;
+    }
+    .control-btn {
+      background: none;
+      border: none;
+      color: var(--silver);
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .control-btn:hover { color: var(--white); }
+    .now-playing .progress {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 500px;
+    }
+    .progress-bar {
+      flex: 1;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      position: relative;
+    }
+    .progress-bar .fill {
+      width: 35%;
+      height: 100%;
+      background: var(--white);
+      border-radius: 2px;
+    }
+    .progress-bar .fill:hover { background: var(--green); }
+    .progress-time {
+      font-size: 12px;
+      color: var(--silver);
+      min-width: 40px;
+      text-align: center;
+    }
+    .now-playing .volume {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 150px;
+    }
+
+    /* Footer spacer for now-playing bar */
+    .footer-spacer { height: 72px; }
+
+    /* Footer */
+    .footer {
+      padding: 64px 32px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+    .footer-col h4 {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--silver);
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--silver);
+      text-decoration: none;
+      margin-bottom: 12px;
+    }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .footer-bottom p {
+      font-size: 12px;
+      color: var(--silver);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 36px; }
+      .browse-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: 1fr; }
+      .plans-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .now-playing .progress { display: none; }
+      .now-playing .volume { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="spotify-icon">♪</div>
+      Spotify
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">Premium</a></li>
+      <li><a href="#">サポート</a></li>
+      <li><a href="#">ダウンロード</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#" class="nav-signin">ログイン</a>
+      <a href="#" class="btn-pill-uppercase">新規登録</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Music for <span class="green">everyone.</span></h1>
+    <p>1億曲以上の楽曲、500万以上のポッドキャストエピソード。広告なしで、オフラインでも。すべてを無料で体験しましょう。</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-pill-green">無料で始める</a>
+      <a href="#" class="btn-pill-outlined">プランを見る</a>
+    </div>
+  </section>
+
+  <!-- Browse -->
+  <section class="browse">
+    <h2>人気のプレイリスト</h2>
+    <div class="browse-grid">
+      <div class="browse-card">
+        <div class="artwork artwork-1">🎵</div>
+        <h3>Today's Top Hits</h3>
+        <p>世界で最も人気の楽曲</p>
+      </div>
+      <div class="browse-card">
+        <div class="artwork artwork-2">🌙</div>
+        <h3>Deep Focus</h3>
+        <p>集中力を高めるアンビエント</p>
+      </div>
+      <div class="browse-card">
+        <div class="artwork artwork-3">💜</div>
+        <h3>Chill Vibes</h3>
+        <p>リラックスできるチルアウト</p>
+      </div>
+      <div class="browse-card">
+        <div class="artwork artwork-4">🔥</div>
+        <h3>Workout Energy</h3>
+        <p>トレーニングに最適なBGM</p>
+      </div>
+      <div class="browse-card">
+        <div class="artwork artwork-5">🍃</div>
+        <h3>Morning Coffee</h3>
+        <p>朝のひとときに穏やかな音楽</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <h2>Spotify Premium の特長</h2>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="icon">🚫</div>
+        <h3>広告なし</h3>
+        <p>曲の間に広告が入りません。途切れることなく音楽を楽しめます。</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">📱</div>
+        <h3>オフライン再生</h3>
+        <p>楽曲をダウンロードして、インターネット接続なしでも聴けます。</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">🎧</div>
+        <h3>高音質</h3>
+        <p>最大320kbpsの高音質で、アーティストが意図した通りの音を体験。</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">🔀</div>
+        <h3>オンデマンド再生</h3>
+        <p>好きな曲を好きな順番で。シャッフル不要で、自由にスキップ。</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">👥</div>
+        <h3>グループセッション</h3>
+        <p>友達と一緒に再生キューを共有。みんなで音楽を選べます。</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">🎤</div>
+        <h3>歌詞表示</h3>
+        <p>リアルタイムの歌詞表示で、お気に入りの曲を一緒に歌えます。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plans -->
+  <section class="plans">
+    <h2>あなたに合ったプラン</h2>
+    <p>すべてのプランで広告なし・オフライン再生が利用可能</p>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <h3>Individual</h3>
+        <div class="price">¥980 <span>/ 月</span></div>
+        <ul>
+          <li>1つのアカウント</li>
+          <li>広告なしの音楽再生</li>
+          <li>オフライン再生</li>
+          <li>オンデマンド再生</li>
+        </ul>
+        <a href="#" class="btn-pill-green" style="text-align:center">今すぐ始める</a>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-badge">おすすめ</div>
+        <h3>Family</h3>
+        <div class="price">¥1,580 <span>/ 月</span></div>
+        <ul>
+          <li>最大6つのアカウント</li>
+          <li>Family Mix プレイリスト</li>
+          <li>不適切な音楽のブロック</li>
+          <li>Spotify Kids アプリ</li>
+        </ul>
+        <a href="#" class="btn-pill-green" style="text-align:center">今すぐ始める</a>
+      </div>
+      <div class="plan-card">
+        <h3>Student</h3>
+        <div class="price">¥480 <span>/ 月</span></div>
+        <ul>
+          <li>1つのアカウント</li>
+          <li>学生割引適用</li>
+          <li>広告なしの音楽再生</li>
+          <li>オフライン再生</li>
+        </ul>
+        <a href="#" class="btn-pill-green" style="text-align:center">今すぐ始める</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Jobs</a>
+        <a href="#">For the Record</a>
+      </div>
+      <div class="footer-col">
+        <h4>Communities</h4>
+        <a href="#">For Artists</a>
+        <a href="#">Developers</a>
+        <a href="#">Advertising</a>
+        <a href="#">Investors</a>
+      </div>
+      <div class="footer-col">
+        <h4>Useful Links</h4>
+        <a href="#">Support</a>
+        <a href="#">Free Mobile App</a>
+      </div>
+      <div class="footer-col">
+        <h4>Plans</h4>
+        <a href="#">Premium Individual</a>
+        <a href="#">Premium Student</a>
+        <a href="#">Premium Family</a>
+        <a href="#">Spotify Free</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Spotify AB. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div class="footer-spacer"></div>
+
+  <!-- Now Playing Bar -->
+  <div class="now-playing">
+    <div class="track-info">
+      <div class="track-art"></div>
+      <div>
+        <div class="track-name">Midnight City</div>
+        <div class="track-artist">M83</div>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:center; flex:1; max-width:600px;">
+      <div class="controls">
+        <button class="control-btn">⏮</button>
+        <button class="play-btn">▶</button>
+        <button class="control-btn">⏭</button>
+      </div>
+      <div class="progress" style="width:100%; margin-top:4px;">
+        <span class="progress-time">1:23</span>
+        <div class="progress-bar"><div class="fill"></div></div>
+        <span class="progress-time">4:03</span>
+      </div>
+    </div>
+    <div class="volume">
+      <button class="control-btn">🔊</button>
+      <div class="progress-bar" style="flex:1"><div class="fill" style="width:65%"></div></div>
+    </div>
+  </div>
+</body>
+</html>

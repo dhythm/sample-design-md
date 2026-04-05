@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notion - Your connected workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: rgba(0,0,0,0.95);
+      --white: #ffffff;
+      --warm-white: #f6f5f4;
+      --warm-dark: #31302e;
+      --gray-500: #615d59;
+      --gray-300: #a39e98;
+      --notion-blue: #0075de;
+      --active-blue: #005bab;
+      --badge-bg: #f2f9ff;
+      --badge-text: #097fe8;
+      --teal: #2a9d99;
+      --border: rgba(0,0,0,0.1);
+      --card-shadow: rgba(0,0,0,0.04) 0px 4px 18px, rgba(0,0,0,0.027) 0px 2.025px 7.85px, rgba(0,0,0,0.02) 0px 0.8px 2.93px, rgba(0,0,0,0.01) 0px 0.175px 1.04px;
+      --font: 'Inter', -apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      color: var(--black);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Navigation */
+    .nav {
+      padding: 0 32px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .nav-logo .logo-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--black);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--black);
+      text-decoration: none;
+    }
+    .nav-links a:hover { color: var(--notion-blue); }
+    .nav-cta { display: flex; gap: 12px; align-items: center; }
+    .btn-blue {
+      background: var(--notion-blue);
+      color: var(--white);
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-blue:hover { background: var(--active-blue); }
+    .btn-secondary {
+      background: rgba(0,0,0,0.05);
+      color: var(--black);
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-secondary:hover { background: rgba(0,0,0,0.08); }
+    .btn-link {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--black);
+      text-decoration: none;
+    }
+    .btn-link:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero {
+      padding: 100px 32px 80px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.125px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -2.125px;
+      margin-bottom: 24px;
+    }
+    .hero p {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--gray-500);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      letter-spacing: -0.125px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    /* Trust Bar */
+    .trust-bar {
+      padding: 48px 32px;
+      text-align: center;
+    }
+    .trust-bar p {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-300);
+      margin-bottom: 24px;
+    }
+    .trust-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .trust-logo {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-300);
+    }
+
+    /* Features - Warm bg */
+    .features-warm {
+      background: var(--warm-white);
+      padding: 80px 32px;
+    }
+    .features-warm .inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .features-warm h2 {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .features-warm > .inner > p {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--gray-500);
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto 64px;
+      letter-spacing: -0.125px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .feature-card {
+      padding: 32px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+    }
+    .feature-card .emoji {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+    .feature-card h3 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.25px;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--gray-500);
+    }
+
+    /* Use Cases */
+    .use-cases {
+      padding: 80px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .use-cases h2 {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .use-cases > p {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--gray-500);
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto 64px;
+    }
+    .use-cases-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .use-case-card {
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+    }
+    .use-case-card .tag {
+      display: inline-block;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.125px;
+      margin-bottom: 16px;
+    }
+    .use-case-card h3 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.625px;
+      line-height: 1.23;
+      margin-bottom: 12px;
+    }
+    .use-case-card p {
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--gray-500);
+    }
+
+    /* Metrics */
+    .metrics-section {
+      background: var(--warm-white);
+      padding: 80px 32px;
+    }
+    .metrics-section .inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .metrics-section h2 {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      text-align: center;
+    }
+    .metric-card {
+      padding: 32px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .metric-card .number {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .metric-card p {
+      font-size: 16px;
+      color: var(--gray-500);
+    }
+
+    /* CTA */
+    .cta-section {
+      padding: 100px 32px;
+      text-align: center;
+    }
+    .cta-section h2 {
+      font-size: 54px;
+      font-weight: 700;
+      letter-spacing: -1.875px;
+      line-height: 1.04;
+      margin-bottom: 24px;
+    }
+    .cta-section p {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--gray-500);
+      margin-bottom: 40px;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 64px 32px 32px;
+      border-top: 1px solid var(--border);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+    .footer-col h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gray-500);
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
+    .footer-col a:hover { color: var(--notion-blue); }
+    .footer-bottom {
+      font-size: 12px;
+      color: var(--gray-300);
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 40px; letter-spacing: -1.5px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .use-cases-grid { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .hero { padding: 60px 16px 48px; }
+      .features-warm, .use-cases, .metrics-section { padding: 60px 16px; }
+      .cta-section h2 { font-size: 40px; letter-spacing: -1.5px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="logo-icon">N</div>
+      Notion
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">Product</a></li>
+      <li><a href="#">Teams</a></li>
+      <li><a href="#">Individuals</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Templates</a></li>
+      <li><a href="#">Resources</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#" class="btn-link">Log in</a>
+      <a href="#" class="btn-blue">Get Notion free</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">🎉 Notion AI が新しくなりました</div>
+    <h1>あなたの<br>つながるワークスペース</h1>
+    <p>ドキュメント、プロジェクト、ナレッジをひとつの場所に。チーム全体で情報を整理し、仕事をもっとスムーズに。</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-blue">Get Notion free →</a>
+      <a href="#" class="btn-secondary">Request a demo</a>
+    </div>
+  </section>
+
+  <!-- Trust Bar -->
+  <section class="trust-bar">
+    <p>世界中の100万以上のチームが利用</p>
+    <div class="trust-logos">
+      <span class="trust-logo">Toyota</span>
+      <span class="trust-logo">Samsung</span>
+      <span class="trust-logo">Figma</span>
+      <span class="trust-logo">Pixar</span>
+      <span class="trust-logo">Nike</span>
+      <span class="trust-logo">Uber</span>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features-warm">
+    <div class="inner">
+      <h2>チームに必要なすべて</h2>
+      <p>ドキュメント、Wiki、タスク管理を統合した唯一のプラットフォーム。</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="emoji">📝</div>
+          <h3>Docs</h3>
+          <p>リッチテキストエディタで美しいドキュメントを作成。リアルタイムコラボレーションで、チーム全員が同時に編集可能です。</p>
+        </div>
+        <div class="feature-card">
+          <div class="emoji">📚</div>
+          <h3>Wiki</h3>
+          <p>チームのナレッジを一元管理。検索可能なデータベースで、必要な情報にすぐにアクセス。属人化を防ぎます。</p>
+        </div>
+        <div class="feature-card">
+          <div class="emoji">✅</div>
+          <h3>Projects</h3>
+          <p>タスク管理、カンバンボード、タイムラインビューを搭載。プロジェクトの全体像を把握し、チームの進捗を可視化。</p>
+        </div>
+        <div class="feature-card">
+          <div class="emoji">🤖</div>
+          <h3>Notion AI</h3>
+          <p>ワークスペース全体の情報を理解するAIアシスタント。質問に回答、文章の下書き、要約を自動生成します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="emoji">🗓️</div>
+          <h3>Calendar</h3>
+          <p>会議とタスクを統合したカレンダー。Google Calendar、Outlookと連携し、スケジュール管理を一元化。</p>
+        </div>
+        <div class="feature-card">
+          <div class="emoji">📧</div>
+          <h3>Mail</h3>
+          <p>メール、カレンダー、タスクを一つの画面で。コンテキストを失わずにコミュニケーションを完結させます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="use-cases">
+    <h2>あらゆるチームに最適</h2>
+    <p>エンジニアリングからマーケティングまで、あらゆる部門のワークフローに対応。</p>
+    <div class="use-cases-grid">
+      <div class="use-case-card">
+        <div class="tag">エンジニアリング</div>
+        <h3>スプリントプランニングとドキュメント</h3>
+        <p>技術仕様書、アーキテクチャ決定記録、スプリントボードをひとつの場所に。GitHub連携でPRと課題を自動リンクします。</p>
+      </div>
+      <div class="use-case-card">
+        <div class="tag">デザイン</div>
+        <h3>デザインシステムとリサーチ</h3>
+        <p>デザインガイドライン、ユーザーリサーチの記録、プロトタイプのレビューフローを管理。Figma埋め込みでデザインを直接確認。</p>
+      </div>
+      <div class="use-case-card">
+        <div class="tag">マーケティング</div>
+        <h3>コンテンツカレンダーとキャンペーン</h3>
+        <p>ブログ記事、SNS投稿、キャンペーン計画をデータベースで一元管理。チーム全員が公開スケジュールを把握できます。</p>
+      </div>
+      <div class="use-case-card">
+        <div class="tag">人事・総務</div>
+        <h3>オンボーディングと社内ポータル</h3>
+        <p>新入社員のオンボーディングチェックリスト、社内規程、FAQを整備。全社員がいつでもアクセスできるナレッジベースを構築。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metrics -->
+  <section class="metrics-section">
+    <div class="inner">
+      <h2>Notion の効果</h2>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="number">72%</div>
+          <p>ドキュメント検索時間の短縮</p>
+        </div>
+        <div class="metric-card">
+          <div class="number">$4,200</div>
+          <p>ユーザーあたりの年間 ROI</p>
+        </div>
+        <div class="metric-card">
+          <div class="number">3.5x</div>
+          <p>チームコラボレーションの向上</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>仕事をもっと<br>シンプルに。</h2>
+    <p>無料ではじめて、チームの生産性を体感してください。</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-blue">Get Notion free →</a>
+      <a href="#" class="btn-secondary">Request a demo</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#">Docs</a>
+        <a href="#">Wiki</a>
+        <a href="#">Projects</a>
+        <a href="#">Notion AI</a>
+        <a href="#">Calendar</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Guides & Tutorials</a>
+        <a href="#">Blog</a>
+        <a href="#">Templates</a>
+        <a href="#">Community</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Security</a>
+        <a href="#">Terms & Privacy</a>
+        <a href="#">Status</a>
+      </div>
+      <div class="footer-col">
+        <h4>Download</h4>
+        <a href="#">iOS & Android</a>
+        <a href="#">Mac & Windows</a>
+        <a href="#">Web Clipper</a>
+        <a href="#">API</a>
+        <a href="#">Integrations</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Notion Labs, Inc. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>

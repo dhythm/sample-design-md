@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vercel - Your Web, Shipped</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #171717;
+      --white: #ffffff;
+      --gray-50: #fafafa;
+      --gray-100: #ebebeb;
+      --gray-400: #808080;
+      --gray-500: #666666;
+      --gray-600: #4d4d4d;
+      --ship-red: #ff5b4f;
+      --preview-pink: #de1d8d;
+      --develop-blue: #0a72ef;
+      --link-blue: #0072f5;
+      --badge-bg: #ebf5ff;
+      --badge-text: #0068d6;
+      --border-shadow: rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+      --card-shadow: rgba(0,0,0,0.08) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 2px, rgba(0,0,0,0.04) 0px 8px 8px -8px, #fafafa 0px 0px 0px 1px;
+      --font-sans: 'Inter', Arial, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-feature-settings: "liga";
+      color: var(--black);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      box-shadow: var(--border-shadow);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-logo svg { width: 24px; height: 24px; }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--black);
+      text-decoration: none;
+    }
+    .nav-links a:hover { color: var(--gray-500); }
+    .nav-cta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .btn-dark {
+      background: var(--black);
+      color: var(--white);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-dark:hover { opacity: 0.9; }
+    .btn-ghost {
+      background: var(--white);
+      color: var(--black);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      box-shadow: rgb(235, 235, 235) 0px 0px 0px 1px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-ghost:hover { background: var(--gray-50); }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 120px 32px 100px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 32px;
+    }
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 600;
+      line-height: 1.0;
+      letter-spacing: -2.4px;
+      margin-bottom: 24px;
+    }
+    .hero p {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.8;
+      color: var(--gray-600);
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    /* Trust Bar */
+    .trust-bar {
+      padding: 60px 32px;
+      text-align: center;
+      border-top: 1px solid var(--gray-100);
+    }
+    .trust-bar p {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-500);
+      margin-bottom: 32px;
+    }
+    .trust-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .trust-logo {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gray-400);
+      letter-spacing: -0.72px;
+    }
+
+    /* Workflow Section */
+    .workflow {
+      padding: 100px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .workflow h2 {
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -2.4px;
+      margin-bottom: 16px;
+    }
+    .workflow > p {
+      font-size: 20px;
+      color: var(--gray-600);
+      line-height: 1.8;
+      max-width: 600px;
+      margin: 0 auto 64px;
+    }
+    .workflow-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .workflow-step {
+      padding: 32px;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      text-align: left;
+    }
+    .workflow-step .step-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .step-develop .step-label { color: var(--develop-blue); }
+    .step-preview .step-label { color: var(--preview-pink); }
+    .step-ship .step-label { color: var(--ship-red); }
+    .workflow-step h3 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.96px;
+      margin-bottom: 12px;
+    }
+    .workflow-step p {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--gray-600);
+    }
+
+    /* Metrics */
+    .metrics {
+      padding: 100px 32px;
+      border-top: 1px solid var(--black);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .metrics h2 {
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -2.4px;
+      line-height: 1.2;
+      margin-bottom: 64px;
+      text-align: center;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .metric-card {
+      padding: 32px;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+    }
+    .metric-card .number {
+      font-size: 48px;
+      font-weight: 600;
+      letter-spacing: -2.4px;
+      line-height: 1.17;
+      margin-bottom: 8px;
+    }
+    .metric-card p {
+      font-size: 16px;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+
+    /* Features */
+    .features {
+      padding: 100px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .features h2 {
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -2.4px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .features > p {
+      font-size: 20px;
+      color: var(--gray-600);
+      line-height: 1.8;
+      max-width: 600px;
+      margin: 0 auto 64px;
+      text-align: center;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+    }
+    .feature-card .feature-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      box-shadow: var(--border-shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+    .feature-card h3 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.96px;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: 16px;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+
+    /* CTA */
+    .cta-section {
+      padding: 120px 32px;
+      text-align: center;
+      border-top: 1px solid var(--black);
+    }
+    .cta-section h2 {
+      font-size: 48px;
+      font-weight: 600;
+      letter-spacing: -2.4px;
+      line-height: 1.0;
+      margin-bottom: 24px;
+    }
+    .cta-section p {
+      font-size: 20px;
+      color: var(--gray-600);
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 64px 32px 32px;
+      border-top: 1px solid var(--gray-100);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+    .footer-col h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: -0.32px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gray-500);
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
+    .footer-col a:hover { color: var(--black); }
+    .footer-bottom {
+      font-size: 12px;
+      color: var(--gray-400);
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 32px; letter-spacing: -1.28px; }
+      .hero p { font-size: 16px; }
+      .workflow-steps, .metrics-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .trust-logos { gap: 24px; }
+      .hero { padding: 80px 16px 60px; }
+      .workflow, .metrics, .features { padding: 60px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <svg viewBox="0 0 76 65" fill="currentColor"><path d="M37.5274 0L75.0548 65H0L37.5274 0Z"/></svg>
+      Vercel
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">Products</a></li>
+      <li><a href="#">Solutions</a></li>
+      <li><a href="#">Resources</a></li>
+      <li><a href="#">Enterprise</a></li>
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">Pricing</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#" class="btn-ghost">Contact Sales</a>
+      <a href="#" class="btn-dark">Start Deploying</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">✨ Announcing Vercel AI SDK 5.0</div>
+    <h1>Your Web,<br>Shipped.</h1>
+    <p>Vercelは、フロントエンド開発者に最適なプラットフォームです。フレームワークとインフラを統合し、最速のユーザー体験を提供します。</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-dark">Start Deploying</a>
+      <a href="#" class="btn-ghost">Get a Demo</a>
+    </div>
+  </section>
+
+  <!-- Trust Bar -->
+  <section class="trust-bar">
+    <p>Trusted by the best teams in the world</p>
+    <div class="trust-logos">
+      <span class="trust-logo">OpenAI</span>
+      <span class="trust-logo">Perplexity</span>
+      <span class="trust-logo">Cursor</span>
+      <span class="trust-logo">Notion</span>
+      <span class="trust-logo">Loom</span>
+      <span class="trust-logo">HashiCorp</span>
+    </div>
+  </section>
+
+  <!-- Workflow -->
+  <section class="workflow">
+    <h2>開発ワークフローを加速</h2>
+    <p>開発からプレビュー、本番デプロイまで。すべてのステップを最適化します。</p>
+    <div class="workflow-steps">
+      <div class="workflow-step step-develop">
+        <div class="step-label">develop</div>
+        <h3>ローカル開発</h3>
+        <p>お好みのフレームワークで開発。Next.js、Nuxt、SvelteKit など、最新の技術スタックに対応。ゼロコンフィグで始められます。</p>
+      </div>
+      <div class="workflow-step step-preview">
+        <div class="step-label">preview</div>
+        <h3>プレビューデプロイ</h3>
+        <p>すべてのプルリクエストに自動プレビュー URL を生成。チーム全体でレビューし、フィードバックを共有できます。</p>
+      </div>
+      <div class="workflow-step step-ship">
+        <div class="step-label">ship</div>
+        <h3>本番にシップ</h3>
+        <p>グローバル Edge Network にワンクリックでデプロイ。自動スケーリングとキャッシュ最適化で、世界中のユーザーに高速配信。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metrics -->
+  <section class="metrics">
+    <h2>Numbers that matter</h2>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="number">10x</div>
+        <p>従来のCI/CDパイプラインと比較して、デプロイ速度が10倍高速に。</p>
+      </div>
+      <div class="metric-card">
+        <div class="number">99.99%</div>
+        <p>Enterprise グレードの SLA でアップタイムを保証。ダウンタイムの心配は不要です。</p>
+      </div>
+      <div class="metric-card">
+        <div class="number">50ms</div>
+        <p>グローバル Edge Network による平均レスポンスタイム。ユーザーに最も近いリージョンから配信。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <h2>全てを統合するプラットフォーム</h2>
+    <p>フロントエンドの構築に必要な機能を、すべて一つの場所に。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Edge Functions</h3>
+        <p>サーバーレス関数をグローバル Edge で実行。コールドスタートなしで、超低レイテンシーの API を構築できます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Web Application Firewall</h3>
+        <p>DDoS 保護、ボット対策、レート制限を標準搭載。セキュリティをインフラレベルで自動化します。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Analytics</h3>
+        <p>リアルユーザーモニタリングで Core Web Vitals を追跡。パフォーマンスの問題を即座に特定・修正。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI SDK</h3>
+        <p>OpenAI、Anthropic、Google の AI モデルを簡単に統合。ストリーミング対応の AI アプリを数分で構築。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Start building<br>with Vercel today.</h2>
+    <p>無料プランで今すぐ始めましょう。クレジットカード不要。</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-dark">Start Deploying</a>
+      <a href="#" class="btn-ghost">Talk to Sales</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Products</h4>
+        <a href="#">Previews</a>
+        <a href="#">AI</a>
+        <a href="#">Edge Functions</a>
+        <a href="#">Analytics</a>
+        <a href="#">Firewall</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Documentation</a>
+        <a href="#">Guides</a>
+        <a href="#">Blog</a>
+        <a href="#">Templates</a>
+        <a href="#">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Contact</a>
+        <a href="#">Partners</a>
+        <a href="#">Legal</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">DPA</a>
+        <a href="#">SLA</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Vercel Inc. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>
