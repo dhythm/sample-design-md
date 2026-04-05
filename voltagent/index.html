@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoltAgent - AI Agent Engineering Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       Design System: CSS Custom Properties
+       ======================================== */
+    :root {
+      /* Primary */
+      --emerald-signal: #00d992;
+      --voltagent-mint: #2fd6a1;
+      --tailwind-emerald: #10b981;
+
+      /* Secondary */
+      --soft-purple: #818cf8;
+      --ring-blue: #3b82f6;
+
+      /* Surface & Background */
+      --abyss-black: #050507;
+      --carbon-surface: #101010;
+      --warm-charcoal: #3d3a39;
+
+      /* Neutrals & Text */
+      --snow-white: #f2f2f2;
+      --pure-white: #ffffff;
+      --warm-parchment: #b8b3b0;
+      --steel-slate: #8b949e;
+      --fog-gray: #bdbdbd;
+      --mist-gray: #dcdcdc;
+      --near-white: #eeeeee;
+
+      /* Semantic */
+      --success-emerald: #008b00;
+      --warning-amber: #ffba00;
+      --danger-coral: #fb565b;
+      --info-teal: #4cb3d4;
+
+      /* Typography */
+      --font-heading: system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+      --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', Helvetica, Arial, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+      /* Shadows */
+      --shadow-ambient: rgba(92, 88, 85, 0.2) 0px 0px 15px;
+      --shadow-dramatic: rgba(0, 0, 0, 0.7) 0px 20px 60px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-feature-settings: "calt", "rlig";
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--abyss-black);
+      color: var(--snow-white);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ========================================
+       Utilities
+       ======================================== */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .overline {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.56;
+      letter-spacing: 0.45px;
+      text-transform: uppercase;
+      color: var(--voltagent-mint);
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--abyss-black);
+      border-bottom: 1px solid var(--warm-charcoal);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--snow-white);
+    }
+
+    .nav__bolt {
+      width: 28px;
+      height: 28px;
+      color: var(--emerald-signal);
+      filter: drop-shadow(0 0 4px var(--emerald-signal));
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { filter: drop-shadow(0 0 2px var(--emerald-signal)); }
+      50% { filter: drop-shadow(0 0 8px var(--emerald-signal)); }
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav__link {
+      font-size: 14.45px;
+      font-weight: 500;
+      line-height: 1.65;
+      color: var(--snow-white);
+      transition: color 0.2s ease;
+    }
+
+    .nav__link:hover {
+      color: var(--emerald-signal);
+    }
+
+    .nav__cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      background-color: var(--carbon-surface);
+      color: var(--voltagent-mint);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1px solid var(--warm-charcoal);
+      transition: background-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav__cta:hover {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .nav__hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--snow-white);
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      padding: 120px 0 96px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(61, 58, 57, 0.3) 1px, transparent 0);
+      background-size: 40px 40px;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .hero__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background-color: var(--carbon-surface);
+      border: 1px solid var(--warm-charcoal);
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--warm-parchment);
+      margin-bottom: 32px;
+    }
+
+    .hero__tag-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--emerald-signal);
+      border-radius: 50%;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    .hero__title {
+      font-family: var(--font-heading);
+      font-size: 60px;
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -0.65px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .hero__title-accent {
+      color: var(--emerald-signal);
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-body);
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--warm-parchment);
+      max-width: 640px;
+      margin: 0 auto 48px;
+    }
+
+    .hero__install {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 24px;
+      background-color: var(--carbon-surface);
+      border: 1px solid var(--warm-charcoal);
+      border-radius: 6.4px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--snow-white);
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .hero__install:hover {
+      border-color: var(--emerald-signal);
+    }
+
+    .hero__install-prompt {
+      color: var(--emerald-signal);
+      user-select: none;
+    }
+
+    .hero__install-copy {
+      color: var(--steel-slate);
+      font-size: 12px;
+      margin-left: 16px;
+      padding: 4px 8px;
+      border: 1px solid var(--warm-charcoal);
+      border-radius: 4px;
+      background: transparent;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      transition: color 0.2s ease;
+    }
+
+    .hero__install-copy:hover {
+      color: var(--snow-white);
+    }
+
+    .hero__actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background-color: var(--carbon-surface);
+      color: var(--voltagent-mint);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 600;
+      border: 1px solid var(--warm-charcoal);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      border-color: var(--voltagent-mint);
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: transparent;
+      color: var(--pure-white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      border: 1px solid var(--warm-charcoal);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-ghost:hover {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    /* ========================================
+       Features Section
+       ======================================== */
+    .features {
+      padding: 96px 0;
+    }
+
+    .features__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .features__title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.11;
+      letter-spacing: -0.9px;
+      margin-top: 16px;
+    }
+
+    .features__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background-color: var(--carbon-surface);
+      border: 1px solid var(--warm-charcoal);
+      border-radius: 8px;
+      padding: 32px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--emerald-signal);
+      box-shadow: var(--shadow-ambient);
+    }
+
+    .feature-card__icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--abyss-black);
+      border: 1px solid var(--warm-charcoal);
+      border-radius: 8px;
+      margin-bottom: 20px;
+      color: var(--emerald-signal);
+    }
+
+    .feature-card__title {
+      font-family: var(--font-body);
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--snow-white);
+      margin-bottom: 12px;
+    }
+
+    .feature-card__desc {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--warm-parchment);
+    }
+
+    /* ========================================
+       Code Showcase Section
+       ======================================== */
+    .showcase {
+      padding: 96px 0;
+      border-top: 1px solid var(--warm-charcoal);
+    }
+
+    .showcase__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .showcase__code {
+      background-color: var(--carbon-surface);
+      border: 2px solid var(--emerald-signal);
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: var(--shadow-dramatic);
+      overflow-x: auto;
+    }
+
+    .showcase__code-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--warm-charcoal);
+    }
+
+    .showcase__code-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .showcase__code-dot--red { background-color: var(--danger-coral); }
+    .showcase__code-dot--yellow { background-color: var(--warning-amber); }
+    .showcase__code-dot--green { background-color: var(--success-emerald); }
+
+    .showcase__code pre {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.43;
+      color: var(--snow-white);
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .showcase__code .keyword { color: var(--soft-purple); }
+    .showcase__code .string { color: var(--emerald-signal); }
+    .showcase__code .comment { color: var(--steel-slate); }
+    .showcase__code .function { color: var(--voltagent-mint); }
+    .showcase__code .variable { color: var(--near-white); }
+
+    .showcase__content {
+      padding: 16px 0;
+    }
+
+    .showcase__content .overline {
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .showcase__content-title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.11;
+      letter-spacing: -0.9px;
+      margin-bottom: 20px;
+    }
+
+    .showcase__content-desc {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--warm-parchment);
+      margin-bottom: 32px;
+    }
+
+    .showcase__feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .showcase__feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 16px;
+      color: var(--snow-white);
+    }
+
+    .showcase__feature-check {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: var(--emerald-signal);
+      margin-top: 2px;
+    }
+
+    /* ========================================
+       Architecture / Workflow Section
+       ======================================== */
+    .architecture {
+      padding: 96px 0;
+      border-top: 1px solid var(--warm-charcoal);
+    }
+
+    .architecture__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .architecture__title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.11;
+      letter-spacing: -0.9px;
+      margin-top: 16px;
+    }
+
+    .architecture__diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+
+    .arch-node {
+      background-color: var(--carbon-surface);
+      border: 1px solid var(--warm-charcoal);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      min-width: 180px;
+      transition: border-color 0.3s ease;
+    }
+
+    .arch-node:hover {
+      border-color: var(--emerald-signal);
+    }
+
+    .arch-node--active {
+      border: 2px solid var(--emerald-signal);
+    }
+
+    .arch-node__icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .arch-node__label {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--snow-white);
+      margin-bottom: 4px;
+    }
+
+    .arch-node__desc {
+      font-size: 13px;
+      color: var(--steel-slate);
+    }
+
+    .arch-connector {
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      color: var(--emerald-signal);
+    }
+
+    .arch-connector svg {
+      width: 40px;
+      height: 20px;
+    }
+
+    /* ========================================
+       CTA Section
+       ======================================== */
+    .cta {
+      padding: 96px 0;
+      border-top: 1px solid var(--warm-charcoal);
+    }
+
+    .cta__inner {
+      text-align: center;
+      background-color: var(--carbon-surface);
+      border: 1px solid var(--warm-charcoal);
+      border-radius: 8px;
+      padding: 64px 48px;
+      box-shadow: var(--shadow-ambient);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta__inner::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--emerald-signal), transparent);
+    }
+
+    .cta__title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.11;
+      letter-spacing: -0.9px;
+      margin-bottom: 16px;
+    }
+
+    .cta__title-accent {
+      color: var(--emerald-signal);
+    }
+
+    .cta__desc {
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--warm-parchment);
+      max-width: 560px;
+      margin: 0 auto 40px;
+    }
+
+    .cta__actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .cta__install {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      background-color: var(--abyss-black);
+      border: 2px solid var(--emerald-signal);
+      border-radius: 6.4px;
+      font-family: var(--font-mono);
+      font-size: 15px;
+      color: var(--snow-white);
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .cta__install:hover {
+      box-shadow: 0 0 15px rgba(0, 217, 146, 0.2);
+    }
+
+    .cta__install-prompt {
+      color: var(--emerald-signal);
+    }
+
+    /* ========================================
+       Stats Section
+       ======================================== */
+    .stats {
+      padding: 64px 0;
+    }
+
+    .stats__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 32px 16px;
+      background-color: var(--carbon-surface);
+      border: 1px solid var(--warm-charcoal);
+      border-radius: 8px;
+    }
+
+    .stat-card__number {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.11;
+      letter-spacing: -0.9px;
+      color: var(--emerald-signal);
+      margin-bottom: 8px;
+    }
+
+    .stat-card__label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--steel-slate);
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      padding: 64px 0 32px;
+      border-top: 1px solid var(--warm-charcoal);
+    }
+
+    .footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer__brand-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--snow-white);
+      margin-bottom: 16px;
+    }
+
+    .footer__brand-bolt {
+      width: 24px;
+      height: 24px;
+      color: var(--emerald-signal);
+    }
+
+    .footer__brand-desc {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--steel-slate);
+      max-width: 320px;
+    }
+
+    .footer__col-title {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 2.52px;
+      text-transform: uppercase;
+      color: var(--snow-white);
+      margin-bottom: 20px;
+    }
+
+    .footer__col-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer__col-link {
+      font-size: 14px;
+      color: var(--fog-gray);
+      transition: color 0.2s ease;
+    }
+
+    .footer__col-link:hover {
+      color: var(--pure-white);
+    }
+
+    .footer__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 32px;
+      border-top: 1px solid var(--warm-charcoal);
+    }
+
+    .footer__copyright {
+      font-size: 13px;
+      color: var(--steel-slate);
+    }
+
+    .footer__social {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer__social-link {
+      color: var(--steel-slate);
+      transition: color 0.2s ease;
+    }
+
+    .footer__social-link:hover {
+      color: var(--emerald-signal);
+    }
+
+    .footer__social-link svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ========================================
+       Responsive Design
+       ======================================== */
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+      .hero__title {
+        font-size: 48px;
+      }
+
+      .features__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .showcase__inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .stats__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer__top {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 767px) {
+      .hero {
+        padding: 80px 0 64px;
+      }
+
+      .hero__title {
+        font-size: 36px;
+        letter-spacing: -0.5px;
+      }
+
+      .hero__subtitle {
+        font-size: 16px;
+      }
+
+      .hero__install {
+        font-size: 12px;
+        padding: 12px 16px;
+      }
+
+      .hero__actions {
+        flex-direction: column;
+      }
+
+      .nav__links {
+        display: none;
+      }
+
+      .nav__hamburger {
+        display: block;
+      }
+
+      .features__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .features__title,
+      .architecture__title,
+      .showcase__content-title,
+      .cta__title {
+        font-size: 28px;
+      }
+
+      .architecture__diagram {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .arch-connector {
+        transform: rotate(90deg);
+        padding: 8px 0;
+      }
+
+      .stats__grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer__top {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer__bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .cta__inner {
+        padding: 48px 24px;
+      }
+
+      .cta__actions {
+        flex-direction: column;
+      }
+    }
+
+    /* Small Mobile */
+    @media (max-width: 420px) {
+      .hero__title {
+        font-size: 24px;
+      }
+
+      .hero__install {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .features, .showcase, .architecture, .cta {
+        padding: 64px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ========== Navigation ========== -->
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo">
+        <svg class="nav__bolt" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 2L3 14h9l-1 10 10-12h-9l1-10z"/>
+        </svg>
+        VoltAgent
+      </a>
+      <ul class="nav__links">
+        <li><a href="#features" class="nav__link">Features</a></li>
+        <li><a href="#showcase" class="nav__link">Platform</a></li>
+        <li><a href="#architecture" class="nav__link">Architecture</a></li>
+        <li><a href="https://github.com/VoltAgent/voltagent" class="nav__link" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="#cta" class="nav__cta">Docs</a></li>
+      </ul>
+      <button class="nav__hamburger" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== Hero ========== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__tag">
+        <span class="hero__tag-dot"></span>
+        v1.0 Stable Release
+      </div>
+      <h1 class="hero__title">
+        AI Agent<br><span class="hero__title-accent">Engineering Platform</span>
+      </h1>
+      <p class="hero__subtitle">
+        TypeScriptで構築する次世代AIエージェントフレームワーク。マルチエージェントオーケストレーション、メモリ管理、ツール統合を一つのプラットフォームで。
+      </p>
+      <div class="hero__install" onclick="navigator.clipboard.writeText('npm create voltagent-app@latest')">
+        <span class="hero__install-prompt">$</span>
+        <span>npm create voltagent-app@latest</span>
+        <span class="hero__install-copy">Copy</span>
+      </div>
+      <div class="hero__actions">
+        <a href="#cta" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 10 10-12h-9l1-10z"/></svg>
+          Get Started
+        </a>
+        <a href="#showcase" class="btn-ghost">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          Learn More
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Features ========== -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features__header">
+        <span class="overline">Core Features</span>
+        <h2 class="features__title">AIエージェント開発に必要な全てを</h2>
+      </div>
+      <div class="features__grid">
+        <!-- Card 1 -->
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">マルチエージェント連携</h3>
+          <p class="feature-card__desc">複数のAIエージェントが協調して動作するオーケストレーションシステム。スーパーバイザーパターンで複雑なタスクを自動分割。</p>
+        </div>
+        <!-- Card 2 -->
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">ツール統合</h3>
+          <p class="feature-card__desc">カスタムツールを簡単に定義・統合。Zodスキーマによる型安全なバリデーションでエージェントの能力を拡張。</p>
+        </div>
+        <!-- Card 3 -->
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">メモリシステム</h3>
+          <p class="feature-card__desc">会話履歴と長期記憶を管理する柔軟なメモリアーキテクチャ。コンテキストウィンドウを最適化して的確な応答を実現。</p>
+        </div>
+        <!-- Card 4 -->
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">VoltAgent Console</h3>
+          <p class="feature-card__desc">リアルタイムでエージェントの動作を監視・デバッグ。会話フロー、ツール実行、メモリ状態を可視化するダッシュボード。</p>
+        </div>
+        <!-- Card 5 -->
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">TypeScript First</h3>
+          <p class="feature-card__desc">完全なTypeScriptサポート。型推論、自動補完、コンパイル時チェックでエージェント開発の品質を向上。</p>
+        </div>
+        <!-- Card 6 -->
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3 class="feature-card__title">ガードレール</h3>
+          <p class="feature-card__desc">入出力バリデーション、コンテンツフィルタリング、レート制限。安全なエージェント運用のためのセキュリティレイヤー。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Code Showcase ========== -->
+  <section class="showcase" id="showcase">
+    <div class="container">
+      <div class="showcase__inner">
+        <div class="showcase__code">
+          <div class="showcase__code-header">
+            <span class="showcase__code-dot showcase__code-dot--red"></span>
+            <span class="showcase__code-dot showcase__code-dot--yellow"></span>
+            <span class="showcase__code-dot showcase__code-dot--green"></span>
+          </div>
+          <pre><span class="keyword">import</span> { <span class="variable">Agent</span> } <span class="keyword">from</span> <span class="string">"@voltagent/core"</span>;
+<span class="keyword">import</span> { <span class="variable">VercelAIProvider</span> } <span class="keyword">from</span> <span class="string">"@voltagent/vercel-ai"</span>;
+<span class="keyword">import</span> { <span class="variable">openai</span> } <span class="keyword">from</span> <span class="string">"@ai-sdk/openai"</span>;
+
+<span class="keyword">const</span> <span class="variable">agent</span> = <span class="keyword">new</span> <span class="function">Agent</span>({
+  <span class="variable">name</span>: <span class="string">"assistant"</span>,
+  <span class="variable">description</span>: <span class="string">"A helpful AI assistant"</span>,
+  <span class="variable">llm</span>: <span class="keyword">new</span> <span class="function">VercelAIProvider</span>(),
+  <span class="variable">model</span>: <span class="function">openai</span>(<span class="string">"gpt-4o"</span>),
+  <span class="variable">markdown</span>: <span class="keyword">true</span>,
+});
+
+<span class="comment">// Start a conversation</span>
+<span class="keyword">const</span> <span class="variable">response</span> = <span class="keyword">await</span> <span class="variable">agent</span>.<span class="function">chat</span>(
+  <span class="string">"Explain quantum computing"</span>
+);</pre>
+        </div>
+        <div class="showcase__content">
+          <span class="overline">Developer Experience</span>
+          <h2 class="showcase__content-title">コードが語る、<br>プラットフォームの実力</h2>
+          <p class="showcase__content-desc">
+            数行のコードでAIエージェントを構築。VoltAgentは複雑なAIオーケストレーションを直感的なAPIに変換し、開発者がビジネスロジックに集中できる環境を提供します。
+          </p>
+          <ul class="showcase__feature-list">
+            <li class="showcase__feature-item">
+              <svg class="showcase__feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Vercel AI SDK、LangChain等の主要プロバイダーをサポート</span>
+            </li>
+            <li class="showcase__feature-item">
+              <svg class="showcase__feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Zodスキーマによる型安全なツール定義</span>
+            </li>
+            <li class="showcase__feature-item">
+              <svg class="showcase__feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>ストリーミングレスポンスに標準対応</span>
+            </li>
+            <li class="showcase__feature-item">
+              <svg class="showcase__feature-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>VoltAgent Consoleでリアルタイムデバッグ</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Architecture ========== -->
+  <section class="architecture" id="architecture">
+    <div class="container">
+      <div class="architecture__header">
+        <span class="overline">Architecture</span>
+        <h2 class="architecture__title">マルチエージェントのオーケストレーション</h2>
+      </div>
+      <div class="architecture__diagram">
+        <div class="arch-node">
+          <div class="arch-node__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--warm-parchment)" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="arch-node__label">User Input</div>
+          <div class="arch-node__desc">Request</div>
+        </div>
+        <div class="arch-connector">
+          <svg viewBox="0 0 40 20"><line x1="0" y1="10" x2="36" y2="10" stroke="var(--emerald-signal)" stroke-width="2"/><polygon points="36,5 40,10 36,15" fill="var(--emerald-signal)"/></svg>
+        </div>
+        <div class="arch-node arch-node--active">
+          <div class="arch-node__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="var(--emerald-signal)"><path d="M13 2L3 14h9l-1 10 10-12h-9l1-10z"/></svg>
+          </div>
+          <div class="arch-node__label">Supervisor Agent</div>
+          <div class="arch-node__desc">VoltAgent Core</div>
+        </div>
+        <div class="arch-connector">
+          <svg viewBox="0 0 40 20"><line x1="0" y1="10" x2="36" y2="10" stroke="var(--emerald-signal)" stroke-width="2"/><polygon points="36,5 40,10 36,15" fill="var(--emerald-signal)"/></svg>
+        </div>
+        <div class="arch-node">
+          <div class="arch-node__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--soft-purple)" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="arch-node__label">Sub-Agents</div>
+          <div class="arch-node__desc">Task Execution</div>
+        </div>
+        <div class="arch-connector">
+          <svg viewBox="0 0 40 20"><line x1="0" y1="10" x2="36" y2="10" stroke="var(--emerald-signal)" stroke-width="2"/><polygon points="36,5 40,10 36,15" fill="var(--emerald-signal)"/></svg>
+        </div>
+        <div class="arch-node">
+          <div class="arch-node__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--warm-parchment)" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <div class="arch-node__label">Tools & Memory</div>
+          <div class="arch-node__desc">External Resources</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Stats ========== -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats__grid">
+        <div class="stat-card">
+          <div class="stat-card__number">5.2K+</div>
+          <div class="stat-card__label">GitHub Stars</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__number">150+</div>
+          <div class="stat-card__label">Contributors</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__number">50K+</div>
+          <div class="stat-card__label">npm Downloads / week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__number">3K+</div>
+          <div class="stat-card__label">Discord Members</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA ========== -->
+  <section class="cta" id="cta">
+    <div class="container">
+      <div class="cta__inner">
+        <h2 class="cta__title">今すぐ<span class="cta__title-accent">ビルド</span>を始めよう</h2>
+        <p class="cta__desc">
+          VoltAgentで次世代のAIエージェントアプリケーションを構築。オープンソースで、コミュニティドリブン。
+        </p>
+        <div class="cta__actions">
+          <div class="cta__install" onclick="navigator.clipboard.writeText('npm create voltagent-app@latest')">
+            <span class="cta__install-prompt">$</span>
+            <span>npm create voltagent-app@latest</span>
+          </div>
+          <a href="https://github.com/VoltAgent/voltagent" class="btn-ghost" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Footer ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <div class="footer__brand-name">
+            <svg class="footer__brand-bolt" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 10 10-12h-9l1-10z"/></svg>
+            VoltAgent
+          </div>
+          <p class="footer__brand-desc">
+            TypeScriptベースのオープンソースAIエージェントフレームワーク。マルチエージェントシステムの構築を、シンプルに。
+          </p>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">Product</h4>
+          <ul class="footer__col-links">
+            <li><a href="#features" class="footer__col-link">Features</a></li>
+            <li><a href="#showcase" class="footer__col-link">Platform</a></li>
+            <li><a href="#" class="footer__col-link">Console</a></li>
+            <li><a href="#" class="footer__col-link">Pricing</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">Resources</h4>
+          <ul class="footer__col-links">
+            <li><a href="#" class="footer__col-link">Documentation</a></li>
+            <li><a href="#" class="footer__col-link">API Reference</a></li>
+            <li><a href="#" class="footer__col-link">Examples</a></li>
+            <li><a href="#" class="footer__col-link">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">Community</h4>
+          <ul class="footer__col-links">
+            <li><a href="#" class="footer__col-link">GitHub</a></li>
+            <li><a href="#" class="footer__col-link">Discord</a></li>
+            <li><a href="#" class="footer__col-link">X (Twitter)</a></li>
+            <li><a href="#" class="footer__col-link">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">&copy; 2026 VoltAgent. All rights reserved.</p>
+        <div class="footer__social">
+          <a href="https://github.com/VoltAgent/voltagent" class="footer__social-link" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+          <a href="#" class="footer__social-link" aria-label="Discord">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          </a>
+          <a href="#" class="footer__social-link" aria-label="X">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

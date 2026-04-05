@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uber - あなたの移動をもっと自由に</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       Uber Design System - CSS Custom Properties
+       ============================================ */
+    :root {
+      /* Primary */
+      --uber-black: #000000;
+      --pure-white: #ffffff;
+
+      /* Interactive & Button States */
+      --hover-gray: #e2e2e2;
+      --hover-light: #f3f3f3;
+      --chip-gray: #efefef;
+
+      /* Text & Content */
+      --body-gray: #4b4b4b;
+      --muted-gray: #afafaf;
+
+      /* Shadows */
+      --shadow-light: rgba(0, 0, 0, 0.12) 0px 4px 16px 0px;
+      --shadow-medium: rgba(0, 0, 0, 0.16) 0px 4px 16px 0px;
+      --shadow-floating: rgba(0, 0, 0, 0.16) 0px 2px 8px 0px;
+      --shadow-pressed: rgba(0, 0, 0, 0.08);
+
+      /* Typography */
+      --font-heading: 'DM Sans', 'Inter', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --font-body: 'Inter', system-ui, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+      /* Border Radius */
+      --radius-card: 8px;
+      --radius-featured: 12px;
+      --radius-pill: 999px;
+
+      /* Spacing */
+      --container-max: 1136px;
+    }
+
+    /* ============================================
+       Reset & Base
+       ============================================ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--uber-black);
+      background-color: var(--pure-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ============================================
+       Container
+       ============================================ */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ============================================
+       Navigation
+       ============================================ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--pure-white);
+      border-bottom: 1px solid var(--chip-gray);
+    }
+
+    .nav-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--uber-black);
+      line-height: 1;
+    }
+
+    .nav-pills {
+      display: flex;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .nav-pill {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      background: var(--chip-gray);
+      color: var(--uber-black);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      border: none;
+    }
+
+    .nav-pill:hover {
+      background: var(--hover-gray);
+    }
+
+    .nav-pill.active {
+      background: var(--uber-black);
+      color: var(--pure-white);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-link {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--uber-black);
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      transition: background 0.2s;
+    }
+
+    .nav-link:hover {
+      background: var(--chip-gray);
+    }
+
+    .nav-hamburger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: var(--chip-gray);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: var(--uber-black);
+      border-radius: 1px;
+    }
+
+    /* ============================================
+       Buttons
+       ============================================ */
+    .btn-primary {
+      display: inline-block;
+      padding: 14px 24px;
+      background: var(--uber-black);
+      color: var(--pure-white);
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      line-height: 1.25;
+    }
+
+    .btn-primary:hover {
+      background: #333333;
+    }
+
+    .btn-primary:focus {
+      outline: none;
+      box-shadow: rgb(255, 255, 255) 0px 0px 0px 2px inset;
+    }
+
+    .btn-secondary {
+      display: inline-block;
+      padding: 14px 24px;
+      background: var(--pure-white);
+      color: var(--uber-black);
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      line-height: 1.25;
+    }
+
+    .btn-secondary:hover {
+      background: var(--hover-gray);
+    }
+
+    .btn-small {
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+
+    /* ============================================
+       Hero Section
+       ============================================ */
+    .hero {
+      padding: 64px 0 80px;
+      background: var(--pure-white);
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-content {
+      max-width: 520px;
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1.23;
+      color: var(--uber-black);
+      margin-bottom: 24px;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--body-gray);
+      margin-bottom: 32px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .hero-inputs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .hero-input {
+      flex: 1;
+      padding: 14px 16px;
+      border: 1px solid var(--uber-black);
+      border-radius: var(--radius-card);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--uber-black);
+      background: var(--pure-white);
+      outline: none;
+    }
+
+    .hero-input::placeholder {
+      color: var(--muted-gray);
+    }
+
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--chip-gray);
+      border-radius: var(--radius-featured);
+      min-height: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-illustration {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+
+    .hero-illustration svg {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+    }
+
+    /* ============================================
+       Category Pills Section
+       ============================================ */
+    .categories {
+      padding: 48px 0;
+      border-bottom: 1px solid var(--chip-gray);
+    }
+
+    .categories-title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.22;
+      color: var(--uber-black);
+      margin-bottom: 24px;
+    }
+
+    .categories-pills {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .category-pill {
+      padding: 14px 24px;
+      border-radius: var(--radius-pill);
+      background: var(--chip-gray);
+      color: var(--uber-black);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      border: none;
+    }
+
+    .category-pill:hover {
+      background: var(--hover-gray);
+    }
+
+    .category-pill.active {
+      background: var(--uber-black);
+      color: var(--pure-white);
+    }
+
+    /* ============================================
+       Features / Cards Section
+       ============================================ */
+    .features {
+      padding: 80px 0;
+    }
+
+    .features-header {
+      margin-bottom: 48px;
+    }
+
+    .features-title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.22;
+      color: var(--uber-black);
+      margin-bottom: 12px;
+    }
+
+    .features-subtitle {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--body-gray);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--pure-white);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-light);
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--shadow-medium);
+    }
+
+    .feature-card-image {
+      width: 100%;
+      height: 200px;
+      background: var(--chip-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .feature-card-image svg {
+      width: 80px;
+      height: 80px;
+    }
+
+    .feature-card-body {
+      padding: 24px;
+    }
+
+    .feature-card-title {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.33;
+      color: var(--uber-black);
+      margin-bottom: 8px;
+    }
+
+    .feature-card-desc {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--body-gray);
+      margin-bottom: 20px;
+    }
+
+    .feature-card .btn-primary {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+
+    /* ============================================
+       Services Section (3-column)
+       ============================================ */
+    .services {
+      padding: 80px 0;
+      background: var(--pure-white);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .service-card {
+      background: var(--pure-white);
+      border-radius: var(--radius-featured);
+      box-shadow: var(--shadow-light);
+      padding: 32px 24px;
+      text-align: center;
+      transition: box-shadow 0.2s;
+    }
+
+    .service-card:hover {
+      box-shadow: var(--shadow-medium);
+    }
+
+    .service-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .service-card-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--uber-black);
+      margin-bottom: 8px;
+    }
+
+    .service-card-desc {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      color: var(--body-gray);
+    }
+
+    /* ============================================
+       CTA Section
+       ============================================ */
+    .cta {
+      padding: 96px 0;
+      background: var(--uber-black);
+      color: var(--pure-white);
+    }
+
+    .cta-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .cta-content {
+      max-width: 480px;
+    }
+
+    .cta-title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.22;
+      color: var(--pure-white);
+      margin-bottom: 16px;
+    }
+
+    .cta-desc {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--muted-gray);
+      margin-bottom: 32px;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    .cta-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cta-visual svg {
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+    }
+
+    /* ============================================
+       Driver CTA Section
+       ============================================ */
+    .driver-cta {
+      padding: 80px 0;
+      background: var(--pure-white);
+    }
+
+    .driver-cta-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .driver-cta-visual {
+      background: var(--chip-gray);
+      border-radius: var(--radius-featured);
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+
+    .driver-cta-content {
+      max-width: 480px;
+    }
+
+    .driver-cta-title {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.22;
+      color: var(--uber-black);
+      margin-bottom: 16px;
+    }
+
+    .driver-cta-desc {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--body-gray);
+      margin-bottom: 32px;
+    }
+
+    /* ============================================
+       Footer
+       ============================================ */
+    .footer {
+      background: var(--uber-black);
+      color: var(--pure-white);
+      padding: 64px 0 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+
+    .footer-col-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--pure-white);
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.43;
+      color: var(--muted-gray);
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--pure-white);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #333333;
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--pure-white);
+    }
+
+    .footer-legal {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.67;
+      color: var(--muted-gray);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-social a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #333333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--pure-white);
+      transition: background 0.2s;
+    }
+
+    .footer-social a:hover {
+      background: var(--body-gray);
+    }
+
+    /* ============================================
+       Responsive
+       ============================================ */
+    @media (max-width: 1119px) {
+      .hero-title {
+        font-size: 40px;
+      }
+
+      .hero-inner {
+        gap: 32px;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-pills {
+        display: none;
+      }
+
+      .nav-right .nav-link {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .hero-title {
+        font-size: 36px;
+      }
+
+      .hero-inputs {
+        flex-direction: column;
+      }
+
+      .hero-visual {
+        min-height: 280px;
+      }
+
+      .categories-title {
+        font-size: 28px;
+      }
+
+      .categories-pills {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      .categories-pills::-webkit-scrollbar {
+        display: none;
+      }
+
+      .category-pill {
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .features-title {
+        font-size: 28px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        text-align: center;
+      }
+
+      .cta-content {
+        max-width: 100%;
+      }
+
+      .cta-actions {
+        justify-content: center;
+      }
+
+      .cta-title {
+        font-size: 28px;
+      }
+
+      .driver-cta-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .driver-cta-content {
+        max-width: 100%;
+      }
+
+      .driver-cta-title {
+        font-size: 28px;
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 32px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .btn-primary, .btn-secondary {
+        width: 100%;
+        text-align: center;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================
+       Navigation
+       ============================================ -->
+  <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a href="#" class="nav-logo" aria-label="Uber ホーム">Uber</a>
+        <ul class="nav-pills" role="list">
+          <li><button class="nav-pill active" aria-current="page">ライド</button></li>
+          <li><button class="nav-pill">ドライブ</button></li>
+          <li><button class="nav-pill">ビジネス</button></li>
+          <li><button class="nav-pill">Uber Eats</button></li>
+          <li><button class="nav-pill">会社概要</button></li>
+        </ul>
+      </div>
+      <div class="nav-right">
+        <a href="#" class="nav-link">ヘルプ</a>
+        <a href="#" class="nav-link">ログイン</a>
+        <a href="#" class="btn-primary btn-small">新規登録</a>
+        <button class="nav-hamburger" aria-label="メニュー">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================
+       Hero Section
+       ============================================ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-content">
+          <h1 class="hero-title">どこへでも、あなたのペースで</h1>
+          <p class="hero-subtitle">ボタンひとつで配車をリクエスト。目的地まで快適にお届けします。Uberで移動をもっと自由に。</p>
+          <div class="hero-inputs">
+            <input type="text" class="hero-input" placeholder="乗車場所を入力" aria-label="乗車場所">
+            <input type="text" class="hero-input" placeholder="目的地を入力" aria-label="目的地">
+          </div>
+          <div class="hero-actions">
+            <button class="btn-primary">料金を確認</button>
+            <button class="btn-secondary" style="background: var(--chip-gray);">予約する</button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-illustration">
+            <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- City skyline -->
+              <rect x="20" y="120" width="50" height="180" rx="4" fill="#d4d4d4"/>
+              <rect x="30" y="130" width="10" height="12" rx="1" fill="#ffffff"/>
+              <rect x="50" y="130" width="10" height="12" rx="1" fill="#ffffff"/>
+              <rect x="30" y="150" width="10" height="12" rx="1" fill="#ffffff"/>
+              <rect x="50" y="150" width="10" height="12" rx="1" fill="#ffffff"/>
+              <rect x="30" y="170" width="10" height="12" rx="1" fill="#ffffff"/>
+              <rect x="50" y="170" width="10" height="12" rx="1" fill="#ffffff"/>
+
+              <rect x="80" y="80" width="60" height="220" rx="4" fill="#c0c0c0"/>
+              <rect x="90" y="90" width="12" height="14" rx="1" fill="#ffffff"/>
+              <rect x="110" y="90" width="12" height="14" rx="1" fill="#ffffff"/>
+              <rect x="90" y="112" width="12" height="14" rx="1" fill="#ffffff"/>
+              <rect x="110" y="112" width="12" height="14" rx="1" fill="#ffffff"/>
+              <rect x="90" y="134" width="12" height="14" rx="1" fill="#ffffff"/>
+              <rect x="110" y="134" width="12" height="14" rx="1" fill="#ffffff"/>
+              <rect x="90" y="156" width="12" height="14" rx="1" fill="#ffffff"/>
+              <rect x="110" y="156" width="12" height="14" rx="1" fill="#ffffff"/>
+
+              <rect x="150" y="140" width="45" height="160" rx="4" fill="#b8b8b8"/>
+              <rect x="160" y="150" width="8" height="10" rx="1" fill="#ffffff"/>
+              <rect x="175" y="150" width="8" height="10" rx="1" fill="#ffffff"/>
+              <rect x="160" y="168" width="8" height="10" rx="1" fill="#ffffff"/>
+              <rect x="175" y="168" width="8" height="10" rx="1" fill="#ffffff"/>
+
+              <rect x="205" y="100" width="55" height="200" rx="4" fill="#d0d0d0"/>
+              <rect x="215" y="110" width="10" height="12" rx="1" fill="#ffffff"/>
+              <rect x="235" y="110" width="10" height="12" rx="1" fill="#ffffff"/>
+              <rect x="215" y="130" width="10" height="12" rx="1" fill="#ffffff"/>
+              <rect x="235" y="130" width="10" height="12" rx="1" fill="#ffffff"/>
+              <rect x="215" y="150" width="10" height="12" rx="1" fill="#ffffff"/>
+              <rect x="235" y="150" width="10" height="12" rx="1" fill="#ffffff"/>
+
+              <rect x="270" y="160" width="40" height="140" rx="4" fill="#c8c8c8"/>
+              <rect x="320" y="130" width="60" height="170" rx="4" fill="#bbb"/>
+              <rect x="330" y="140" width="12" height="14" rx="1" fill="#ffffff"/>
+              <rect x="350" y="140" width="12" height="14" rx="1" fill="#ffffff"/>
+              <rect x="330" y="162" width="12" height="14" rx="1" fill="#ffffff"/>
+              <rect x="350" y="162" width="12" height="14" rx="1" fill="#ffffff"/>
+
+              <!-- Road -->
+              <rect x="0" y="280" width="400" height="20" rx="0" fill="#e0e0e0"/>
+              <rect x="30" y="288" width="30" height="4" rx="2" fill="#ffffff"/>
+              <rect x="80" y="288" width="30" height="4" rx="2" fill="#ffffff"/>
+              <rect x="130" y="288" width="30" height="4" rx="2" fill="#ffffff"/>
+              <rect x="180" y="288" width="30" height="4" rx="2" fill="#ffffff"/>
+              <rect x="230" y="288" width="30" height="4" rx="2" fill="#ffffff"/>
+              <rect x="280" y="288" width="30" height="4" rx="2" fill="#ffffff"/>
+              <rect x="330" y="288" width="30" height="4" rx="2" fill="#ffffff"/>
+
+              <!-- Car -->
+              <rect x="170" y="260" width="60" height="24" rx="12" fill="#000000"/>
+              <rect x="178" y="252" width="44" height="14" rx="6" fill="#000000"/>
+              <rect x="182" y="254" width="14" height="10" rx="3" fill="#87CEEB"/>
+              <rect x="202" y="254" width="14" height="10" rx="3" fill="#87CEEB"/>
+              <circle cx="182" cy="284" r="6" fill="#333"/>
+              <circle cx="182" cy="284" r="3" fill="#666"/>
+              <circle cx="218" cy="284" r="6" fill="#333"/>
+              <circle cx="218" cy="284" r="3" fill="#666"/>
+
+              <!-- Location pin -->
+              <g transform="translate(195, 200)">
+                <path d="M5 0C2.24 0 0 2.24 0 5c0 3.5 5 9 5 9s5-5.5 5-9c0-2.76-2.24-5-5-5z" fill="#000000" transform="scale(2.5)"/>
+                <circle cx="12.5" cy="12.5" r="4" fill="#ffffff"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       Category Pills
+       ============================================ -->
+  <section class="categories">
+    <div class="container">
+      <h2 class="categories-title">Uberのサービス</h2>
+      <div class="categories-pills">
+        <button class="category-pill active">ライド</button>
+        <button class="category-pill">Uber Eats</button>
+        <button class="category-pill">Uber Reserve</button>
+        <button class="category-pill">Uber for Business</button>
+        <button class="category-pill">Uber Connect</button>
+        <button class="category-pill">Uber Pet</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       Features / Cards Section
+       ============================================ -->
+  <section class="features">
+    <div class="container">
+      <div class="features-header">
+        <h2 class="features-title">あなたに合った移動手段を</h2>
+        <p class="features-subtitle">日常の通勤から特別な日のお出かけまで、あらゆるシーンに対応します。</p>
+      </div>
+      <div class="features-grid">
+        <!-- Card 1 -->
+        <div class="feature-card">
+          <div class="feature-card-image">
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="10" y="30" width="60" height="28" rx="14" fill="#000"/>
+              <rect x="18" y="22" width="44" height="16" rx="6" fill="#000"/>
+              <rect x="22" y="24" width="14" height="12" rx="3" fill="#87CEEB"/>
+              <rect x="42" y="24" width="14" height="12" rx="3" fill="#87CEEB"/>
+              <circle cx="22" cy="58" r="6" fill="#333"/>
+              <circle cx="58" cy="58" r="6" fill="#333"/>
+            </svg>
+          </div>
+          <div class="feature-card-body">
+            <h3 class="feature-card-title">Uber ライド</h3>
+            <p class="feature-card-desc">アプリで簡単に配車リクエスト。目的地を入力するだけで、近くのドライバーがお迎えに上がります。</p>
+            <button class="btn-primary">詳しく見る</button>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="feature-card">
+          <div class="feature-card-image">
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="28" r="14" fill="#000"/>
+              <rect x="22" y="44" width="36" height="6" rx="3" fill="#000"/>
+              <rect x="30" y="52" width="20" height="20" rx="4" fill="#000"/>
+              <rect x="34" y="56" width="12" height="8" rx="2" fill="#fff"/>
+              <path d="M36 60l4 4 4-4" stroke="#000" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="feature-card-body">
+            <h3 class="feature-card-title">Uber Reserve</h3>
+            <p class="feature-card-desc">大切な予定に合わせて事前予約。最大90日前から配車を予約でき、時間通りの移動を実現します。</p>
+            <button class="btn-primary">予約する</button>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="feature-card">
+          <div class="feature-card-image">
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="15" y="20" width="50" height="40" rx="8" fill="#000"/>
+              <rect x="20" y="25" width="16" height="14" rx="3" fill="#fff"/>
+              <rect x="40" y="25" width="16" height="14" rx="3" fill="#fff"/>
+              <rect x="20" y="43" width="36" height="3" rx="1.5" fill="#666"/>
+              <rect x="20" y="50" width="24" height="3" rx="1.5" fill="#666"/>
+              <rect x="55" y="62" width="20" height="10" rx="5" fill="#000"/>
+            </svg>
+          </div>
+          <div class="feature-card-body">
+            <h3 class="feature-card-title">Uber for Business</h3>
+            <p class="feature-card-desc">出張や接待の移動を一元管理。経費精算の自動化と従業員の安全な移動をサポートします。</p>
+            <button class="btn-primary">法人向け詳細</button>
+          </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="feature-card">
+          <div class="feature-card-image">
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="15" width="40" height="50" rx="6" fill="#000"/>
+              <rect x="24" y="20" width="32" height="36" rx="3" fill="#fff"/>
+              <circle cx="40" cy="60" r="3" fill="#fff"/>
+              <path d="M32 32l6 6 10-12" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="feature-card-body">
+            <h3 class="feature-card-title">安心・安全機能</h3>
+            <p class="feature-card-desc">リアルタイムの位置情報共有、緊急連絡ボタン、ドライバー情報の事前確認など、安心してご利用いただけます。</p>
+            <button class="btn-primary">安全への取り組み</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       Services Section (3-column)
+       ============================================ -->
+  <section class="services">
+    <div class="container">
+      <div class="features-header">
+        <h2 class="features-title">Uberが選ばれる理由</h2>
+        <p class="features-subtitle">テクノロジーの力で、移動の体験を変えていきます。</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="22" stroke="#000" stroke-width="3" fill="none"/>
+              <path d="M24 12v12l8 4" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="service-card-title">すぐに乗れる</h3>
+          <p class="service-card-desc">平均数分でドライバーが到着。待ち時間を最小限に抑えます。</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M24 4l6 12h14l-11 8 4 14-13-9-13 9 4-14L4 16h14z" fill="#000"/>
+            </svg>
+          </div>
+          <h3 class="service-card-title">明確な料金</h3>
+          <p class="service-card-desc">乗車前に料金を確認。追加料金なしの透明な価格設定。</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M24 4C14 4 6 12 6 22c0 12 18 24 18 24s18-12 18-24c0-10-8-18-18-18z" fill="#000"/>
+              <circle cx="24" cy="22" r="7" fill="#fff"/>
+            </svg>
+          </div>
+          <h3 class="service-card-title">どこでも利用可能</h3>
+          <p class="service-card-desc">世界70カ国以上、10,000都市以上で展開。旅先でも安心。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       CTA Section (Dark)
+       ============================================ -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-inner">
+        <div class="cta-content">
+          <h2 class="cta-title">アプリをダウンロードして、今すぐ始めよう</h2>
+          <p class="cta-desc">Uberアプリで、ライドの配車、フードデリバリー、荷物の配送まで。すべてがひとつのアプリで完結します。</p>
+          <div class="cta-actions">
+            <a href="#" class="btn-secondary">App Store</a>
+            <a href="#" class="btn-secondary">Google Play</a>
+          </div>
+        </div>
+        <div class="cta-visual">
+          <svg viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Phone mockup -->
+            <rect x="50" y="20" width="200" height="360" rx="28" fill="#222"/>
+            <rect x="58" y="40" width="184" height="320" rx="4" fill="#fff"/>
+            <!-- Screen content -->
+            <rect x="70" y="56" width="80" height="12" rx="6" fill="#000"/>
+            <rect x="70" y="80" width="160" height="40" rx="8" fill="#efefef"/>
+            <rect x="80" y="92" width="60" height="6" rx="3" fill="#afafaf"/>
+            <rect x="70" y="132" width="160" height="40" rx="8" fill="#efefef"/>
+            <rect x="80" y="144" width="80" height="6" rx="3" fill="#afafaf"/>
+            <!-- Map area -->
+            <rect x="70" y="184" width="160" height="120" rx="8" fill="#e8e8e8"/>
+            <circle cx="150" cy="244" r="8" fill="#000"/>
+            <circle cx="150" cy="244" r="3" fill="#fff"/>
+            <path d="M110 220 Q130 200 150 220 Q170 240 190 220" stroke="#000" stroke-width="2" fill="none" stroke-dasharray="4 4"/>
+            <!-- CTA button -->
+            <rect x="70" y="316" width="160" height="36" rx="18" fill="#000"/>
+            <rect x="110" y="330" width="80" height="8" rx="4" fill="#fff"/>
+            <!-- Notch -->
+            <rect x="120" y="26" width="60" height="8" rx="4" fill="#444"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       Driver CTA Section
+       ============================================ -->
+  <section class="driver-cta">
+    <div class="container">
+      <div class="driver-cta-inner">
+        <div class="driver-cta-visual">
+          <svg viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Driver illustration -->
+            <!-- Person -->
+            <circle cx="160" cy="70" r="28" fill="#e8c4a0"/>
+            <rect x="134" y="96" width="52" height="60" rx="8" fill="#000"/>
+            <rect x="140" y="156" width="16" height="50" rx="4" fill="#333"/>
+            <rect x="164" y="156" width="16" height="50" rx="4" fill="#333"/>
+            <!-- Steering wheel -->
+            <circle cx="160" cy="130" r="20" stroke="#fff" stroke-width="3" fill="none"/>
+            <line x1="160" y1="110" x2="160" y2="150" stroke="#fff" stroke-width="2"/>
+            <line x1="140" y1="130" x2="180" y2="130" stroke="#fff" stroke-width="2"/>
+            <!-- Stars -->
+            <g transform="translate(100, 210)">
+              <polygon points="8,0 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6" fill="#000"/>
+            </g>
+            <g transform="translate(124, 210)">
+              <polygon points="8,0 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6" fill="#000"/>
+            </g>
+            <g transform="translate(148, 210)">
+              <polygon points="8,0 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6" fill="#000"/>
+            </g>
+            <g transform="translate(172, 210)">
+              <polygon points="8,0 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6" fill="#000"/>
+            </g>
+            <g transform="translate(196, 210)">
+              <polygon points="8,0 10,6 16,6 11,10 13,16 8,12 3,16 5,10 0,6 6,6" fill="#000"/>
+            </g>
+          </svg>
+        </div>
+        <div class="driver-cta-content">
+          <h2 class="driver-cta-title">ドライバーパートナーとして収入を得よう</h2>
+          <p class="driver-cta-desc">自分のスケジュールで、自分の車で。Uberドライバーパートナーとして、自由な働き方を実現しませんか。</p>
+          <div class="hero-actions">
+            <a href="#" class="btn-primary">ドライバー登録</a>
+            <a href="#" class="btn-primary" style="background: var(--chip-gray); color: var(--uber-black);">詳細を見る</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       Footer
+       ============================================ -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4 class="footer-col-title">会社情報</h4>
+          <ul class="footer-links">
+            <li><a href="#">Uberについて</a></li>
+            <li><a href="#">ニュースルーム</a></li>
+            <li><a href="#">投資家情報</a></li>
+            <li><a href="#">ブログ</a></li>
+            <li><a href="#">採用情報</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">サービス</h4>
+          <ul class="footer-links">
+            <li><a href="#">ライド</a></li>
+            <li><a href="#">Uber Eats</a></li>
+            <li><a href="#">Uber for Business</a></li>
+            <li><a href="#">Uber Freight</a></li>
+            <li><a href="#">ギフトカード</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">安全性</h4>
+          <ul class="footer-links">
+            <li><a href="#">コミュニティガイドライン</a></li>
+            <li><a href="#">安全への取り組み</a></li>
+            <li><a href="#">保険について</a></li>
+            <li><a href="#">COVID-19対策</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">ヘルプ</h4>
+          <ul class="footer-links">
+            <li><a href="#">サポート</a></li>
+            <li><a href="#">忘れ物について</a></li>
+            <li><a href="#">アクセシビリティ</a></li>
+            <li><a href="#">利用規約</a></li>
+            <li><a href="#">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-logo">Uber</span>
+        <p class="footer-legal">&copy; 2026 Uber Technologies Inc. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
+          </a>
+          <a href="#" aria-label="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zapier - あらゆるワークフローを自動化</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Design System Custom Properties ===== */
+    :root {
+      /* Colors */
+      --zapier-black: #201515;
+      --cream-white: #fffefb;
+      --off-white: #fffdf9;
+      --zapier-orange: #ff4f00;
+      --dark-charcoal: #36342e;
+      --warm-gray: #939084;
+      --sand: #c5c0b1;
+      --light-sand: #eceae3;
+      --mid-warm: #b5b2aa;
+
+      /* Typography */
+      --font-display: 'Inter', Helvetica, Arial, sans-serif;
+      --font-primary: 'Inter', Helvetica, Arial, sans-serif;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 64px;
+      --space-4xl: 80px;
+
+      /* Border Radius */
+      --radius-sm: 4px;
+      --radius-md: 5px;
+      --radius-lg: 8px;
+      --radius-pill: 20px;
+    }
+
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background-color: var(--cream-white);
+      color: var(--dark-charcoal);
+      font-size: 16px;
+      line-height: 1.25;
+      letter-spacing: -0.16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: var(--zapier-black);
+      text-decoration: underline;
+      transition: text-decoration 0.2s ease;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* ===== Utility ===== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+
+    .label-upper {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--warm-gray);
+    }
+
+    /* ===== Buttons ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-primary);
+      font-weight: 600;
+      font-size: 16px;
+      line-height: normal;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-orange {
+      background-color: var(--zapier-orange);
+      color: var(--cream-white);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border-color: var(--zapier-orange);
+    }
+
+    .btn-orange:hover {
+      background-color: #e64600;
+      border-color: #e64600;
+      color: var(--cream-white);
+      text-decoration: none;
+    }
+
+    .btn-dark {
+      background-color: var(--zapier-black);
+      color: var(--cream-white);
+      padding: 20px 24px;
+      border-radius: var(--radius-lg);
+      border-color: var(--zapier-black);
+    }
+
+    .btn-dark:hover {
+      background-color: var(--sand);
+      color: var(--zapier-black);
+      border-color: var(--sand);
+      text-decoration: none;
+    }
+
+    .btn-ghost {
+      background-color: var(--light-sand);
+      color: var(--dark-charcoal);
+      padding: 20px 24px;
+      border-radius: var(--radius-lg);
+      border-color: var(--sand);
+    }
+
+    .btn-ghost:hover {
+      background-color: var(--sand);
+      color: var(--zapier-black);
+      text-decoration: none;
+    }
+
+    .btn-orange-lg {
+      background-color: var(--zapier-orange);
+      color: var(--cream-white);
+      padding: 20px 24px;
+      border-radius: var(--radius-lg);
+      border-color: var(--zapier-orange);
+      font-size: 18px;
+    }
+
+    .btn-orange-lg:hover {
+      background-color: #e64600;
+      border-color: #e64600;
+      color: var(--cream-white);
+      text-decoration: none;
+    }
+
+    /* ===== Navigation ===== */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--cream-white);
+      border-bottom: 1px solid var(--sand);
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: var(--zapier-black);
+    }
+
+    .nav-logo svg {
+      width: 104px;
+      height: 28px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--zapier-black);
+      text-decoration: none;
+      padding: 12px 0;
+    }
+
+    .nav-links a:hover {
+      color: var(--zapier-orange);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .nav-login {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--zapier-black);
+      text-decoration: none;
+    }
+
+    .nav-login:hover {
+      color: var(--zapier-orange);
+      text-decoration: none;
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--zapier-black);
+      margin: 5px 0;
+      border-radius: 1px;
+      transition: 0.3s;
+    }
+
+    /* ===== Hero Section ===== */
+    .hero {
+      padding: var(--space-4xl) 0;
+      text-align: center;
+      border-bottom: 1px solid var(--sand);
+    }
+
+    .hero-label {
+      margin-bottom: var(--space-lg);
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: 72px;
+      font-weight: 500;
+      line-height: 0.90;
+      color: var(--zapier-black);
+      margin-bottom: var(--space-xl);
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero p {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--dark-charcoal);
+      letter-spacing: -0.2px;
+      max-width: 640px;
+      margin: 0 auto var(--space-2xl);
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3xl);
+      margin-top: var(--space-3xl);
+      padding-top: var(--space-2xl);
+      border-top: 1px solid var(--sand);
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-number {
+      font-size: 48px;
+      font-weight: 500;
+      color: var(--zapier-black);
+      line-height: 1.04;
+    }
+
+    .hero-stat-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--warm-gray);
+      margin-top: var(--space-sm);
+    }
+
+    /* ===== Features Section ===== */
+    .features {
+      padding: var(--space-4xl) 0;
+      border-bottom: 1px solid var(--sand);
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: var(--space-3xl);
+    }
+
+    .features-header .label-upper {
+      margin-bottom: var(--space-md);
+    }
+
+    .features-header h2 {
+      font-family: var(--font-primary);
+      font-size: 48px;
+      font-weight: 500;
+      line-height: 1.04;
+      color: var(--zapier-black);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+    }
+
+    .feature-card {
+      background: var(--cream-white);
+      border: 1px solid var(--sand);
+      border-radius: var(--radius-md);
+      padding: var(--space-xl);
+      transition: border-color 0.2s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--mid-warm);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      background: var(--light-sand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-lg);
+    }
+
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--zapier-orange);
+    }
+
+    .feature-card h3 {
+      font-family: var(--font-primary);
+      font-size: 24px;
+      font-weight: 600;
+      line-height: normal;
+      letter-spacing: -0.48px;
+      color: var(--zapier-black);
+      margin-bottom: var(--space-sm);
+    }
+
+    .feature-card p {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--dark-charcoal);
+      line-height: 1.5;
+    }
+
+    /* ===== Integrations Section ===== */
+    .integrations {
+      padding: var(--space-4xl) 0;
+      border-bottom: 1px solid var(--sand);
+    }
+
+    .integrations-header {
+      text-align: center;
+      margin-bottom: var(--space-3xl);
+    }
+
+    .integrations-header h2 {
+      font-family: var(--font-primary);
+      font-size: 48px;
+      font-weight: 500;
+      line-height: 1.04;
+      color: var(--zapier-black);
+      margin-bottom: var(--space-md);
+    }
+
+    .integrations-header p {
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--dark-charcoal);
+      letter-spacing: -0.2px;
+    }
+
+    .integration-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .integration-card {
+      background: var(--cream-white);
+      border: 1px solid var(--sand);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .integration-pair {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .integration-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-lg);
+      background: var(--light-sand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+
+    .integration-arrow {
+      color: var(--sand);
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .integration-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .integration-text h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--zapier-black);
+      line-height: 1.16;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .integration-text p {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--warm-gray);
+      line-height: 1.54;
+    }
+
+    .integrations-footer {
+      text-align: center;
+    }
+
+    /* ===== How It Works Section ===== */
+    .how-it-works {
+      padding: var(--space-4xl) 0;
+      border-bottom: 1px solid var(--sand);
+    }
+
+    .how-it-works-header {
+      text-align: center;
+      margin-bottom: var(--space-3xl);
+    }
+
+    .how-it-works-header h2 {
+      font-family: var(--font-primary);
+      font-size: 48px;
+      font-weight: 500;
+      line-height: 1.04;
+      color: var(--zapier-black);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xl);
+    }
+
+    .step {
+      text-align: center;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1px solid var(--sand);
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--zapier-orange);
+      margin-bottom: var(--space-lg);
+    }
+
+    .step h3 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.48px;
+      color: var(--zapier-black);
+      margin-bottom: var(--space-sm);
+    }
+
+    .step p {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--dark-charcoal);
+      line-height: 1.5;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    /* ===== CTA Section ===== */
+    .cta {
+      padding: var(--space-4xl) 0;
+      text-align: center;
+      border-bottom: 1px solid var(--sand);
+    }
+
+    .cta-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .cta h2 {
+      font-family: var(--font-display);
+      font-size: 56px;
+      font-weight: 500;
+      line-height: 0.90;
+      color: var(--zapier-black);
+      margin-bottom: var(--space-lg);
+    }
+
+    .cta p {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--dark-charcoal);
+      letter-spacing: -0.2px;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    .cta-note {
+      margin-top: var(--space-md);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--warm-gray);
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      background-color: var(--zapier-black);
+      color: var(--cream-white);
+      padding: var(--space-3xl) 0 var(--space-xl);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: var(--space-2xl);
+      margin-bottom: var(--space-3xl);
+    }
+
+    .footer-brand p {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--sand);
+      line-height: 1.5;
+      margin-top: var(--space-md);
+      max-width: 280px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+    }
+
+    .footer-social a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      border: 1px solid var(--sand);
+      color: var(--sand);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .footer-social a:hover {
+      color: var(--cream-white);
+      border-color: var(--cream-white);
+    }
+
+    .footer-column h4 {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--cream-white);
+      margin-bottom: var(--space-md);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer-column ul a {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--sand);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-column ul a:hover {
+      color: var(--cream-white);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--dark-charcoal);
+      padding-top: var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-bottom p {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--warm-gray);
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: var(--space-lg);
+    }
+
+    .footer-bottom-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--warm-gray);
+      text-decoration: none;
+    }
+
+    .footer-bottom-links a:hover {
+      color: var(--cream-white);
+    }
+
+    .footer-logo svg {
+      height: 24px;
+      width: auto;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 991px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      .hero h1 {
+        font-size: 56px;
+      }
+
+      .hero-stats {
+        gap: var(--space-xl);
+      }
+
+      .features-header h2,
+      .integrations-header h2,
+      .how-it-works-header h2 {
+        font-size: 36px;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .integration-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-md);
+      }
+
+      .cta h2 {
+        font-size: 40px;
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .hero {
+        padding: var(--space-2xl) 0 var(--space-3xl);
+      }
+
+      .hero h1 {
+        font-size: 40px;
+      }
+
+      .hero p {
+        font-size: 18px;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: var(--space-lg);
+      }
+
+      .features,
+      .integrations,
+      .how-it-works,
+      .cta {
+        padding: var(--space-2xl) 0;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .integration-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+        gap: var(--space-2xl);
+      }
+
+      .cta h2 {
+        font-size: 32px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: center;
+      }
+
+      .footer-bottom-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .nav-actions .btn-orange {
+        font-size: 14px;
+        padding: 6px 12px;
+      }
+    }
+
+    @media (max-width: 450px) {
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Navigation ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="#" class="nav-logo">
+          <svg viewBox="0 0 244 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M57.3 51.5L42.9 33l14.4-18.5H47L36.5 28.2 26 14.5H15.7L30.1 33 15.7 51.5H26l10.5-13.7L47 51.5h10.3z" fill="#201515"/>
+            <path d="M78 51.5h-9.2V33.2L54.3 51.5H48L78 14.5v37zm0-37L62.5 33.2v18.3h15.5V14.5z" fill="#201515"/>
+            <path d="M97.8 14.5c-10.5 0-19 8.5-19 19s8.5 18 19 18h6v-9h-6c-5.5 0-10-4-10-9s4.5-9.5 10-9.5h6v-9.5h-6z" fill="#201515"/>
+            <path d="M115.2 14.5h-9.5v37h9.5v-37z" fill="#201515"/>
+            <path d="M136.5 14.5c-10.5 0-19 8.5-19 19s8.5 18 19 18 19-8.5 19-9.5h-10c0 5.5-4 9.5-9 9.5s-9-4.5-9-9.5h28c0-10.5-8.5-17.5-19-17.5zm-9.5 15.5c.5-4.5 4.5-8 9.5-8s9 3.5 9.5 8h-19z" fill="#201515"/>
+            <path d="M174.8 14.5c-4.5 0-8.5 2-11 5v-5h-9.5v37h9.5V31c0-4.5 3.5-8 8-8h3v-8.5h-0z" fill="#201515"/>
+          </svg>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#">製品</a></li>
+          <li><a href="#">ソリューション</a></li>
+          <li><a href="#">リソース</a></li>
+          <li><a href="#">料金プラン</a></li>
+          <li><a href="#">Enterprise</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a href="#" class="nav-login">ログイン</a>
+          <a href="#" class="btn btn-orange">メールで無料開始</a>
+        </div>
+        <button class="hamburger" aria-label="メニュー">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Hero Section ===== -->
+  <section class="hero">
+    <div class="container">
+      <div class="label-upper hero-label">自動化プラットフォーム</div>
+      <h1>ワークフローを自動化して、もっと大切なことに集中しよう</h1>
+      <p>7,000以上のアプリを連携し、手作業を自動化。コード不要で誰でも簡単にワークフローを構築できます。チームの生産性を最大限に引き出しましょう。</p>
+      <div class="hero-actions">
+        <a href="#" class="btn btn-orange-lg">無料で始める</a>
+        <a href="#" class="btn btn-ghost">デモを見る</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-number">7,000+</div>
+          <div class="hero-stat-label">対応アプリ数</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">220万+</div>
+          <div class="hero-stat-label">利用企業数</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">99.9%</div>
+          <div class="hero-stat-label">稼働率</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Features Section ===== -->
+  <section class="features">
+    <div class="container">
+      <div class="features-header">
+        <div class="label-upper">機能</div>
+        <h2>ビジネスを加速する自動化機能</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h3>Zaps</h3>
+          <p>トリガーとアクションを組み合わせて、アプリ間の自動ワークフローを構築。コーディング不要で、数分でセットアップ完了。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"/>
+            </svg>
+          </div>
+          <h3>Tables</h3>
+          <p>自動化に最適化されたデータベース。データの保存、整理、自動処理を一つの場所で管理できます。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+          <h3>Interfaces</h3>
+          <p>カスタムフォーム、ダッシュボード、Webページを作成。自動化と連携したインタラクティブなツールを構築。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3>Canvas</h3>
+          <p>ビジュアルなドラッグ&ドロップエディタで複雑なワークフローを設計。条件分岐やループも直感的に構築。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3>Chatbots</h3>
+          <p>AIを活用したカスタムチャットボットを作成。顧客対応、社内サポート、データ検索を自動化。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+          </div>
+          <h3>Enterprise</h3>
+          <p>高度なセキュリティ、SSO、監査ログ、専任サポート。エンタープライズ規模の自動化を安全に実現。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Integrations Section ===== -->
+  <section class="integrations">
+    <div class="container">
+      <div class="integrations-header">
+        <div class="label-upper" style="margin-bottom: 16px;">連携</div>
+        <h2>人気アプリをシームレスに接続</h2>
+        <p>7,000以上のアプリから自由に組み合わせて自動化</p>
+      </div>
+      <div class="integration-cards">
+        <div class="integration-card">
+          <div class="integration-pair">
+            <div class="integration-icon">📧</div>
+            <div class="integration-arrow">&rarr;</div>
+            <div class="integration-icon">📋</div>
+          </div>
+          <div class="integration-text">
+            <h4>Gmail &rarr; Notion</h4>
+            <p>メールをタスクに自動変換</p>
+          </div>
+        </div>
+        <div class="integration-card">
+          <div class="integration-pair">
+            <div class="integration-icon">💬</div>
+            <div class="integration-arrow">&rarr;</div>
+            <div class="integration-icon">📊</div>
+          </div>
+          <div class="integration-text">
+            <h4>Slack &rarr; Google Sheets</h4>
+            <p>メッセージを自動記録</p>
+          </div>
+        </div>
+        <div class="integration-card">
+          <div class="integration-pair">
+            <div class="integration-icon">🛒</div>
+            <div class="integration-arrow">&rarr;</div>
+            <div class="integration-icon">📦</div>
+          </div>
+          <div class="integration-text">
+            <h4>Shopify &rarr; HubSpot</h4>
+            <p>注文データをCRMに同期</p>
+          </div>
+        </div>
+        <div class="integration-card">
+          <div class="integration-pair">
+            <div class="integration-icon">📝</div>
+            <div class="integration-arrow">&rarr;</div>
+            <div class="integration-icon">📧</div>
+          </div>
+          <div class="integration-text">
+            <h4>Typeform &rarr; Mailchimp</h4>
+            <p>回答者を自動でリスト追加</p>
+          </div>
+        </div>
+        <div class="integration-card">
+          <div class="integration-pair">
+            <div class="integration-icon">🐙</div>
+            <div class="integration-arrow">&rarr;</div>
+            <div class="integration-icon">💬</div>
+          </div>
+          <div class="integration-text">
+            <h4>GitHub &rarr; Slack</h4>
+            <p>PRとIssueの通知を自動化</p>
+          </div>
+        </div>
+        <div class="integration-card">
+          <div class="integration-pair">
+            <div class="integration-icon">📅</div>
+            <div class="integration-arrow">&rarr;</div>
+            <div class="integration-icon">✅</div>
+          </div>
+          <div class="integration-text">
+            <h4>Calendar &rarr; Todoist</h4>
+            <p>予定からタスクを自動作成</p>
+          </div>
+        </div>
+      </div>
+      <div class="integrations-footer">
+        <a href="#" class="btn btn-dark">すべての連携を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== How It Works Section ===== -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="how-it-works-header">
+        <div class="label-upper" style="margin-bottom: 16px;">使い方</div>
+        <h2>3ステップで自動化を開始</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>アプリを選択</h3>
+          <p>連携したいアプリを7,000以上のライブラリから選択。お使いのツールがきっと見つかります。</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>ワークフローを構築</h3>
+          <p>トリガーとアクションを設定するだけ。ドラッグ&ドロップで直感的にワークフローを作成できます。</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>自動化を開始</h3>
+          <p>ワークフローを有効にすれば、24時間365日自動で稼働。手作業から解放されましょう。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA Section ===== -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-inner">
+        <h2>今日から無料で自動化を始めましょう</h2>
+        <p>クレジットカード不要。無料プランで今すぐスタート。チームの生産性を変える第一歩を踏み出しましょう。</p>
+        <div class="cta-actions">
+          <a href="#" class="btn btn-orange-lg">無料で始める</a>
+          <a href="#" class="btn btn-ghost">営業に相談する</a>
+        </div>
+        <p class="cta-note">無料プランには月100タスクが含まれます</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <svg viewBox="0 0 244 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M57.3 51.5L42.9 33l14.4-18.5H47L36.5 28.2 26 14.5H15.7L30.1 33 15.7 51.5H26l10.5-13.7L47 51.5h10.3z" fill="#fffefb"/>
+              <path d="M78 51.5h-9.2V33.2L54.3 51.5H48L78 14.5v37zm0-37L62.5 33.2v18.3h15.5V14.5z" fill="#fffefb"/>
+              <path d="M97.8 14.5c-10.5 0-19 8.5-19 19s8.5 18 19 18h6v-9h-6c-5.5 0-10-4-10-9s4.5-9.5 10-9.5h6v-9.5h-6z" fill="#fffefb"/>
+              <path d="M115.2 14.5h-9.5v37h9.5v-37z" fill="#fffefb"/>
+              <path d="M136.5 14.5c-10.5 0-19 8.5-19 19s8.5 18 19 18 19-8.5 19-9.5h-10c0 5.5-4 9.5-9 9.5s-9-4.5-9-9.5h28c0-10.5-8.5-17.5-19-17.5zm-9.5 15.5c.5-4.5 4.5-8 9.5-8s9 3.5 9.5 8h-19z" fill="#fffefb"/>
+              <path d="M174.8 14.5c-4.5 0-8.5 2-11 5v-5h-9.5v37h9.5V31c0-4.5 3.5-8 8-8h3v-8.5h-0z" fill="#fffefb"/>
+            </svg>
+          </div>
+          <p>Zapierは世界中の220万以上のチームに信頼されている自動化プラットフォームです。</p>
+          <div class="footer-social">
+            <a href="#" aria-label="X">X</a>
+            <a href="#" aria-label="LinkedIn">in</a>
+            <a href="#" aria-label="YouTube">YT</a>
+            <a href="#" aria-label="Facebook">f</a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4>製品</h4>
+          <ul>
+            <li><a href="#">Zaps</a></li>
+            <li><a href="#">Tables</a></li>
+            <li><a href="#">Interfaces</a></li>
+            <li><a href="#">Canvas</a></li>
+            <li><a href="#">Chatbots</a></li>
+            <li><a href="#">料金プラン</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>リソース</h4>
+          <ul>
+            <li><a href="#">ブログ</a></li>
+            <li><a href="#">ヘルプセンター</a></li>
+            <li><a href="#">コミュニティ</a></li>
+            <li><a href="#">開発者向けAPI</a></li>
+            <li><a href="#">ステータス</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>会社概要</h4>
+          <ul>
+            <li><a href="#">Zapierについて</a></li>
+            <li><a href="#">採用情報</a></li>
+            <li><a href="#">プレス</a></li>
+            <li><a href="#">プライバシーポリシー</a></li>
+            <li><a href="#">利用規約</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Zapier Inc. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">プライバシー</a>
+          <a href="#">利用規約</a>
+          <a href="#">セキュリティ</a>
+          <a href="#">アクセシビリティ</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
